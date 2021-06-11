@@ -55,7 +55,7 @@ class TB:
         headers = {"Content-Type":"application/json", "X-Authorization": "Bearer {}".format(self.jwt_token)}
         key = requests.get(timeseries, headers=headers)
         self.key = list(key.text)
-        print(key.text)
+        print(device_name,key.text)
         
 
         epoch = datetime.datetime.utcfromtimestamp(0)
@@ -117,10 +117,12 @@ class TB:
         df.ts = pd.to_datetime(df.ts,unit='ms')
         df.set_index('ts',inplace=True)
         df.columns = [key]
-        df[key] = pd.to_numeric(df[key])
+        df[key] = df[key].astype("float64")
+        #df[key] = pd.to_numeric(df[key])
 #         df = df.resample("60S").pad()
         df.dropna(inplace=True)
         
         self.datos = df
         return df
+
         
