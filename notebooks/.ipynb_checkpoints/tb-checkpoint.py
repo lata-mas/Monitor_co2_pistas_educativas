@@ -55,10 +55,12 @@ class TB:
         headers = {"Content-Type":"application/json", "X-Authorization": "Bearer {}".format(self.jwt_token)}
         key = requests.get(timeseries, headers=headers)
         self.key = list(key.text)
-        print(device_name,key.text)
+        print(key.text)
         
 
         epoch = datetime.datetime.utcfromtimestamp(0)
+        
+#         return self.key
 
     def unix_time_millis(dt):
       return (dt - epoch).total_seconds() * 1000
