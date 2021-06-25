@@ -3,6 +3,7 @@ import requests
 import json
 import datetime
 from dateutil.parser import parse
+import numpy as np
 import time
 # def get_config(file="local.ini", sec="DEFAULT"):
 #   """Reads a section of a configpareser INI file"""
@@ -119,12 +120,13 @@ class TB:
         df.ts = pd.to_datetime(df.ts,unit='ms')
         df.set_index('ts',inplace=True)
         df.columns = [key]
-        #df[key] = df[key].astype("float64")
         for i,valor in enumerate(df[key]):
             try:
                 df[key].iloc[i] = float(valor)
             except:
-                df[key].iloc[i] = -1.
+                df[key].iloc[i] = np.nan
+        df[key] = df[key].astype("float64")
+
         #df[key] = pd.to_numeric(df[key])
 #         df = df.resample("60S").pad()
         df.dropna(inplace=True)
