@@ -1,3 +1,4 @@
+#define DEBUG
 /*
   CO2-all-sensors
 
@@ -7,14 +8,28 @@
   (C) 2021 Instituto de Energías Renovables <www.ier.unam.mx>
   (C) 2021 Universidad Nacional Autónoma de México <www.unam.mx>
 
-  Quick&Dirty copy-paste samples for CO2 sensors:
-  
-  * sen0219
-  * sen0220
-  * t3022
-  * s8lp
+  Supported sensors:
 
+  * DUMMY
+    A dummy sensor for test purposes
+    
+  * SEN0219
+    Analog interface for DFRobot SEN0219. Deprecated.
+    
+  * SEN0220
+    DFRobot SEN0220.
+
+  * MH_Z14a
+    UART interface for DFRobot SEN0219 AKA MH-Z14A
+    
+  * T3022
+    TelAire T3022 OEM. i2c (TWI) interface.
+  
+  * S8LP
+    SenseAir S8 Low Power. UART interface.
+  
 */
+#define DUMMY
 
 #if defined(ARDUINO_SAMD_MKRWIFI1010) || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
   #include <WiFiNINA.h>
@@ -52,6 +67,7 @@ unsigned long previousMillis = 0;
 
 TM1637Display display(CLK, DIO);
 
+#ifdef T3022
 /****************************************
  * Sensor T3022 0-5K CO2 ppm            
  *   i2c addr = 0x15
@@ -101,6 +117,22 @@ word t3022(const void* p) {
   } else return -1;
 }
 
+inline int detectSensor() {
+   return t3022(CMD_FWREV); 
+}
+
+inline int initSensor() {
+  return t3022(CMD_STATUS);
+}
+
+inline int readSensor() {
+  return t3022(CMD_CO2PPM);
+}
+
+#define SENSOR_NAME "t3022"
+#endif
+
+#if defined(SEN0220) || defined(MH_Z14A)
 /****************************************
  * Sensor SEN0220 0-50K CO2 ppm            
  *   Serial1 requires Arduino Leonardo
@@ -132,6 +164,23 @@ int sen0220(void) {
   else return -1;    
 }
 
+int initSensor() {
+  if(sen0220()==-1) return -1;
+  else return 0;
+}
+
+inline int readSensor() {
+  return sen0220();
+}
+
+#ifdef SEN0220
+#define SENSOR_NAME "sen0220"
+#elif defined(MH_Z14A)
+#define SENSOR_NAME "mh-z14a"
+#endif
+#endif
+
+#ifdef SEN0219
 /****************************************
  * Sensor SEN0219 0-5K CO2 ppm            
  *   Requieres AREF=3.3V
@@ -149,6 +198,19 @@ int sen0219(void) {
   }
 }
 
+int initSensor() {
+  if(sen0219()==-1) return -1;
+  else return 0;
+}
+
+inline int readSensor() {
+  return sen0219();
+}
+
+#define SENSOR_NAME "sen0219"
+#endif
+
+#ifdef S8LP
 /****************************************
  * SenseAir S8            
  *   UART interface
@@ -212,19 +274,31 @@ int s8co2read(void) {
   }
 }
 
+inline int initSensor() {
+  return s8status();
+}
+
+inline int readSensor() {
+  return s8co2read();
+}
+
+#define SENSOR_NAME "s8lp"
+#endif 
+
+#ifdef DUMMY
 /****************************************
  * Dummy Sensor
  *   (CC) 2021 <hdcg@ier.unam.mx>
  ****************************************/
 static int myDummyData=420;
 
-int initDummy() {
+int initSensor() {
   randomSeed(0xc0cac07a);
   if (millis()&1!=0) return 0;
   else return -1;
 }
 
-int readDummy() {
+int readSensor() {
   switch(random(10)) {
     case 2: return ++myDummyData;
     case 3: return --myDummyData;
@@ -234,9 +308,20 @@ int readDummy() {
   }
 }
 
+#define SENSOR_NAME "dummy"
+#endif
+
 /*********************
  * Main program here!
  *********************/
+#ifndef SENSOR_NAME
+#error "PLEASE SELECT A SENSOR"
+#endif
+
+#ifdef TwoWire_h
+static const byte SEG_i2c[] = { SEG_C, SEG_A | SEG_B | SEG_G | SEG_E | SEG_D, SEG_G | SEG_E | SEG_D, 0 };
+#endif
+
 boolean led = false;
 
 void setup() {
@@ -253,17 +338,35 @@ void setup() {
   Serial.begin(38400);
   Serial.println(F("\n***************************"));
   Serial.println(F(" CO2 all sensors template"));
-  Serial.println(F(" * mh-z14a\n * sen0220\n * t3022\n * s8lp"));
+  Serial.println(F(" * sen0219\n * mh-z14a\n * sen0220\n * t3022\n * s8lp"));
   Serial.println(F(" (C) 2021 hdcg@ier.unam.mx"));
   Serial.println(F("***************************\n"));
 
+  Serial.print(F("Sensor: " SENSOR_NAME));
+
   Serial1.begin(9600);
 
-  Serial.println(F("Init..."));
+#ifdef TwoWire_h
+  display.setSegments(SEG_i2c);
+  delay(SHORT_DELAY);
+
+  Wire.begin();
+#endif
+
+#ifdef T3022
+  Serial.println(F("Detect[t3022]..."));
+  Serial.print(F("FWREV=0x"));
+  int fwrev=t3022(CMD_FWREV);
+  display.showNumberHexEx(fwrev,0,true);
+  delay(SHORT_DELAY);
+  Serial.println(fwrev, HEX);
+#endif
+
+  Serial.println(F("Init[" SENSOR_NAME "]..."));
   while(1) {
     Serial.print(F("ST=0x"));
     digitalWrite(LED_BUILTIN, led=!led);
-    word st=initDummy();
+    word st=initSensor();
     display.showNumberHexEx(st,0,true);
     Serial.println(st, HEX);
     delay(SHORT_DELAY);
@@ -273,20 +376,20 @@ void setup() {
 
   display.showNumberDec(1234);
   // attempt to connect to Wifi network:
-  Serial.print("Attempting to connect to WPA SSID: ");
+  Serial.print(F("Attempting to connect to WPA SSID: "));
   Serial.println(ssid);
   while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
     // failed, retry
     digitalWrite(LED_BUILTIN, led=!led);
-    Serial.print(".");
+    Serial.print(F("."));
     delay(SHORT_DELAY);
   }
 
-  Serial.println("You're connected to the network");
+  Serial.println(F("You're connected to the network"));
 
-  Serial.print("POST interval=");
+  Serial.print(F("POST interval="));
   Serial.print(interval);
-  Serial.println("ms\n");
+  Serial.println(F("ms\n"));
   display.clear();
 }
 
@@ -302,14 +405,13 @@ void loop() {
     digitalWrite(LED_BUILTIN, led=!led);
 
     // Sensor Data HERE! 
-    String sensorName = "dummy";
-    int co2ppm = readDummy(); 
+    int co2ppm = readSensor(); 
 
     // Common code here!
     display.showNumberDec(co2ppm);
     
     String payload = "{";
-    payload += "'" + sensorName + "':";
+    payload += "'" SENSOR_NAME "':";
     payload += co2ppm;
     payload += "}";
 
