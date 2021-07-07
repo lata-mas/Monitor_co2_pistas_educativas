@@ -1,0 +1,27 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=UniversalShield
+*Date=12:21:15
+*CreatedBy=Fritzing 0.9.6b..
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;32.512;-45.9857;0;Bottom;Copper Fill2
+2;;THT;18.8309;-42.0568;180;Bottom;T3022
+3;;THT;44.4871;-45.8068;90;Bottom;DISPLAY
+4;;THT;60.9971;-41.9968;0;Bottom;SEN0220
+5;;;43.18;-3.82168;0;Bottom;Copper Fill7
+6;;;52.2478;-44.5887;0;Bottom;Copper Fill3
+7;;;53.6194;-22.0589;0;Bottom;Copper Fill4
+8;;;34.2957;-26.7568;0;Bottom;Arduino WiFi Rev. 2
+9;;;18.9738;-26.7833;0;Bottom;Copper Fill1
+10;;;40.6527;-1.68808;0;Bottom;Copper Fill6
+11;;;40.6527;-3.82168;0;Bottom;Copper Fill5
+12;;;43.18;-1.68808;0;Bottom;Copper Fill8
