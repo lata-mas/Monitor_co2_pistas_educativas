@@ -30,6 +30,7 @@
   
 */
 #define DUMMY
+#define POST_INTERVAL_MS 60000L
 
 #if defined(ARDUINO_SAMD_MKRWIFI1010) || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
   #include <WiFiNINA.h>
@@ -55,7 +56,7 @@ char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as k
 WiFiClient wifiClient;
 HttpClient httpClient = HttpClient(wifiClient, SECRET_SERVER, SECRET_PORT);
 
-const long interval = 0x7fffL;
+const long interval = POST_INTERVAL_MS;
 unsigned long previousMillis = 0;
 
 #define SHORT_DELAY 128
@@ -324,10 +325,14 @@ static const byte SEG_i2c[] = { SEG_C, SEG_A | SEG_B | SEG_G | SEG_E | SEG_D, SE
 
 boolean led = false;
 
+inline void toggleLED(void) {
+  digitalWrite(LED_BUILTIN, led=!led);
+}
+
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, led=!led);
-
+  toggleLED();
+  
   analogReference(EXTERNAL);
 
   display.setBrightness(0x07);
@@ -365,7 +370,7 @@ void setup() {
   Serial.println(F("Init[" SENSOR_NAME "]..."));
   while(1) {
     Serial.print(F("ST=0x"));
-    digitalWrite(LED_BUILTIN, led=!led);
+    toggleLED();
     word st=initSensor();
     display.showNumberHexEx(st,0,true);
     Serial.println(st, HEX);
@@ -380,9 +385,9 @@ void setup() {
   Serial.println(ssid);
   while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
     // failed, retry
-    digitalWrite(LED_BUILTIN, led=!led);
+    toggleLED();
     Serial.print(F("."));
-    delay(SHORT_DELAY);
+    delay(DELAY);
   }
 
   Serial.println(F("You're connected to the network"));
@@ -390,6 +395,7 @@ void setup() {
   Serial.print(F("POST interval="));
   Serial.print(interval);
   Serial.println(F("ms\n"));
+
   display.clear();
 }
 
@@ -402,7 +408,7 @@ void loop() {
     // save the last time a message was sent
     unsigned long uptime = (previousMillis = currentMillis) / 1000;
 
-    digitalWrite(LED_BUILTIN, led=!led);
+    toggleLED();
 
     // Sensor Data HERE! 
     int co2ppm = readSensor(); 
@@ -417,7 +423,7 @@ void loop() {
 
     Serial.println("POST... " + payload);
 
-    digitalWrite(LED_BUILTIN, led=!led);
+    toggleLED();
     httpClient.post(SECRET_TOPIC, "application/json", payload);
 
     int statusCode = httpClient.responseStatusCode();  
@@ -426,6 +432,6 @@ void loop() {
     Serial.print(statusCode);
     Serial.print(" ");
     Serial.println(response);
-    digitalWrite(LED_BUILTIN, led=!led);
+    toggleLED();
   }
 }
