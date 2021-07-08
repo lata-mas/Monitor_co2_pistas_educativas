@@ -29,7 +29,7 @@
     SenseAir S8 Low Power. UART interface.
   
 */
-#define DUMMY
+#define SCD30
 #define POST_INTERVAL_MS 60000L
 
 #if defined(ARDUINO_SAMD_MKRWIFI1010) || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
@@ -68,6 +68,124 @@ unsigned long previousMillis = 0;
 
 TM1637Display display(CLK, DIO);
 
+#ifdef SCD30
+/****************************************
+ * Sensor SCD30 0-10K CO2 ppm            
+ *   i2c addr = 0x61
+ *   (CC) 2021 <hdcg@ier.unam.mx>
+ ****************************************/
+#warning "Sensor SCD30 not tested yet!"
+
+#include <Wire.h>
+
+#define I2C_ADDR (byte)0x61
+
+static const byte CMD_START_CM[] = {0xc2, 0x00, 0x01, 0x00, 0x00, 0x81};
+static const byte CMD_DATA_RDY[] = {0xc2, 0x02, 0x02};
+static const byte CMD_READ_MSR[] = {0xc2, 0x03, 0x00};
+
+typedef struct {
+  byte header, hi, lo, crc;
+} data_rdy_t;
+
+typedef struct {
+  byte hi, lo;
+} word_t;
+
+typedef struct {
+  byte header;
+  word_t co2hi;
+  byte crc1;
+  word_t co2lo;
+  byte crc2;
+  word_t t_hi;
+  byte crc3;
+  word_t t_lo;
+  byte crc4;
+  word_t rh_lo;
+  byte crc5;
+  word_t rh_hi;
+  byte crc6;
+} data_msr_t;
+
+void sendData(const void* p, size_t n) {
+  byte i;
+#ifdef DEBUG_SCD30
+  Serial.print("i2c-write[");
+  Serial.print(n);
+  Serial.print("]:");
+  for(i=0; i<n; ++i) {
+    Serial.print(" ");
+    Serial.print(((byte*)p)[i], HEX);
+  }
+  Serial.println();
+#endif;
+  
+  for(i=0; i<n; ++i)
+    Wire.write(((byte*)p)[i]);
+}
+
+void receiveData(const void* p, size_t n) {
+  byte i;
+  for(i=0; i<n; ++i)
+    ((byte*)p)[i]=Wire.read();
+#ifdef DEBUG_SCD30
+  Serial.print("i2c-read[");
+  Serial.print(n);
+  Serial.print("]:");
+  for(i=0; i<n; ++i) {
+    Serial.print(" ");
+    Serial.print(((byte*)p)[i], HEX);
+  }
+  Serial.println();
+#endif;
+}
+
+int initSensor() {
+  Wire.beginTransmission(I2C_ADDR);
+  sendData(CMD_START_CM, sizeof(CMD_START_CM));
+  if(Wire.endTransmission(true)!=0) return -1; // is needed true or false?
+  return 0;  
+}
+
+int readSensor() {
+  union {
+    data_rdy_t data_rdy;
+    data_msr_t data_msr;
+  } data;
+  union {
+    struct { byte b0, b1, b2, b3; };
+    float value;
+  } retval;
+  // First send DATA READY command
+  Wire.beginTransmission(I2C_ADDR);
+  sendData(CMD_DATA_RDY, sizeof(CMD_DATA_RDY));
+  Wire.endTransmission(true);
+  delay(3);
+  Wire.requestFrom(I2C_ADDR, sizeof(data_rdy_t));
+  receiveData(&data, sizeof(data_rdy_t));
+  if(data.data_rdy.header!=0xc3) return -1; // data error
+  if(data.data_rdy.lo!=1) return 0; // no data availabe
+  // then delay something
+  delay(SHORT_DELAY);
+  // then send READ MEASUREMENT command   
+  Wire.beginTransmission(I2C_ADDR);
+  sendData(CMD_READ_MSR, sizeof(CMD_READ_MSR));
+  Wire.endTransmission(true);
+  delay(3);
+  Wire.requestFrom(I2C_ADDR, sizeof(data_msr_t));
+  receiveData(&data, sizeof(data_msr_t));
+  if(data.data_msr.header!=0xc3) return -1; // data error
+  retval.b0=data.data_msr.co2lo.lo;
+  retval.b1=data.data_msr.co2lo.hi;
+  retval.b2=data.data_msr.co2hi.lo;
+  retval.b3=data.data_msr.co2hi.hi;
+  return retval.value;  
+}
+
+#define SENSOR_NAME "scd30"
+#endif
+
 #ifdef T3022
 /****************************************
  * Sensor T3022 0-5K CO2 ppm            
@@ -78,7 +196,7 @@ TM1637Display display(CLK, DIO);
 
 #define I2C_ADDR (byte)0x15
 
-static const byte CMD_FWREV[] = {0x04, 0x13, 0x89, 0x00, 0x01};
+static const byte CMD_FWREV[]  = {0x04, 0x13, 0x89, 0x00, 0x01};
 static const byte CMD_STATUS[] = {0x04, 0x13, 0x8A, 0x00, 0x01};
 static const byte CMD_CO2PPM[] = {0x04, 0x13, 0x8B, 0x00, 0x01};
 
@@ -116,10 +234,6 @@ word t3022(const void* p) {
     retval.hi=data.hi; retval.lo=data.lo;
     return retval.w;
   } else return -1;
-}
-
-inline int detectSensor() {
-   return t3022(CMD_FWREV); 
 }
 
 inline int initSensor() {
