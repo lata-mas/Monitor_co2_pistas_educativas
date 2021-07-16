@@ -1,4 +1,3 @@
-#define DEBUG
 /*
   CO2-all-sensors
 
@@ -8,31 +7,13 @@
   (C) 2021 Instituto de Energías Renovables <www.ier.unam.mx>
   (C) 2021 Universidad Nacional Autónoma de México <www.unam.mx>
 
-  Supported sensors:
-
-  * DUMMY
-    A dummy sensor for test purposes
-    
-  * SEN0219
-    Analog interface for DFRobot SEN0219. Deprecated.
-    
-  * SEN0220
-    DFRobot SEN0220.
-
-  * MH_Z14a
-    UART interface for DFRobot SEN0219 AKA MH-Z14A
-    
-  * T3022
-    TelAire T3022 OEM. i2c (TWI) interface.
+  Quick&Dirty copy-paste samples for CO2 sensors:
   
-  * S8LP
-    SenseAir S8 Low Power. UART interface.
-  
+  * sen0219
+  * sen0220
+  * t3022
+
 */
-#define SCD30
-
-#define POST_INTERVAL 60
-#define POST_INTERVAL_MS (60*1000L)
 
 #if defined(ARDUINO_SAMD_MKRWIFI1010) || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_AVR_UNO_WIFI_REV2)
   #include <WiFiNINA.h>
@@ -41,10 +22,6 @@
 #elif defined(ARDUINO_ESP8266_ESP12)
   #include <ESP8266WiFi.h>
 #endif
-
-#include <TM1637Display.h>
-
-//#include <ArduinoMQTTClient.h>
 #include <ArduinoHttpClient.h>
 
 #include "arduino_secrets.h"
@@ -58,44 +35,10 @@ char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as k
 WiFiClient wifiClient;
 HttpClient httpClient = HttpClient(wifiClient, SECRET_SERVER, SECRET_PORT);
 
-const long interval = POST_INTERVAL_MS;
+const long interval = 8192;
 unsigned long previousMillis = 0;
 
-#define SHORT_DELAY 128
 #define DELAY 1024
-#define LONG_DELAY 4096
-
-#define CLK 6
-#define DIO 7
-
-TM1637Display display(CLK, DIO);
-
-#ifdef SCD30
-/****************************************
- * Sensor SCD30 0-10K CO2 ppm            
- *   i2c addr = 0x61
- *   Thanks Lady Ada!
- ****************************************/
-#include <Adafruit_SCD30.h>
-
-Adafruit_SCD30 scd30;
-
-int initSensor() {
-  if (!scd30.begin()) return -1;
-  if (!scd30.setMeasurementInterval(2)) return -1;
-  return 0;  
-}
-
-int readSensor() {
-  if (!scd30.dataReady()) return -1;
-  if (!scd30.read()) return -1;
-  return scd30.CO2;
-}
-
-#define SENSOR_NAME "scd30"
-#endif
-
-#ifdef T3022
 /****************************************
  * Sensor T3022 0-5K CO2 ppm            
  *   i2c addr = 0x15
@@ -105,7 +48,7 @@ int readSensor() {
 
 #define I2C_ADDR (byte)0x15
 
-static const byte CMD_FWREV[]  = {0x04, 0x13, 0x89, 0x00, 0x01};
+static const byte CMD_FWREV[] = {0x04, 0x13, 0x89, 0x00, 0x01};
 static const byte CMD_STATUS[] = {0x04, 0x13, 0x8A, 0x00, 0x01};
 static const byte CMD_CO2PPM[] = {0x04, 0x13, 0x8B, 0x00, 0x01};
 
@@ -145,18 +88,6 @@ word t3022(const void* p) {
   } else return -1;
 }
 
-inline int initSensor() {
-  return t3022(CMD_STATUS);
-}
-
-inline int readSensor() {
-  return t3022(CMD_CO2PPM);
-}
-
-#define SENSOR_NAME "t3022"
-#endif
-
-#if defined(SEN0220) || defined(MH_Z14A)
 /****************************************
  * Sensor SEN0220 0-50K CO2 ppm            
  *   Serial1 requires Arduino Leonardo
@@ -188,23 +119,6 @@ int sen0220(void) {
   else return -1;    
 }
 
-int initSensor() {
-  if(sen0220()==-1) return -1;
-  else return 0;
-}
-
-inline int readSensor() {
-  return sen0220();
-}
-
-#ifdef SEN0220
-#define SENSOR_NAME "sen0220"
-#elif defined(MH_Z14A)
-#define SENSOR_NAME "mh-z14a"
-#endif
-#endif
-
-#ifdef SEN0219
 /****************************************
  * Sensor SEN0219 0-5K CO2 ppm            
  *   Requieres AREF=3.3V
@@ -222,204 +136,68 @@ int sen0219(void) {
   }
 }
 
-int initSensor() {
-  if(sen0219()==-1) return -1;
-  else return 0;
-}
-
-inline int readSensor() {
-  return sen0219();
-}
-
-#define SENSOR_NAME "sen0219"
-#endif
-
-#ifdef S8LP
-/****************************************
- * SenseAir S8            
- *   UART interface
- *   (CC) 2021 <hdcg@ier.unam.mx>
- ****************************************/
-static const byte S8_CMD_STATUS[]  = {0xfe, 0x04, 0x00, 0x00, 0x00, 0x01, 0x25, 0xc5};
-static const byte S8_CMD_CO2READ[] = {0xfe, 0x04, 0x00, 0x03, 0x00, 0x01, 0xd5, 0xc5};
-
-typedef struct {
-  byte addr,
-   function_code,
-   count,
-   hi,
-   lo,
-   crc_hi,
-   crc_lo;
-} s8data_t;
-
-typedef union {
-    struct {
-      byte lo,hi;
-    };
-    word w;
-  } retval_t;
-
-#define S8_WAIT_DELAY 100
-
-int s8status(void) {
-  retval_t retval;
-  s8data_t data;
-  
-  Serial1.write((char*)S8_CMD_STATUS, sizeof(S8_CMD_STATUS));
-  delay(S8_WAIT_DELAY);
-  if (Serial1.available()>0)
-    Serial1.readBytes((char*)&data,sizeof(data));
-  else return -1;
-  
-  if((data.addr != 0xfe) && (data.function_code != 0x04)) return -1;
-  else {
-    retval.hi=data.hi;
-    retval.lo=data.lo;
-    return retval.w;
-  }
-}
-
-int s8co2read(void) {
-  retval_t retval;
-  s8data_t data;
-  
-  Serial1.write((char*)S8_CMD_CO2READ, sizeof(S8_CMD_CO2READ));
-  delay(S8_WAIT_DELAY);
-  if (Serial1.available()>0)
-    Serial1.readBytes((char*)&data,sizeof(data));
-  else return -1;
-
-  if((data.addr != 0xfe) && (data.function_code != 0x04)) return -1;
-  else {
-    retval.hi=data.hi;
-    retval.lo=data.lo;
-    return retval.w;
-  }
-}
-
-inline int initSensor() {
-  return s8status();
-}
-
-inline int readSensor() {
-  return s8co2read();
-}
-
-#define SENSOR_NAME "s8lp"
-#endif 
-
-#ifdef DUMMY
-/****************************************
- * Dummy Sensor
- *   (CC) 2021 <hdcg@ier.unam.mx>
- ****************************************/
-static int myDummyData=420;
-
-int initSensor() {
-  randomSeed(0xc0cac07a);
-  if (millis()&1!=0) return 0;
-  else return -1;
-}
-
-int readSensor() {
-  switch(random(10)) {
-    case 2: return ++myDummyData;
-    case 3: return --myDummyData;
-    case 5: return myDummyData+=10;
-    case 7: return myDummyData-=10;
-    default: return myDummyData;
-  }
-}
-
-#define SENSOR_NAME "dummy"
-#endif
-
 /*********************
  * Main program here!
  *********************/
-#ifndef SENSOR_NAME
-#error "PLEASE SELECT A SENSOR"
-#endif
-
-#ifdef TwoWire_h
-static const byte SEG_i2c[] = { SEG_C, SEG_A | SEG_B | SEG_G | SEG_E | SEG_D, SEG_G | SEG_E | SEG_D, 0 };
-#endif
-
 boolean led = false;
-
-inline void toggleLED(void) {
-  digitalWrite(LED_BUILTIN, led=!led);
-}
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-  toggleLED();
-  
+  digitalWrite(LED_BUILTIN, led=!led);
+
   analogReference(EXTERNAL);
 
-  display.setBrightness(0x07);
-  display.showNumberDec(8888);
-  delay(LONG_DELAY);
-  
   //Initialize serial and wait for port to open:
   Serial.begin(38400);
-  Serial.println(F("\n***************************"));
-  Serial.println(F(" CO2 all sensors template"));
-  Serial.println(F(" * sen0219\n * mh-z14a\n * sen0220\n * t3022\n * s8lp"));
-  Serial.println(F(" (C) 2021 hdcg@ier.unam.mx"));
-  Serial.println(F("***************************\n"));
-
-  Serial.print(F("Sensor: " SENSOR_NAME));
-
-  Serial1.begin(9600);
-
-#ifdef TwoWire_h
-  display.setSegments(SEG_i2c);
-  delay(SHORT_DELAY);
-
-  Wire.begin();
-#endif
-
-#ifdef T3022
-  Serial.println(F("Detect[t3022]..."));
-  Serial.print(F("FWREV=0x"));
-  int fwrev=t3022(CMD_FWREV);
-  display.showNumberHexEx(fwrev,0,true);
-  delay(SHORT_DELAY);
-  Serial.println(fwrev, HEX);
-#endif
-
-  Serial.println(F("Init[" SENSOR_NAME "]..."));
-  while(1) {
-    Serial.print(F("ST=0x"));
-    toggleLED();
-    word st=initSensor();
-    display.showNumberHexEx(st,0,true);
-    Serial.println(st, HEX);
-    delay(SHORT_DELAY);
-    if(st==0) break;
-    delay(DELAY-SHORT_DELAY);
+  while (!Serial) {
+    digitalWrite(LED_BUILTIN, led=!led);
+    delay(DELAY);
   }
+  Serial.println();
+  Serial.println(F("***************************"));
+  Serial.println(F(" CO2 all sensors"));
+  Serial.println(F(" * sen0219\n * sen0220\n * t3022"));
+  Serial.println(F(" (C) 2021 hdcg@ier.unam.mx"));
+  Serial.println(F("***************************"));
+  Serial.println();
 
-  display.showNumberDec(1234);
   // attempt to connect to Wifi network:
-  Serial.print(F("Attempting to connect to WPA SSID: "));
+  Serial.print("Attempting to connect to WPA SSID: ");
   Serial.println(ssid);
   while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
     // failed, retry
-    toggleLED();
-    Serial.print(F("."));
+    digitalWrite(LED_BUILTIN, led=!led);
+    Serial.print(".");
     delay(DELAY);
   }
 
-  Serial.println(F("You're connected to the network"));
+  Serial.println("You're connected to the network");
+  Serial.println();
 
-  Serial.print(F("POST interval="));
-  Serial.print(interval);
-  Serial.println(F("ms\n"));
+  Serial.print(F("Init[sen0220]..."));
+  Serial1.begin(9600);
+  while (!Serial1) {
+    digitalWrite(LED_BUILTIN, led=!led);
+    delay(DELAY);
+  }
+  Serial.println(F("\nDone!")); 
 
-  display.clear();
+  Wire.begin();
+
+  Serial.println(F("Detect[t3022]..."));
+  Serial.print(F("FWREV=0x"));
+  int fwrev=t3022(CMD_FWREV);
+  Serial.println(fwrev, HEX);
+  
+  Serial.println(F("Init[t3022]..."));
+  while(1) {
+    digitalWrite(LED_BUILTIN, led=!led);
+    word st=t3022(CMD_STATUS);
+    Serial.print(F("ST=0x"));
+    Serial.println(st, HEX);
+    if(st==0) break;
+    delay(DELAY);
+  }
 }
 
 void loop() {
@@ -431,22 +209,28 @@ void loop() {
     // save the last time a message was sent
     unsigned long uptime = (previousMillis = currentMillis) / 1000;
 
-    toggleLED();
+    digitalWrite(LED_BUILTIN, led=!led);
 
-    // Sensor Data HERE! 
-    int co2ppm = readSensor(); 
-
-    // Common code here!
-    display.showNumberDec(co2ppm);
+    int co2sen0219 = sen0219();
     
+    int co2sen0220 = sen0220();
+
+    int co2t3022 = t3022(CMD_CO2PPM);
+ 
     String payload = "{";
-    payload += "'" SENSOR_NAME "':";
-    payload += co2ppm;
+    payload += "'uptime':";
+    payload += uptime;
+    payload += ",'sen0219':";
+    payload += co2sen0219;
+    payload += ",'sen0220':";
+    payload += co2sen0220;
+    payload += ",'t3022':";
+    payload += co2t3022;
     payload += "}";
 
     Serial.println("POST... " + payload);
 
-    toggleLED();
+    digitalWrite(LED_BUILTIN, led=!led);
     httpClient.post(SECRET_TOPIC, "application/json", payload);
 
     int statusCode = httpClient.responseStatusCode();  
@@ -455,6 +239,6 @@ void loop() {
     Serial.print(statusCode);
     Serial.print(" ");
     Serial.println(response);
-    toggleLED();
+    digitalWrite(LED_BUILTIN, led=!led);
   }
 }
