@@ -15,4 +15,23 @@ toda la informaci'on necesaria para construir tu propio medidor de CO2 usando
 software y hardware libre.
 
 ## Metodolog'ia
-Los sensores se prueban en una caja herm'etica a diferentes concentracione
+Los sensores se prueban en una caja herm'etica a diferentes concentraciones y
+se analiza el tiempo de respuesta y el error respecto a un dispositivo
+de referencia (Fluke 975).
+
+## Sensores
+
+Los sensores que hemos probado son:
+
+1. cjmcu811
+2. cdm4160
+3. t3022
+4. scd30
+5. sen0220
+6. s8lp
+7. sen0219
+
+## Resultados
+
+
+
