@@ -12,13 +12,13 @@ reducir el riesgo de transmisi'on del SARS-CoV-2.
 
 ## Objetivo
 Caracterizar sensores de CO2 disponibles en el mercado mexicano y proporcionar
-toda la informaci'on necesaria para construir tu propio medidor de CO2 usando
+toda la información necesaria para construir tu propio medidor de CO2 usando
 software y hardware libre.
 
-## Metodolog'ia
-Los sensores se prueban en una caja herm'etica a diferentes concentraciones y
-se analiza el tiempo de respuesta y el error respecto a un dispositivo
-de referencia (Fluke 975).
+## Metodología
+Los sensores se prueban en una caja hermética a diferentes concentraciones cd CO2 y
+se analiza el transitorio de la respuesta y el error una vez alcanzado el estado  
+permanente. Se utiliza el Fluke 975 como dispositivo de referencia.
 
 ## Sensores
 
