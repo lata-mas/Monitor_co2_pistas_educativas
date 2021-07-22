@@ -1,12 +1,13 @@
 # Sensores para medir el CO2 en edificaciones
 
 
-## Introducci'on
+## Introducción
 
-Cada d'ia hay m'as evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles. 
-En el proceso de respiraci'on humana, se expira CO2,  por lo que medir
-el nivel de CO2 en un espacio nos ayuda a mejorar la ventilaci'on de un espacio
-y reducir el riesgo de transmisi'on del SARS-CoV-2 en espacios.
+Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles. 
+En el proceso de respiración humana se expira CO2,  por lo que medir
+el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
+y nos ayuda a tomar acciones para 
+reducir el riesgo de transmisi'on del SARS-CoV-2.
 
 
 ## Objetivo
