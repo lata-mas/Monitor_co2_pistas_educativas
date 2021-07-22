@@ -7,7 +7,7 @@ Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aero
 En el proceso de respiración humana se expira CO2,  por lo que medir
 el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
 y nos ayuda a tomar acciones para 
-reducir el riesgo de transmisi'on del SARS-CoV-2.
+reducir el riesgo de transmisión del SARS-CoV-2.
 
 
 ## Objetivo
@@ -34,5 +34,9 @@ Los sensores que hemos probado son:
 
 ## Resultados
 
+Se mide el tiempo de respuesta,
+\[
+TR = t(CO_2^{90\%})
+\]
 
 
