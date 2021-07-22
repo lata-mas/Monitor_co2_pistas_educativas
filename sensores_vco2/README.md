@@ -35,8 +35,8 @@ Los sensores que hemos probado son:
 ## Resultados
 
 Se mide el tiempo de respuesta,
-\[
+$
 TR = t(CO_2^{90\%})
-\]
+$
 
 
