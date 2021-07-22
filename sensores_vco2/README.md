@@ -34,9 +34,20 @@ Los sensores que hemos probado son:
 
 ## Resultados
 
-Se mide el tiempo de respuesta,
-$
-TR = t(CO_2^{90\%})
-$
+Se mide el tiempo de respuesta respecto al dispositivo de referencia (D_r), 
+definido como el tiempo que tarda el sensor en alcanzar el 90% del valor
+del dispositivo de referencia en estado permanente, definido como:
+
+TR = t(D_r ) - t( S)
+
+donde:
+
+TR es el tiempo de respuesta del sensor S,
+
+t(D_r) es el tiempo en el que se alcanz'o el 90% del valor
+del dispositivo de referencia,
+ 
+t(S) es el tiempo en el que el sensor en prueba alcanz'o
+el 90% del valor del dispositivo de referencia. 
 
 
