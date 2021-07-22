@@ -34,9 +34,12 @@ Los sensores que hemos probado son:
 
 ## Resultados
 
-Se mide el tiempo de respuesta respecto al dispositivo de referencia (D_r), 
+Se mide el tiempo de respuesta respecto al dispositivo de referencia
+y el error en estado permanente del experimento. 
+
+El tiempo de respuesta (TR) respecto al dispositivo de referencia (D_r) est'a
 definido como el tiempo que tarda el sensor en alcanzar el 90% del valor
-del dispositivo de referencia en estado permanente, definido como:
+del dispositivo de referencia en estado permanente:
 
 TR = t(D_r ) - t( S)
 
