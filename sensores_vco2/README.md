@@ -1,7 +1,7 @@
 # Sensores para medir el CO2 en edificaciones
 
 
-## Introducción
+# Introducción
 
 Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles. 
 En el proceso de respiración humana se expira CO2,  por lo que medir
