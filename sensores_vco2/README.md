@@ -10,17 +10,17 @@ y nos ayuda a tomar acciones para
 reducir el riesgo de transmisión del SARS-CoV-2.
 
 
-## Objetivo
+# Objetivo
 Caracterizar sensores de CO2 disponibles en el mercado mexicano y proporcionar
 toda la información necesaria para construir tu propio medidor de CO2 usando
 software y hardware libre.
 
-## Metodología
+# Metodología
 Los sensores se prueban en una caja hermética a diferentes concentraciones cd CO2 y
 se analiza el transitorio de la respuesta y el error una vez alcanzado el estado  
 permanente. Se utiliza el Fluke 975 como dispositivo de referencia.
 
-## Sensores
+# Sensores
 
 Los sensores que hemos probado son:
 
@@ -32,7 +32,7 @@ Los sensores que hemos probado son:
 6. s8lp
 7. sen0219
 
-## M'etricas 
+# M'etricas 
 
 Se mide el tiempo de respuesta respecto al dispositivo de referencia
 y el error en estado permanente del experimento. 
@@ -66,7 +66,11 @@ Una vez que el experimento ha alcanzado el estado permanente, se calcula el erro
 
 E = 
 
-## Resultados
+
+
+# Resultados
+
+
 
 | Sensor |    TR   |   E    |  MCU | 
 |:-------| ------: | -----: | :--: |
