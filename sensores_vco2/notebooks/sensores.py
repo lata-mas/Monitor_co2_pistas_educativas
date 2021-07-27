@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from dateutil.parser import parse
 
 def analiza_sensor(df,fluke,sensor="None",intervalo="1S",
-                   int_promedio="5Min",grafica=True):
+                   int_promedio="5Min",grafica=True,imprime=False):
     tmp = pd.DataFrame(df[sensor])
     tmp.dropna(inplace=True)
     tmp["derivada"]     = tmp.diff().rolling(intervalo).mean()
@@ -15,7 +15,8 @@ def analiza_sensor(df,fluke,sensor="None",intervalo="1S",
     resultados = obtiene_resultados(tmp,fluke,sensor,int_promedio)
     if grafica:
         grafica_sensor(tmp,fluke,intervalo)
-    print(sensor,resultados)
+    if imprime:
+        print(sensor,resultados)
     return resultados
 
 
