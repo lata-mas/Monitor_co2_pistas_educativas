@@ -10,8 +10,8 @@ ___
 5. [**Conclusiones**](#Conclusiones)
 6. [**Constrúyelo**](#Constrúyelo)
 7. [**Pendientes**](#Pendientes)
-8. [**Referencias**](#Referencias)
-9. [**Autores**](#Autores)
+8. [**Autores**](#Autores)
+9. [**Referencias**](#Referencias)
 
 ___
 
