@@ -1,4 +1,4 @@
-# Sensores para medir el CO2 en edificaciones
+# Dispositivo para medir el CO2 en edificaciones
 
 ## Objetivo
 Caracterizar sensores de CO2 disponibles en el mercado mexicano y proporcionar
