@@ -49,7 +49,7 @@ def obtiene_resultados(tmp,fluke,sensor,int_promedio):
     Error= M.iloc[-1] - D_r.iloc[-1]
     nombre = str(int(D_r.iloc[-1]))+ 'ppm'
     my_dict= {"Error":[abs(Error)],
-              "TR+":[TR.iloc[0]],  
+              "TR":[TR.iloc[0]],  
               "M":[M[-1]],
               "D_r":[D_r.iloc[-1]],
               'sensor':[sensor],
