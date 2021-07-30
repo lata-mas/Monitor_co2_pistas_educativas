@@ -29,6 +29,8 @@ def grafica_sensor(df,fluke,intervalo,zoom):
     ax[0].plot(fluke.fluke.rolling(intervalo).mean(),"ro",label='fluke')
     
     ax[0].set_ylabel("$CO_2$ [ppm]")
+    ax[0].set_title("Figura 1")
+    ax[1].set_title("Figura 2")
     ax[1].plot(df.derivada,"go",label=nombre[0])
     ax[1].set_ylabel("$\dfrac{d CO_2}{dt}$")
     ax[1].set_xlabel("Fecha [dd hh:mm]")
