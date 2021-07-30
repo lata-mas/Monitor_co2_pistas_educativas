@@ -24,7 +24,7 @@ software y hardware libre.
 
 ## Introducción
 
-Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles.
+Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles[1].
 En el proceso de respiración humana se expira CO2,  por lo que medir
 el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
 y nos ayuda a tomar acciones para
@@ -152,3 +152,4 @@ Y a la fecha han contribuido:
 ## Referencias
 
 1.[Singing unmasked, indoors spreads COVID-19 through aerosols, new study confirms](https://www.colorado.edu/today/2020/09/17/singing-unmasked-indoors-spreads-covid-19-through-aerosols-new-study-confirms)
+2. [Pese a lo que nos habían dicho, la COVID-19 sí se transmite por aire y la ventilación es crucial para protegernos](https://unamglobal.unam.mx/pese-a-lo-que-nos-habian-dicho-la-covid-19-si-se-transmite-por-aire-y-la-ventilacion-es-crucial-para-protegernos/?fbclid=IwAR0sW6vuGHWTH13rlhkBLLkxjZxu5v7fGgK68bcxknCwfhoOIFyJ7NPaWW8)
