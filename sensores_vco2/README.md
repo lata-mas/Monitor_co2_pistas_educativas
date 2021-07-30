@@ -77,7 +77,7 @@ Los sensores que se han probado son:
 En una prueba a una concentración dada se colocan los  sensores en evaluación y
 se calcula el error, el
 tiempo de respuesta TR, y el valor de la medición en estado permanente
-del sensor M y también del dispositivo de referencia D_r a la concentra.
+del sensor M y también del dispositivo de referencia D_r a la concentración dada.
 
 |         Sensor         |   Error |   TR  |    M |   D_r |
 |:-----------------------|--------:|------:|-----:|------:|
