@@ -15,7 +15,7 @@ y nos ayuda a tomar acciones para
 reducir el riesgo de transmisión del SARS-CoV-2.
 
 Una de las
-[recomendaciones principales] (https://unamglobal.unam.mx/pese-a-lo-que-nos-habian-dicho-la-covid-19-si-se-transmite-por-aire-y-la-ventilacion-es-crucial-para-protegernos/?fbclid=IwAR0sW6vuGHWTH13rlhkBLLkxjZxu5v7fGgK68bcxknCwfhoOIFyJ7NPaWW8)
+[recomendaciones principales](https://unamglobal.unam.mx/pese-a-lo-que-nos-habian-dicho-la-covid-19-si-se-transmite-por-aire-y-la-ventilacion-es-crucial-para-protegernos/?fbclid=IwAR0sW6vuGHWTH13rlhkBLLkxjZxu5v7fGgK68bcxknCwfhoOIFyJ7NPaWW8)
 es ventilar los espacios
 cuando la concentración de CO2 sea mayor a 700 ppm.
 ## Metodología
