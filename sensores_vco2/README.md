@@ -112,11 +112,11 @@ el voltaje de operación (Vin), el voltaje de comunicación (Vcom) la tecnologí
 las variables que mide (Variables)
 
 
-| sensor    |  Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
-| :-----    |  :--        | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
-|           |             | $usd   |        |  [V]      |  [V]    |        |            |            |
-| s8lp      |  Senseair   |  44    |   UART |   Vin     |  5.0    |   NDIR |      1     | ppm        |
-| scd30     |  Sensirion  |  61    |   I2C  | 4.5-5.25  |  3.3    |  NDIR  |      2     | ppm, oC, HR|
+| sensor    |  Error      | TR     | Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
+| :-----    |  :--        | :--:   |  :--       | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
+|           |             |        |            | $usd   |        |  [V]      |  [V]    |        |            |            |         
+| s8lp      |             |        |  Senseair   |  44   |   UART |   Vin     |  5.0    |   NDIR |      1     | ppm        |
+| scd30     |             |        |  Sensirion  |  61   |   I2C  | 4.5-5.25  |  3.3    |  NDIR  |      2     | ppm, oC, HR|
 
 
 
