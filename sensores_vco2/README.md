@@ -131,7 +131,7 @@ el tiempo de respuesta (TR), ambos con su desviación estándard,  fabricante,  
 
 ## Pendientes    
 
-* [ ] 1 led RGB en lugar de tres
+* [x] 1 led RGB en lugar de tres
 * Precios y materiales por sensor
 * Vin a 5V para el esp32
 * PCB universal para sensores seleccionados
