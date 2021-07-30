@@ -28,16 +28,15 @@ Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aero
 En el proceso de respiración humana se expira CO2,  por lo que medir
 el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
 y nos ayuda a tomar acciones para
-reducir el riesgo de transmisión del SARS-CoV-2[2].
+reducir el riesgo de transmisión del SARS-CoV-2.
 
-Una de las
-[recomendaciones principales](https://unamglobal.unam.mx/pese-a-lo-que-nos-habian-dicho-la-covid-19-si-se-transmite-por-aire-y-la-ventilacion-es-crucial-para-protegernos/?fbclid=IwAR0sW6vuGHWTH13rlhkBLLkxjZxu5v7fGgK68bcxknCwfhoOIFyJ7NPaWW8)
+Una de las recomendaciones principales
 es ventilar los espacios
-cuando la concentración de CO2 sea mayor a 700 ppm.
+cuando la concentración de CO2 sea mayor a 700 ppm[2].
 
 
 ## Metodología
-Se diseñó un experimento para medir el tiempo de respuesta (TR)
+Se diseña un experimento para medir el tiempo de respuesta (TR)
 y el error respecto a un dispositivo de referencia. El experimento
 consiste en colocar el sensor a caracterizar y un sensor de referencia (Fluke 975)
 en una caja (casi)hermética. El experimento inicia cuando se produce CO2 mezclando
@@ -46,10 +45,13 @@ vinagre y bicarbonato de sodio (Figura 1).
 
 ![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/6793b8df06d98f5591a92e80fcb6b1445978810d/sensores_vco2/img/800ppm.png "800ppm")
 
-El TR se define como el tiempo transcurrido  en que el cambio de la derivada de la concentración
-respecto al tiempo es menor a 2 ppm, como se ve en la  Figura 2.
+El TR se define como el tiempo transcurrido  en que el cambio
+de la derivada de la concentración de CO2
+respecto al tiempo es menor a 2 ppm. En  la  Figura 2 se muestra
+la tasa de cambio para el sensor s8lp y se puede apreciar que el TR es alrededor de 5 minutos.
 
-La prueba se deja por una hora para que alcance un estado permanente y se obtiene el promedio temporal
+La prueba dura una hora, y se asegura que se alcance un estado permanente. Una vez
+que se ha alcanzado el estado permanente  se obtiene el promedio temporal
 de los últimos 10 minutos tanto del sensor en caracterización como del dispositivo de referencia. El
 error es el valor absoluto de la diferencia de ambas medidas.
 
