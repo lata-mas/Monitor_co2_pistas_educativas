@@ -134,12 +134,12 @@ las variables que mide (Variables)
 * Vin a 5V para el esp32
 * PCB universal para sensores seleccionados
 * No usar jumpers
-* Carcasa con protección al sensor y menor tamaño
+* Carcasa con protección al sensor, pantalla y menor tamaño
 * Integrar alarma sonora
 * Visibilidad del nivel de bateria
 * Configurable en red
 * Incluir referencias bibliogr'aficas
-* Que el scd30 despligue valoers de oC, HR y ppm 
+* Que el scd30 despligue valoers de oC, HR y ppm
 
 
 ## Autores
