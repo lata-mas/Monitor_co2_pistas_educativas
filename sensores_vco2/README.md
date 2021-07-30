@@ -58,7 +58,7 @@ para cada sensor a una concentración dada, se calcula el error, el
 tiempo de respuesta TR, y el valor de la medición en estado permanente
 del sensor M y también del dispositivo de referencia D_r.
 
-|         Sensor         |   Error |   TR+ |    M |   D_r |
+|         Sensor         |   Error |   TR  |    M |   D_r |
 |:-----------------------|--------:|------:|-----:|------:|
 |                        |   [ppm] | [min] |[ppm] | [ppm] |
 | scd30                  |      37 |     3 |  762 |   800 |
