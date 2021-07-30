@@ -25,7 +25,7 @@ vinagre y bicarbonato de sodio.
 El TR se define como el tiempo transcurrido  en que el cambio de la derivada de la concentración
 respecto al tiempo es menor a 2 ppm, como se ve en la figura siguiente.
 
-![800ppm](../img/800ppm.png?raw=true "800ppm")
+![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/d94b46ae19520f0d464e9faddd4a0c6795e9ec86/sensores_vco2/img/800ppm.png "800ppm")
 
 
 en una caja hermética
