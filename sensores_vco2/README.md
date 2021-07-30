@@ -20,12 +20,12 @@ Se diseñó un experimento para medir el tiempo de respuesta (TR)
 y el error respecto a un dispositivo de referencia. El experimento
 consiste en colocar el sensor a caracterizar y un sensor de referencia (Fluke 975)
 en una caja (casi)hermética. El experimento inicia cuando se produce CO2 mezclando
-vinagre y bicarbonato de sodio.
+vinagre y bicarbonato de sodio (Figura 1).
 
 El TR se define como el tiempo transcurrido  en que el cambio de la derivada de la concentración
-respecto al tiempo es menor a 2 ppm, como se ve en la figura siguiente.
+respecto al tiempo es menor a 2 ppm, como se ve en la  figura siguiente.
 
-![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/d94b46ae19520f0d464e9faddd4a0c6795e9ec86/sensores_vco2/img/800ppm.png "800ppm")
+![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/d2ca1b8e98e3b86a8cee72be6eeb1e02ed23bd05/sensores_vco2/img/800ppm.png "800ppm")
 
 
 en una caja hermética
