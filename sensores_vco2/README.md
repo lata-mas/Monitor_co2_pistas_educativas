@@ -130,6 +130,8 @@ las variables que mide (Variables)
 ## Pendientes    
 
 * 1 led RGB en lugar de tres
+* Precios
+* Vin a 5V para el esp
 * PCB universal para sensores seleccionados
 * No usar jumpers
 * Carcasa con protección al sensor y menor tamaño
