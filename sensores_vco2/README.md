@@ -9,8 +9,9 @@ ___
 4. [**Evaluación**](#Evaluación)
 5. [**Conclusiones**](#Conclusiones)
 6. [**Constrúyelo**](#Constrúyelo)
-7. **Trabajo futuro**
+7. [**Pendientes**](#Pendientes)
 8. **Referencias**
+9. [**Autores](#Autores)
 
 ___
 
@@ -121,3 +122,19 @@ las variables que mide (Variables)
 
 
 ## Constrúyelo
+
+
+
+## Pendientes    
+
+
+## Autores
+
+En este trabajo fue iniciado por (orden alfabético):
+
+Giovanni Velázquez
+Guillermo Barrios
+Guillermo Ramirez
+Hector Daniel Cortés
+
+Y a la fecha han contribuido:
