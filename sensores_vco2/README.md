@@ -24,11 +24,11 @@ software y hardware libre.
 
 ## Introducción
 
-Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles[1].
+Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles[1,2].
 En el proceso de respiración humana se expira CO2,  por lo que medir
 el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
 y nos ayuda a tomar acciones para
-reducir el riesgo de transmisión del SARS-CoV-2.
+reducir el riesgo de transmisión del SARS-CoV-2[2].
 
 Una de las
 [recomendaciones principales](https://unamglobal.unam.mx/pese-a-lo-que-nos-habian-dicho-la-covid-19-si-se-transmite-por-aire-y-la-ventilacion-es-crucial-para-protegernos/?fbclid=IwAR0sW6vuGHWTH13rlhkBLLkxjZxu5v7fGgK68bcxknCwfhoOIFyJ7NPaWW8)
@@ -141,10 +141,10 @@ las variables que mide (Variables)
 
 En este trabajo fue iniciado por (orden alfabético):
 
-Giovanni Velázquez
-Guillermo Barrios
-Guillermo Ramirez
-Hector Daniel Cortés
+* Giovanni Velázquez
+* Guillermo Barrios
+* Guillermo Ramirez
+* Héctor Daniel Cortés
 
 Y a la fecha han contribuido:
 
