@@ -8,7 +8,7 @@ ___
 3. **Metodologia**
 4. **Evaluación de sensores**
 5. **Conclusiones**
-6. **Arma tu dispositivo**
+6. [**Arma tu dispositivo**](#Arma tu Dispositivo)
 7. **Trabajo futuro**
 8. **Referencias**
 
