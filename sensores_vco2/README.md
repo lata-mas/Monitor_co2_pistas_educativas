@@ -3,8 +3,13 @@
 ## Contenido
 
 1. **Objetivo**
-2. ** Intro **
-3. ** Metodologia **
+2. **Intro**
+3. **Metodologia**
+4. **Evaluación de sensores**
+5. **Conclusiones**
+6. **Arma tu dispositivo**
+7. **Trabajo futuro**
+8. **Referencias**
 
 
 
@@ -47,7 +52,12 @@ error es el valor absoluto de la diferencia de ambas medidas.
 
 La prueba se repite a diferentes concentraciones y se promedia el TR y el error de cada sensor.
 
-## Sensores
+
+
+
+
+# Evaluación de sensores  
+
 
 Los sensores que hemos probado son:
 
@@ -58,10 +68,6 @@ Los sensores que hemos probado son:
 5. sen0220
 6. s8lp
 7. sen0219
-
-
-
-# Resultados
 
 En una prueba de concentración se colocan varios sensores,
 para cada sensor a una concentración dada, se calcula el error, el
@@ -103,3 +109,7 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 | :-----    | :--:  |  :--: | :---:  |  :------:  | :----------:  |
 | s8lp      |  Comm |   Vin |   NDIR |   1        | Observaciones |
 | scd30     |  Comm |   Vin |   NDIR |   2        | Observaciones |
+
+
+
+## Arma tu Dispositivo
