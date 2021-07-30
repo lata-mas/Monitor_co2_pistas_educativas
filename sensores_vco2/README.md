@@ -118,7 +118,7 @@ las variables que mide (Variables)
 | sensor    |  Error      |  TR      | Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
 | :-----    |  :--        |  :--:    |  :--       | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
 |           |  [ppm]      |  [min]   |            | $usd   |        |  [V]      |  [V]    |        |            |            |         
-| s8lp      |  23 +- 6    | 2.8 +- 2 |  Senseair   |  44   |   UART |   Vin     |  5.0    |   NDIR |      1     | ppm        |
+| s8lp      |  23 +- 6    | 2.8 +- 2 |  Senseair   |  44   |   UART |   5.0     |  5.0    |   NDIR |      1     | ppm        |
 | scd30     |  41 +- 5    | 3.8 +- 3 |  Sensirion  |  61   |   I2C  | 4.5-5.25  |  3.3    |  NDIR  |      2     | ppm, oC, HR|
 
 
@@ -131,7 +131,7 @@ las variables que mide (Variables)
 
 * 1 led RGB en lugar de tres
 * Precios
-* Vin a 5V para el esp32 
+* Vin a 5V para el esp32
 * PCB universal para sensores seleccionados
 * No usar jumpers
 * Carcasa con protección al sensor y menor tamaño
@@ -139,6 +139,7 @@ las variables que mide (Variables)
 * Visibilidad del nivel de bateria
 * Configurable en red
 * Incluir referencias bibliogr'aficas
+* Que el scd30 despligue valoers de oC, HR y ppm 
 
 
 ## Autores
