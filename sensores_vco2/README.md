@@ -147,3 +147,8 @@ Guillermo Ramirez
 Hector Daniel Cortés
 
 Y a la fecha han contribuido:
+
+
+## Referencias
+
+1.[Singing unmasked, indoors spreads COVID-19 through aerosols, new study confirms](https://www.colorado.edu/today/2020/09/17/singing-unmasked-indoors-spreads-covid-19-through-aerosols-new-study-confirms)
