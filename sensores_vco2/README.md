@@ -82,3 +82,6 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 | scd30    |                  41 |                  5 |               3.8 |                3 |
 | t3022    |                  58 |                  3 |              16   |               10 |
 | cjmcu811 |                3619 |                508 |              10.6 |                2 |
+
+
+## Conclusiones
