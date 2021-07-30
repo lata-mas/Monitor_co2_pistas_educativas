@@ -1,4 +1,4 @@
-# Dispositivo medidores de  CO2  usando software y hardware libre para monitorear la calidad del aire
+# Dispositivo medidor de  CO2xpara monitorear la calidad del aire construido con hardware y software libre
 
 ___
 ## Contenido
