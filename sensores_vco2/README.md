@@ -49,6 +49,21 @@ Los sensores que hemos probado son:
 
 
 # Resultados
+
+En una prueba de concentración se colocan varios sensores, por lo que
+para cada sensor a una concentración dada, se calcula el error, el
+tiempo de respuesta TR, y el valor de la medición en estado permanente
+del sensor M y también del dispositivo de referencia D_r.
+
+
+|        800ppm                |      Error |      TR+ |        M |    D_r |
+|:-----------------------------|-----------:|---------:|---------:|-------:|
+| scd30                        |   37.7205  |  3.75818 |  762.459 | 800.18 |
+| sen0220                      |    3.48667 |  1.53033 |  803.667 | 800.18 |
+| s8lp                         |   27.7043  |  1.74777 |  827.884 | 800.18 |
+| cjmcu811                     | 3105.88    | 13.0813  | 3906.06  | 800.18 |
+| t3022                        |   55.3953  |  8.95093 |  855.575 | 800.18 |
+
 En la siguiente tabla se presenta el promedio temporal en estado permanente
 del sensor en prueba < M >, el tiempo de respuesta TR, el promedio temporal
 en estado permanente del dispositivo de referencia < Fluke >  y el error absoluto,
