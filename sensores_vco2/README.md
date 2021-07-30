@@ -43,7 +43,7 @@ en una caja (casi)hermética. El experimento inicia cuando se produce CO2 mezcla
 vinagre y bicarbonato de sodio (Figura 1).
 
 
-![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/d2ca1b8e98e3b86a8cee72be6eeb1e02ed23bd05/sensores_vco2/img/800ppm.png "800ppm")
+![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/6793b8df06d98f5591a92e80fcb6b1445978810d/sensores_vco2/img/800ppm.png "800ppm")
 
 El TR se define como el tiempo transcurrido  en que el cambio de la derivada de la concentración
 respecto al tiempo es menor a 2 ppm, como se ve en la  Figura 2.
