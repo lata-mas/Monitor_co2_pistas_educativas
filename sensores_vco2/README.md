@@ -4,7 +4,7 @@ ___
 ## Contenido
 
 1. [**Objetivo**](#Objetivo)
-2. **Intro**
+2. [**Intro**](#Introducción)
 3. **Metodologia**
 4. **Evaluación de sensores**
 5. **Conclusiones**
