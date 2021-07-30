@@ -64,7 +64,7 @@ La prueba se repite a diferentes concentraciones y se promedia el TR y el error 
 # Evaluación
 
 
-Los sensores que hemos probado son:
+Los sensores que se han probado son:
 
 1. cjmcu811
 2. cdm4160
@@ -90,7 +90,7 @@ del sensor M y también del dispositivo de referencia D_r.
 
 
 
-Se realizaron pruebas a diferentes concentraciones, alrededor de 500, 600, 700, 800 y 900 ppm
+Se realizan pruebas a diferentes concentraciones, alrededor de 500, 600, 700, 800 y 900 ppm
 de CO2. Del conjunto de pruebas, para cada sensor se calcula
 el promedio y la desviación estándard
 del error ('Error','mean'), y ('Error','std'), respectivamente.
@@ -109,17 +109,19 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 
 
 ## Conclusiones
-En esta sección se enlistan los sensores que consideramos adecuados indicando el fabricante, el precio en usd
- el tipo de comunicación implementado en el programa (Comm),
-el voltaje de operación (Vin), el voltaje de comunicación (Vcom) la tecnología de medición (Tec), el número de canales (Canales),
-las variables que mide (Variables)
+En esta sección se enlistan los sensores que consideramos adecuados presentando el error,
+el tiempo de respuesta (TR), ambos con su desviación estándard,  fabricante,  precio en usd
+ tipo de comunicación implementado en el programa (Comm),
+ voltaje de operación (Vin),  voltaje de comunicación (Vcom),  tecnología de medición de CO2 (Tec),
+  número de canales (Canales), y
+  variables que mide el sensor (Variables).
 
 
-| sensor    |  Error      |  TR      | Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
-| :-----    |  :--        |  :--:    |  :--       | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
-|           |  [ppm]      |  [min]   |            | $usd   |        |  [V]      |  [V]    |        |            |            |         
-| s8lp      |  23 +- 6    | 2.8 +- 2 |  Senseair   |  44   |   UART |   5.0     |  5.0    |   NDIR |      1     | ppm        |
-| scd30     |  41 +- 5    | 3.8 +- 3 |  Sensirion  |  61   |   I2C  | 4.5-5.25  |  3.3    |  NDIR  |      2     | ppm, oC, HR|
+| sensor    |  Error      |  TR      | Fabricante  | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
+| :-----    |  :--        |  :--:    |  :--        | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
+|           |  [ppm]      |  [min]   |             | $usd   |        |  [V]      |  [V]    |        |            |            |         
+| s8lp      |  23 +- 6    | 2.8 +- 2 |  Senseair   |  44    |   UART |   5.0     |  5.0    |   NDIR |      1     | ppm        |
+| scd30     |  41 +- 5    | 3.8 +- 3 |  Sensirion  |  61    |   I2C  | 4.5-5.25  |  3.3    |  NDIR  |      2     | ppm, oC, HR|
 
 
 
@@ -129,8 +131,8 @@ las variables que mide (Variables)
 
 ## Pendientes    
 
-* 1 led RGB en lugar de tres
-* Precios
+* [ ] 1 led RGB en lugar de tres
+* Precios y materiales por sensor
 * Vin a 5V para el esp32
 * PCB universal para sensores seleccionados
 * No usar jumpers
@@ -139,7 +141,7 @@ las variables que mide (Variables)
 * Visibilidad del nivel de bateria
 * Configurable en red
 * Incluir referencias bibliogr'aficas
-* Que el scd30 despligue valoers de oC, HR y ppm
+* Que el scd30 despligue valores de oC, HR y ppm
 
 
 ## Autores
