@@ -29,6 +29,8 @@ def grafica_sensor(df,fluke,intervalo,zoom):
     ax[0].plot(fluke.fluke.rolling(intervalo).mean(),"ro",label='fluke')
     
     ax[0].set_ylabel("$CO_2$ [ppm]")
+    ax[0].set_title("Figura 1")
+    ax[1].set_title("Figura 2")
     ax[1].plot(df.derivada,"go",label=nombre[0])
     ax[1].set_ylabel("$\dfrac{d CO_2}{dt}$")
     ax[1].set_xlabel("Fecha [dd hh:mm]")
@@ -47,7 +49,7 @@ def obtiene_resultados(tmp,fluke,sensor,int_promedio):
     Error= M.iloc[-1] - D_r.iloc[-1]
     nombre = str(int(D_r.iloc[-1]))+ 'ppm'
     my_dict= {"Error":[abs(Error)],
-              "TR+":[TR.iloc[0]],  
+              "TR":[TR.iloc[0]],  
               "M":[M[-1]],
               "D_r":[D_r.iloc[-1]],
               'sensor':[sensor],
