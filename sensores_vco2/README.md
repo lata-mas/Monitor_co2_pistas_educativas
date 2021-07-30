@@ -1,12 +1,17 @@
 # Sensores para medir el CO2 en edificaciones
 
+### Contenido
+
+1. *  Introducción *
+2. 
+
 
 # Introducción
 
-Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles. 
+Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles.
 En el proceso de respiración humana se expira CO2,  por lo que medir
 el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
-y nos ayuda a tomar acciones para 
+y nos ayuda a tomar acciones para
 reducir el riesgo de transmisión del SARS-CoV-2.
 
 
@@ -32,12 +37,12 @@ Los sensores que hemos probado son:
 6. s8lp
 7. sen0219
 
-# M'etricas 
+# M'etricas
 
 Se mide el tiempo de respuesta respecto al dispositivo de referencia
-y el error en estado permanente del experimento. 
+y el error en estado permanente del experimento.
 
-### Tiempo de respuesta 
+### Tiempo de respuesta
 
 El tiempo de respuesta (TR) respecto al dispositivo de referencia (D_r) est'a
 definido como el tiempo que tarda el sensor en alcanzar el 90% del valor
@@ -51,20 +56,20 @@ TR es el tiempo de respuesta del sensor S,
 
 t(D_r) es el tiempo en el que se alcanz'o el 90% del valor
 del dispositivo de referencia,
- 
+
 t(S) es el tiempo en el que el sensor en prueba alcanz'o
-el 90% del valor del dispositivo de referencia. 
+el 90% del valor del dispositivo de referencia.
 
-### Estado permanente 
+### Estado permanente
 
-Se define como valor en estado permanente cuando el promedio de 
+Se define como valor en estado permanente cuando el promedio de
 la pendiente es XXX
 
-### Error en estado permanente 
+### Error en estado permanente
 
 Una vez que el experimento ha alcanzado el estado permanente, se calcula el error
 
-E = 
+E =
 
 
 
@@ -72,10 +77,10 @@ E =
 
 
 
-| Sensor |   < M > | TR     | < Fluke > |  Error  | 
-|:-------| :-----  |:---    | :--:      | :--:    | 
-|        |  [ppm]  | MM:SS  |   [ppm]   |  [ppm]  | 
-| scd30  |  858    | 07:22  |  893.9    |   35.9  | 
+| Sensor |   < M > | TR     | < Fluke > |  Error  |
+|:-------| :-----  |:---    | :--:      | :--:    |
+|        |  [ppm]  | MM:SS  |   [ppm]   |  [ppm]  |
+| scd30  |  858    | 07:22  |  893.9    |   35.9  |
 | t3022  |         |        |           | |  
 |sen0220 |         |        |           | |
-| s8lp   |         |        |           | | 
+| s8lp   |         |        |           | |
