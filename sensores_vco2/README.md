@@ -127,6 +127,13 @@ las variables que mide (Variables)
 
 ## Pendientes    
 
+* 1 led RGB en lugar de tres
+* PCB universal para sensores seleccionados
+* Carcasa con protección al sensor y menor tamaño
+* Integrar alarma sonora
+* Visibilidad del nivel de bateria
+* Configurable en red
+
 
 ## Autores
 
