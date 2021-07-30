@@ -74,10 +74,10 @@ Los sensores que se han probado son:
 6. s8lp
 7. sen0219
 
-En una prueba de concentración se colocan varios sensores,
-para cada sensor a una concentración dada, se calcula el error, el
+En una prueba a una concentración dada se colocan los  sensores en evaluación y
+se calcula el error, el
 tiempo de respuesta TR, y el valor de la medición en estado permanente
-del sensor M y también del dispositivo de referencia D_r.
+del sensor M y también del dispositivo de referencia D_r a la concentra.
 
 |         Sensor         |   Error |   TR  |    M |   D_r |
 |:-----------------------|--------:|------:|-----:|------:|
