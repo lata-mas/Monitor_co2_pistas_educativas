@@ -115,8 +115,8 @@ las variables que mide (Variables)
 | sensor    |  Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
 | :-----    |  :--        | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
 |           |             | $usd   |        |  [V]      |  [V]    |        |            |            |
-| s8lp      |  Senseair   |        |   UART |   Vin     |  XX     |   NDIR |   1        | ppm        |
-| scd30     |  Sensirion  |        |   I2C  |   4.4-5.0 | 3.3     |  NDIR  |   2        | ppm, oC, HR|
+| s8lp      |  Senseair   |  44    |   UART |   Vin     |  5.0    |   NDIR |      1     | ppm        |
+| scd30     |  Sensirion  |  61    |   I2C  | 4.5-5.25  |  3.3    |  NDIR  |      2     | ppm, oC, HR|
 
 
 
