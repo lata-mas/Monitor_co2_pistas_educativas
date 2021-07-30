@@ -71,10 +71,11 @@ del sensor en prueba < M >, el tiempo de respuesta TR, el promedio temporal
 en estado permanente del dispositivo de referencia < Fluke >  y el error absoluto,
 que es el valor absoluto entre < M > y < Fluke >.
 
+
 | sensor   |   ('Error', 'mean') |   ('Error', 'std') |   ('TR+', 'mean') |   ('TR+', 'std') |
 |:---------|--------------------:|-------------------:|------------------:|-----------------:|
-| sen0220  |             18.2364 |           25.5517  |           3.22468 |          2.01775 |
-| s8lp     |             23.2094 |            6.24531 |           2.83337 |          2.11715 |
-| scd30    |             40.5712 |            4.96174 |           3.8037  |          2.5656  |
-| t3022    |             57.8272 |            3.43919 |          15.9704  |          9.92708 |
-| cjmcu811 |           3618.76   |          507.741   |          10.6078  |          2.43256 |
+| sen0220  |                  18 |                 26 |               3.2 |                2 |
+| s8lp     |                  23 |                  6 |               2.8 |                2 |
+| scd30    |                  41 |                  5 |               3.8 |                3 |
+| t3022    |                  58 |                  3 |              16   |               10 |
+| cjmcu811 |                3619 |                508 |              10.6 |                2 |
