@@ -56,7 +56,8 @@ tiempo de respuesta TR, y el valor de la medición en estado permanente
 del sensor M y también del dispositivo de referencia D_r.
 
 
-|        800ppm                |      Error |      TR+ |        M |    D_r |
+|        Sensor                |      Error |      TR+ |        M |    D_r |
+|        Sensor                |      Error |      TR+ |        M |    D_r |
 |:-----------------------------|-----------:|---------:|---------:|-------:|
 | scd30                        |   37.7205  |  3.75818 |  762.459 | 800.18 |
 | sen0220                      |    3.48667 |  1.53033 |  803.667 | 800.18 |
