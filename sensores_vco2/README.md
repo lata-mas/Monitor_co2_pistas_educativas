@@ -4,7 +4,7 @@ ___
 ## Contenido
 
 1. [**Objetivo**](#Objetivo)
-2. [**Intro**](#Introducción)
+2. [**Introducción**](#Introducción)
 3. [**Metodologia**](#Metodología)
 4. [**Evaluación**](#Evaluación)
 5. [**Conclusiones**](#Conclusiones)
