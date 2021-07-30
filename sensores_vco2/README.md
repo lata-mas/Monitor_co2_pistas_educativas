@@ -1,4 +1,4 @@
-# Dispositivo para medir el CO2 en edificaciones
+# Dispositivo para medir el CO2 en espacios ventilados
 
 ## Objetivo
 Caracterizar sensores de CO2 disponibles en el mercado mexicano y proporcionar
@@ -88,3 +88,8 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 
 
 ## Conclusiones
+
+| sensor    |  Comm |   Vin |   Tec  |   Canales  | Observaciones |
+| :-----    | :--:  |  :--: | :---:  |  :------:  | :----------:  |
+| s8lp      |  Comm |   Vin |   NDIR |   1        | Observaciones |
+| scd30     |  Comm |   Vin |   NDIR |   2        | Observaciones |
