@@ -131,17 +131,17 @@ el tiempo de respuesta (TR), ambos con su desviación estándard,  fabricante,  
 
 ## Pendientes    
 
-* [] 1 led RGB en lugar de tres
-* Precios y materiales por sensor
-* Vin a 5V para el esp32
-* PCB universal para sensores seleccionados
-* No usar jumpers
-* Carcasa con protección al sensor, pantalla y menor tamaño
-* Integrar alarma sonora
-* Visibilidad del nivel de bateria
-* Configurable en red
-* Incluir referencias bibliogr'aficas
-* Que el scd30 despligue valores de oC, HR y ppm
+* [ ] 1 led RGB en lugar de tres
+* [ ] Precios y materiales por sensor
+* [ ] Vin a 5V para el esp32
+* [ ] PCB universal para sensores seleccionados
+* [ ] No usar jumper
+* [ ] Carcasa con protección al sensor, pantalla y menor tamaño
+* [ ] Integrar alarma sonora
+* [ ] Visibilidad del nivel de bateria
+* [ ] Configurable en red
+* [ ] Incluir referencias bibliogr'aficas
+* [ ] Que el scd30 despligue valores de oC, HR y ppm
 
 
 ## Autores
