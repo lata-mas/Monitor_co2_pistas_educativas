@@ -34,6 +34,12 @@ Una de las recomendaciones principales
 es ventilar los espacios
 cuando la concentración de CO2 sea mayor a 700 ppm[2].
 
+Se diseñó  un dispositivo  medidor de CO2 buscando minimizar el precio total
+utilizando software y hardware libre. El dispositivo está basado en el
+esp8266 lolin alimentado por el puerto micro-usb por una batería recargable usb
+que alimenta al esp8266 y al sensor. Se diseñó un PCB y un programa en arduino
+que funciona con cualquiera de los sensores presentados en [**Conclusiones**](#Conclusiones)
+siguiendo el esquemático de conexión correspondiente. 
 
 ## Metodología
 Se diseña un experimento para medir el tiempo de respuesta (TR)
@@ -109,6 +115,7 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 
 
 ## Conclusiones
+
 En esta sección se enlistan los sensores que consideramos adecuados presentando el error,
 el tiempo de respuesta (TR), ambos con su desviación estándard,  fabricante,  precio en usd
  tipo de comunicación implementado en el programa (Comm),
@@ -126,6 +133,11 @@ el tiempo de respuesta (TR), ambos con su desviación estándard,  fabricante,  
 
 
 ## Constrúyelo
+
+
+El dispositivo está basado en el ESP8266 Lolin, y se utilizará el sensor s8lp.
+
+
 
 
 
