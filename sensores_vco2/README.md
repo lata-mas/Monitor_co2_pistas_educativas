@@ -22,17 +22,17 @@ consiste en colocar el sensor a caracterizar y un sensor de referencia (Fluke 97
 en una caja (casi)hermética. El experimento inicia cuando se produce CO2 mezclando
 vinagre y bicarbonato de sodio (Figura 1).
 
-El TR se define como el tiempo transcurrido  en que el cambio de la derivada de la concentración
-respecto al tiempo es menor a 2 ppm, como se ve en la  figura siguiente.
 
 ![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/d2ca1b8e98e3b86a8cee72be6eeb1e02ed23bd05/sensores_vco2/img/800ppm.png "800ppm")
 
+El TR se define como el tiempo transcurrido  en que el cambio de la derivada de la concentración
+respecto al tiempo es menor a 2 ppm, como se ve en la  Figura 2.
 
-en una caja hermética
+La prueba se deja por una hora para que alcance un estado permanente y se obtiene el promedio temporal
+de los últimos 10 minutos tanto del sensor en caracterización como del dispositivo de referencia. El
+error es el valor absoluto de la diferencia de ambas medidas.
 
-Los sensores se prueban en una caja hermética a diferentes concentraciones cd CO2 y
-se analiza el transitorio de la respuesta y el error una vez alcanzado el estado  
-permanente. Se utiliza el Fluke 975 como dispositivo de referencia.
+La prueba se repite a diferentes concentraciones y se promedia el TR y el error de cada sensor.
 
 ## Sensores
 
@@ -46,44 +46,13 @@ Los sensores que hemos probado son:
 6. s8lp
 7. sen0219
 
-## M'etricas
-
-Se mide el tiempo de respuesta respecto al dispositivo de referencia
-y el error en estado permanente del experimento.
-
-### Tiempo de respuesta
-
-El tiempo de respuesta (TR) respecto al dispositivo de referencia (D_r) est'a
-definido como el tiempo que tarda el sensor en alcanzar el 90% del valor
-del dispositivo de referencia en estado permanente:
-
-TR = t(D_r ) - t( S)
-
-donde:
-
-TR es el tiempo de respuesta del sensor S,
-
-t(D_r) es el tiempo en el que se alcanz'o el 90% del valor
-del dispositivo de referencia,
-
-t(S) es el tiempo en el que el sensor en prueba alcanz'o
-el 90% del valor del dispositivo de referencia.
-
-### Estado permanente
-
-Se define como valor en estado permanente cuando el promedio de
-la pendiente es XXX
-
-### Error en estado permanente
-
-Una vez que el experimento ha alcanzado el estado permanente, se calcula el error
-
-E =
-
 
 
 # Resultados
-
+En la siguiente tabla se presenta el promedio temporal en estado permanente
+del sensor en prueba < M >, el tiempo de respuesta TR, el promedio temporal
+en estado permanente del dispositivo de referencia < Fluke >  y el error absoluto,
+que es el valor absoluto entre < M > y < Fluke >.
 
 
 | Sensor |   < M > | TR     | < Fluke > |  Error  |
@@ -93,3 +62,8 @@ E =
 | t3022  |         |        |           | |  
 |sen0220 |         |        |           | |
 | s8lp   |         |        |           | |
+
+
+
+
+|                        |      Error |      TR+ |        M |    D_r |\n|:-----------------------|-----------:|---------:|---------:|-------:|\n| ('scd30', '800ppm')    |   37.7205  |  3.75818 |  762.459 | 800.18 |\n| ('sen0220', '800ppm')  |    3.48667 |  1.53033 |  803.667 | 800.18 |\n| ('s8lp', '800ppm')     |   27.7043  |  1.74777 |  827.884 | 800.18 |\n| ('cjmcu811', '800ppm') | 3105.88    | 13.0813  | 3906.06  | 800.18 |\n| ('t3022', '800ppm')    |   55.3953  |  8.95093 |  855.575 | 800.18 |
