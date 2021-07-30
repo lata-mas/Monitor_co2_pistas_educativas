@@ -41,7 +41,7 @@ que alimenta al esp8266 y al sensor. Se diseñó un PCB y un programa en arduino
 que funciona con cualquiera de los sensores presentados en [**Conclusiones**](#Conclusiones)
 siguiendo el esquemático de conexión correspondiente a cada sensor.
 El dispositivo tiene la opción de publicar en la plataforma ThingsBoard y
-tener un tablero en línea y posibilidad de descargar los datos para su posterior análisis.
+tener un tablero en línea y la posibilidad de descargar los datos para su posterior análisis.
 
 En la sección [**Constrúyelo**](#Constrúyelo) se presentan los pasos a seguir haciendo
 referencia al sensor s8lp.
