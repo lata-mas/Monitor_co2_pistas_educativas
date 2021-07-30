@@ -8,7 +8,7 @@ ___
 3. **Metodologia**
 4. **Evaluación de sensores**
 5. **Conclusiones**
-6. [**Arma tu dispositivo**](#Arma tu Dispositivo)
+6. [**Arma tu dispositivo**](#Arma)
 7. **Trabajo futuro**
 8. **Referencias**
 
@@ -114,4 +114,4 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 
 
 
-## Arma tu Dispositivo
+## Arma tu dispositivo
