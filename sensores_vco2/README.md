@@ -1,5 +1,6 @@
 # Dispositivo para medir el CO2 en espacios ventilados
 
+___
 ## Contenido
 
 1. **Objetivo**
