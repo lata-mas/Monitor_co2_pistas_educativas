@@ -50,7 +50,7 @@ Los sensores que hemos probado son:
 
 # Resultados
 
-En una prueba de concentración se colocan varios sensores, por lo que
+En una prueba de concentración se colocan varios sensores,
 para cada sensor a una concentración dada, se calcula el error, el
 tiempo de respuesta TR, y el valor de la medición en estado permanente
 del sensor M y también del dispositivo de referencia D_r.
@@ -66,14 +66,17 @@ del sensor M y también del dispositivo de referencia D_r.
 
 
 
-En la siguiente tabla se presenta el promedio temporal en estado permanente
-del sensor en prueba < M >, el tiempo de respuesta TR, el promedio temporal
-en estado permanente del dispositivo de referencia < Fluke >  y el error absoluto,
-que es el valor absoluto entre < M > y < Fluke >.
+Se realizaron pruebas a diferentes concentraciones, alrededor de 500, 600, 700, 800 y 900 ppm
+de CO2. Del conjunto de pruebas, para cada sensor se calcula
+el promedio y la desviación estándard
+del error ('Error','mean'), y ('Error','std'), respectivamente.
+También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
+('TR', 'std'), respectivamente.
 
 
-| sensor   |   ('Error', 'mean') |   ('Error', 'std') |   ('TR+', 'mean') |   ('TR+', 'std') |
+| sensor   |   ('Error', 'mean') |   ('Error', 'std') |   ('TR', 'mean')  |   ('TR', 'std')  |
 |:---------|--------------------:|-------------------:|------------------:|-----------------:|
+|          |       [ppm]         |        [ppm]       |      [min]        |        [min]     |
 | sen0220  |                  18 |                 26 |               3.2 |                2 |
 | s8lp     |                  23 |                  6 |               2.8 |                2 |
 | scd30    |                  41 |                  5 |               3.8 |                3 |
