@@ -113,7 +113,7 @@ las variables que mide (Variables)
 
 
 | sensor    |  Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
-| :-----    |  --:        | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
+| :-----    |  :--        | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
 |           |             | $usd   |        |  [V]      |  [V]    |        |            |            |
 | s8lp      |  Senseair   |        |   XX   |   Vin     |  XX     |   NDIR |   1        | ppm        |
 | scd30     |  Sensirion  |        |   XX   |   4.4-5.0 | 3.3     |  NDIR  |   2        | ppm, oC, HR|
