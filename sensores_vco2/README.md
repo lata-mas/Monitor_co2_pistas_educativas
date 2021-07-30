@@ -15,6 +15,7 @@ ___
 ___
 
 #Objetivo
+
 Caracterizar sensores de CO2 disponibles en el mercado mexicano y proporcionar
 toda la información necesaria para construir tu propio dispositivo medidor de CO2 usando
 software y hardware libre.
