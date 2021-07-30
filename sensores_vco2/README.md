@@ -134,6 +134,7 @@ las variables que mide (Variables)
 * Integrar alarma sonora
 * Visibilidad del nivel de bateria
 * Configurable en red
+* Incluir referencias bibliogr'aficas
 
 
 ## Autores
