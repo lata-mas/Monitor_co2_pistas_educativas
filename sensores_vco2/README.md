@@ -106,17 +106,17 @@ También se calcula el promedio y la desviación estándard  ('TR', 'mean')  y
 
 
 ## Conclusiones
-En esta sección se enlistan los sensores que consideramos adecuados, el distribuidor
-del cuál lo compramos (puede haber más), el tipo de comunicación implementado en el programa (Comm),
+En esta sección se enlistan los sensores que consideramos adecuados indicando el fabricante, el precio en usd
+ el tipo de comunicación implementado en el programa (Comm),
 el voltaje de operación (Vin), el voltaje de comunicación (Vcom) la tecnología de medición (Tec), el número de canales (Canales),
 las variables que mide (Variables)
 
 
-| sensor    |  Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
-| :-----    |  --:    | :--:   |  :--:     | :---:   | :---:  |  :------:  | :-------:  |
-|           | $usd    |        |  [V]      |  [V]    |        |            |            |
-| s8lp      |         |   XX   |   Vin     |  XX     |   NDIR |   1        | ppm        |
-| scd30     |         |   XX   |   4.4-5.0 | 3.3     |  NDIR  |   2        | ppm, oC, HR|
+| sensor    |  Fabricante | Precio |   Comm |   Vin     |    Vcom |   Tec  |   Canales  | Variables  |
+| :-----    |  --:        | :--:   |  :--:  | :---:     | :---:   |  :---: | :-------:  | :-------:  |
+|           |             | $usd   |        |  [V]      |  [V]    |        |            |            |
+| s8lp      |  Senseair   |        |   XX   |   Vin     |  XX     |   NDIR |   1        | ppm        |
+| scd30     |  Sensirion  |        |   XX   |   4.4-5.0 | 3.3     |  NDIR  |   2        | ppm, oC, HR|
 
 
 
