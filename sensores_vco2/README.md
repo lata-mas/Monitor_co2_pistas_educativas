@@ -7,7 +7,7 @@ ___
 2. [**Intro**](#Introducción)
 3. **Metodologia**
 4. **Evaluación de sensores**
-5. **Conclusiones**
+5. [**Conclusiones**](#Conclusiones)
 6. [**Constrúyelo**](#Constrúyelo)
 7. **Trabajo futuro**
 8. **Referencias**
