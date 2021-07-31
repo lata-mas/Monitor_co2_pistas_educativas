@@ -17,8 +17,8 @@ ___
 
 ## Objetivo
 
-Caracterizar sensores de CO2 disponibles en el mercado mexicano y diseñar un
-dispositivo medidor de CO2 usando software y hardware libre que sea económico y brindar
+Caracterizar sensores de CO2 disponibles en el mercado mexicano para diseñar un
+dispositivo medidor de CO2 confiable usando software y hardware libre que sea económico y brindar
 toda la información necesaria para construirlo.
 
 
