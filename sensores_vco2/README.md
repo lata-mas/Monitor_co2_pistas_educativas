@@ -26,7 +26,7 @@ toda la información necesaria para construirlo.
 
 Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles[1,2].
 En el proceso de respiración humana se expira CO2,  por lo que medir
-el nivel de CO2 en un espacio nos da una idea de la ventilación de un espacio
+este gas en un espacio nos da una idea de la ventilación de un espacio
 y nos ayuda a tomar acciones para
 reducir el riesgo de transmisión del SARS-CoV-2.
 
