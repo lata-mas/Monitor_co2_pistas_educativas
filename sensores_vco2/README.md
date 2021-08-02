@@ -9,9 +9,10 @@ ___
 4. [**Evaluación**](#Evaluación)
 5. [**Conclusiones**](#Conclusiones)
 6. [**Constrúyelo**](#Constrúyelo)
-7. [**Pendientes**](#Pendientes)
-8. [**Autores**](#Autores)
-9. [**Referencias**](#Referencias)
+7. [**Encárgalo**](#Encárgalo)
+8. [**Pendientes**](#Pendientes)
+9. [**Autores**](#Autores)
+10. [**Referencias**](#Referencias)
 
 ___
 
@@ -25,6 +26,7 @@ posible, usando sofware y hardware libre y con la misma filosofía.
 * Seleccionar varios sensores adecuados para tener opciones en caso de desabasto
 * Programa que permita utilizar cualquiera de los sensores seleccionados
 * Diseñar un PCB con conexiones para cualquiera de los sensores seleccionados y un MCU seleccionado
+* Diseñar una carcasa
 * Documentar y compartir
 
 
@@ -150,7 +152,16 @@ El dispositivo está basado en el ESP8266 Lolin, y se utilizará el sensor s8lp.
 
 
 
+## Encárgalo
 
+Si no quieres construirlo, mándanos un correo, nosotros podemos hacerlo y te lo enviamos
+con su hoja de caracterización, te lo enviamos armado.
+
+Si quieres tener varios dispositivos y monitorearlos via web y ser capaz de descargar
+los datos, te podemos ofrecer un plan de monitoreo con un tablero y una libreta en Python
+y Jupyter para descargar los datos.
+
+[co2@ier.unam.mx](mailto:co2@ier.unam.mx)
 
 ## Pendientes    
 
