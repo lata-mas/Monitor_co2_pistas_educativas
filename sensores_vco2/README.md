@@ -148,7 +148,8 @@ el tiempo de respuesta (TR), ambos con su desviación estándard,  fabricante,  
 ## Constrúyelo
 
 
-El dispositivo está basado en el ESP8266 Lolin, y se utilizará el sensor s8lp.
+El dispositivo está basado en el ESP8266 Lolin, y se seleccionó el sensor s8lp.
+
 
 
 
@@ -161,7 +162,16 @@ Si quieres tener varios dispositivos y monitorearlos via web y ser capaz de desc
 los datos, te podemos ofrecer un plan de monitoreo con un tablero y una libreta en Python
 y Jupyter para descargar los datos.
 
-[co2@ier.unam.mx](mailto:co2@ier.unam.mx)
+[correo:co2@ier.unam.mx](mailto:co2@ier.unam.mx)
+
+Costos del dispositivo incluyendo IVA.
+| Cantidad    |  Precio      |
+| :-----      |  :--         |
+|             |  MXN         |    
+|  1 - 4      |  XXX         |         
+| 5-10        |  XXX         |
+| + 10        |  XXX         |  
+
 
 ## Pendientes    
 
