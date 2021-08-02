@@ -156,7 +156,7 @@ El dispositivo está basado en el ESP8266 Lolin, y se seleccionó el sensor s8lp
 ## Encárgalo
 
 Si no quieres construirlo, mándanos un correo, nosotros podemos hacerlo y te lo enviamos
-con su hoja de caracterización, te lo enviamos armado.
+con su hoja de caracterización, te lo enviamos armado. También podemos agregarle un plan de da
 
 Si quieres tener varios dispositivos y monitorearlos via web y ser capaz de descargar
 los datos, te podemos ofrecer un plan de monitoreo con un tablero y una libreta en Python
@@ -168,7 +168,7 @@ Costos del dispositivo incluyendo IVA.
 | Cantidad    |  Precio      |
 | :-----      |  :--         |
 |             |  MXN         |    
-|  1 - 4      |  XXX         |         
+| 1 - 4       |  XXX         |         
 | 5-10        |  XXX         |
 | + 10        |  XXX         |  
 
@@ -183,7 +183,7 @@ Costos del dispositivo incluyendo IVA.
 * [ ] Carcasa con protección al sensor, pantalla y menor tamaño
 * [ ] Integrar alarma sonora
 * [ ] Visibilidad del nivel de bateria
-* [ ] Configurable en red
+* [ ] Configurable en 2 o 3 redes
 * [ ] Incluir referencias bibliogr'aficas
 * [ ] Que el scd30 despligue valores de oC, HR y ppm
 
