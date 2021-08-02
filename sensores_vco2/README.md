@@ -15,11 +15,14 @@ ___
 
 ___
 
-## #Objetivo general 
+## Objetivo
 
-Caracterizar sensores de CO2 disponibles en el mercado mexicano para diseñar un
-dispositivo medidor de CO2 confiable usando software y hardware libre que sea económico y brindar
-toda la información necesaria para construirlo.
+El objetivo general es diseñar un dispositivo medidor de CO2 que sea confiable con un error menor a 50 ppm y lo más barato
+posible, usando sofware y hardware libre y con la misma filosofía.
+
+### Objetivos específicos
+* Caracterizar el error y tiempo de respuesta de diferentes sensores disponibles en el mercado
+* 
 
 
 ## Introducción
