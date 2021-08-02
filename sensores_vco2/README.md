@@ -6,7 +6,7 @@ ___
 1. [**Objetivo**](#Objetivo)
 2. [**Introducción**](#Introducción)
 3. [**Metodologia**](#Metodología)
-4. [**Evaluación**](#Evaluación)
+4. [**Sensores**](#Sensores)
 5. [**Conclusiones**](#Conclusiones)
 6. [**Constrúyelo**](#Constrúyelo)
 7. [**Encárgalo**](#Encárgalo)
@@ -80,7 +80,7 @@ La prueba se repite a diferentes concentraciones y se promedia el TR y el error 
 
 
 
-# Evaluación
+# Sensores
 
 
 Los sensores que se han probado son:
