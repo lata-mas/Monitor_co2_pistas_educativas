@@ -1,4 +1,4 @@
-# Dispositivo medidor de  CO2 para monitorear la calidad del aire construido con hardware y software libre
+# Dispositivo medidor de CO2 para monitorear la calidad del aire construido con hardware y software libre
 
 ___
 ## Contenido
@@ -18,15 +18,16 @@ ___
 
 ## Objetivo
 
-El objetivo general es diseñar un dispositivo medidor de CO2 que sea confiable (con un error menor a 50 ppm) y lo más barato
+El objetivo general es diseñar un dispositivo medidor de CO2 que sea confiable (con un error menor a 50 ppm)
+y lo más barato
 posible, usando sofware y hardware libre y con la misma filosofía.
 
 #### Objetivos específicos
 * Caracterizar el error y tiempo de respuesta de diferentes sensores disponibles en el mercado
 * Seleccionar varios sensores adecuados para tener opciones en caso de desabasto
-* Programa que permita utilizar cualquiera de los sensores seleccionados
-* Diseñar un PCB con conexiones para cualquiera de los sensores seleccionados y un MCU seleccionado
-* Diseñar una carcasa
+* Escribir un programa que permita utilizar cualquiera de los sensores seleccionados
+* Diseñar un PCB con conexiones para los sensores seleccionados y un MCU específico
+* Diseñar una carcasa que proteja al dispositivo con una fuente de alimentación
 * Documentar y compartir
 
 
