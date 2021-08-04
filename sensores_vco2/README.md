@@ -18,13 +18,13 @@ ___
 
 ## Objetivo
 
-El objetivo general es diseñar un dispositivo medidor de CO2 que sea confiable (con un error menor a 50 ppm)
-y lo más barato
-posible, usando sofware y hardware libre y con la misma filosofía.
+El objetivo general es diseñar un dispositivo medidor de CO2 para medir
+la calidad del aire que sea confiable (con un error menor a 50 ppm) y
+barato, usando so software y hardware libre  siguiendo la filosofía del software libre.
 
 #### Objetivos específicos
 * Caracterizar el error y tiempo de respuesta de diferentes sensores disponibles en el mercado
-* Seleccionar varios sensores adecuados para tener opciones en caso de desabasto
+* Seleccionar sensores adecuados para tener opciones en caso de desabasto
 * Escribir un programa que permita utilizar cualquiera de los sensores seleccionados
 * Diseñar un PCB con conexiones para los sensores seleccionados y un MCU específico
 * Diseñar una carcasa que proteja al dispositivo con una fuente de alimentación
@@ -33,34 +33,28 @@ posible, usando sofware y hardware libre y con la misma filosofía.
 
 ## Introducción
 
-Cada día hay más evidencia de que el SARS-CoV-2 se transmite por medio de aerosoles[1,2].
-En el proceso de respiración humana se expira CO2,  por lo que medir
-este gas en un espacio nos da una idea de la ventilación de un espacio
-y nos ayuda a tomar acciones para
-reducir el riesgo de transmisión del SARS-CoV-2.
-
-Una de las recomendaciones principales
-es ventilar los espacios
-cuando la concentración de CO2 sea mayor a 700 ppm[2].
 
 Se diseñó  un dispositivo  medidor de CO2 buscando minimizar el precio total
 utilizando software y hardware libre. El dispositivo está basado en el
-esp8266 lolin alimentado por el puerto micro-usb por una batería recargable usb
-que alimenta al esp8266 y al sensor. Se diseñó un PCB y un programa en arduino
-que funciona con cualquiera de los sensores presentados en [**Conclusiones**](#Conclusiones)
-siguiendo el esquemático de conexión correspondiente a cada sensor.
-El dispositivo tiene la opción de publicar en la plataforma ThingsBoard y
-tener un tablero en línea y la posibilidad de descargar los datos para su posterior análisis.
+esp8266 lolin y cuenta con una   una batería recargable usb
+que alimenta al esp8266 y al sensor.
 
-En la sección [**Constrúyelo**](#Constrúyelo) se presentan los pasos a seguir haciendo
-referencia al sensor s8lp.
+Se diseñó un PCB y un programa en Arduino
+que funciona con cualquiera de los sensores presentados en [**Conclusiones**](#Conclusiones)
+siguiendo el esquemático de conexión correspondiente de cada sensor.
+El dispositivo tiene la opción de publicar en la plataforma ThingsBoard y
+tener un tablero en línea y  descargar los datos para su posterior análisis o visualización.
+
+En la sección [**Constrúyelo**](#Constrúyelo) se presenta el esquemático de conexión y el programa, para
+este caso se usa el sensor s8lp.
 
 ## Metodología
-Se diseña un experimento para medir el tiempo de respuesta (TR)
-y el error respecto a un dispositivo de referencia. El experimento
-consiste en colocar el sensor a caracterizar y un sensor de referencia (Fluke 975)
+Se diseñó un experimento para medir el tiempo de respuesta (TR)
+y el error respecto a un dispositivo de referencia (Fluke 975). El experimento
+consiste en colocar el sensor a caracterizar y el dispositivo de referencia    
 en una caja (casi)hermética. El experimento inicia cuando se produce CO2 mezclando
-vinagre y bicarbonato de sodio (Figura 1).
+vinagre y bicarbonato de sodio (Figura 1) y se mide la concentración de CO2  en ppm
+a lo largo de una hora.
 
 
 ![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/6793b8df06d98f5591a92e80fcb6b1445978810d/sensores_vco2/img/800ppm.png "800ppm")
