@@ -22,7 +22,6 @@ El objetivo general es diseñar un dispositivo medidor de CO2 que sea confiable 
 y lo más barato
 posible, usando sofware y hardware libre y con la misma filosofía.
 
-**Hola mundo**
 #### Objetivos específicos
 * Caracterizar el error y tiempo de respuesta de diferentes sensores disponibles en el mercado
 * Seleccionar varios sensores adecuados para tener opciones en caso de desabasto
