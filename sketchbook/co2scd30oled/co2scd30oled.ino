@@ -1,7 +1,7 @@
 //#define WAIT_SERIAL
 #define DEBUG
-#define EPD
-//#define OLED
+//#define EPD
+#define OLED
 
 //#include <Adafruit_SleepyDog.h>
 #include <ArduinoLowPower.h>
@@ -24,6 +24,7 @@ Adafruit_SCD30 scd30;
 #ifdef OLED
 #include <Adafruit_SSD1306.h>
 #include <Fonts/FreeSansBold24pt7b.h>
+#include "splash.h"
 
 #define FG_COLOR WHITE
 #define BG_COLOR BLACK
@@ -34,6 +35,7 @@ Adafruit_SSD1306 display = Adafruit_SSD1306(128, 64, &Wire);
 #ifdef EPD
 #include "Adafruit_ThinkInk.h"
 #include <Fonts/FreeSansBold24pt7b.h>
+#include "splash.h"
 
 #define EPD_CS      5
 #define EPD_DC      4
@@ -75,7 +77,7 @@ HttpClient httpClient = HttpClient(wifiClient, SECRET_SERVER, SECRET_PORT);
 
 #define DELAY 1024
 #define SHORT_DELAY 128
-#define LONG_DELAY 4096
+#define LONG_DELAY 8192
 
 volatile unsigned long __wakeUpISR = 0;
 
@@ -100,6 +102,7 @@ void setup(void) {
   pinMode(LED_BUILTIN, OUTPUT);
   toggleLED();
   pinMode(RDY_PIN, INPUT_PULLDOWN);
+  pinMode(0, INPUT_PULLUP);
 
 #ifdef DEBUG
   Serial.begin(38400);
@@ -130,6 +133,8 @@ void setup(void) {
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3c)) { // Address 0x3C for 128x32
       noReturn();
   }
+  display.clearDisplay();
+  display.drawBitmap(0,0,splash_IER_128x64,128,64,FG_COLOR);
   display.display();
   delay(LONG_DELAY);
   display.setTextSize(1);
@@ -165,6 +170,17 @@ void setup(void) {
   display.display();
   delay(SHORT_DELAY);
 #endif
+
+  if(digitalRead(0)==LOW) {
+    Serial.println("FCal...");
+    display.print("FCal...");
+    scd30.forceRecalibrationWithReference(420);
+  } else {
+    Serial.println("ABC...");
+    display.print("ABC...");
+    if(!scd30.selfCalibrationEnabled()) 
+      scd30.selfCalibrationEnabled(true);
+  }
   
   Serial.println("Init...");
   display.print("Init... ");
@@ -231,7 +247,7 @@ void loop() {
     display.clearDisplay();
 #endif
     display.setCursor(0,56);
-    display.print(__wakeUpISR, HEX);
+    display.print(__wakeUpISR);
 
     if (!scd30.read()){
       display.setCursor(0,8);
@@ -325,6 +341,10 @@ const char* wl_status_to_string(int status) {
 void chkwifi(void) {
   int st;
   WiFi.disconnect();
+  delay(DELAY);
+
+  Serial.println(F("Attempting to connect to WPA SSID: "));
+  Serial.println(ssid);
 
   display.fillRect(0,0,127,15, BG_COLOR);
   display.setCursor(0,0);
@@ -332,20 +352,18 @@ void chkwifi(void) {
   display.print("CONNECTING WIFI...");
   display.display();
 
-  for(byte k=1; st=WiFi.begin(ssid, pass) != WL_CONNECTED; (k<<=1)==0?k=1:k) {
-    display.fillRect(0,8,127,15, BG_COLOR);
-    display.setCursor(0,8);
-    display.print(wl_status_to_string(st));
-    display.print(" 0x");
-    display.print(k, HEX);
-    display.display();
-    for(unsigned i=0; i<=k*LONG_DELAY; i+=SHORT_DELAY) {
-      toggleLED();
-      delay(SHORT_DELAY);
-    }
-  }
+  st = WiFi.begin(ssid, pass);
+
   display.fillRect(0,8,127,15, BG_COLOR);
   display.setCursor(0,8);
-  display.print("OK!");
+
+  if(st == WL_CONNECTED) {
+    Serial.println(F("You're connected to the network"));
+    display.print("Ok!");
+  } else {
+    Serial.print("ST=");
+    Serial.println(wl_status_to_string(st));
+    display.print(wl_status_to_string(st));
+  }
   display.display();
 }

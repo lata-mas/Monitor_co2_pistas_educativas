@@ -40,7 +40,7 @@
 
     Try POST and if statuscode!=200 try
 */
-#define SCD30
+#define DUMMY
 
 #define POST_INTERVAL 60
 #define POST_INTERVAL_MS (60*1000L)
