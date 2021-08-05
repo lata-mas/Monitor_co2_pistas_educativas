@@ -27,7 +27,7 @@
   * SEN0220
     DFRobot SEN0220.
 
-  * MH_Z14a
+  * MH_Z14A
     UART interface for DFRobot SEN0219 AKA MH-Z14A
     
   * T3022
@@ -36,9 +36,12 @@
   * S8LP
     SenseAir S8 Low Power. UART interface.
 
+  * SCD30
+    Sensirion SCD30 sensor module. i2c (TWI) interface
+
   WiFi Reconnect method
 
-    Try POST and if statuscode!=200 try
+    Try POST and if statuscode!=200, try once
 */
 #define DUMMY
 
