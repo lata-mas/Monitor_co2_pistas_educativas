@@ -34,9 +34,12 @@
   
   * S8LP
     SenseAir S8 Low Power. UART interface.
-  
+
+  WiFi Reconnect method
+
+    Try POST and if statuscode!=200 try
 */
-#define S8LP
+#define SCD30
 
 #define POST_INTERVAL 60
 #define POST_INTERVAL_MS (60*1000L)
@@ -73,7 +76,7 @@ unsigned long previousMillis = 0;
 
 #define SHORT_DELAY 128
 #define DELAY 1024
-#define LONG_DELAY 4096
+#define LONG_DELAY 8192
 
 #define CLK 6
 #define DIO 7
@@ -419,7 +422,6 @@ void setup() {
   Serial.print(interval);
   Serial.println(F("ms\n"));
 
-  display.showNumberDec(1234);
   // attempt to connect to Wifi network:
   chkwifi();
   display.clear();
@@ -440,6 +442,8 @@ void loop() {
     int co2ppm = readSensor(); 
 
     // Common code here!
+    Serial.print("CO2ppm=");
+    Serial.println(co2ppm);
     display.showNumberDec(co2ppm);
     
     String payload = "{";
@@ -468,22 +472,16 @@ void chkwifi(void) {
   WiFi.end();
   delay(DELAY);
 
-  Serial.print(F("Attempting to connect to WPA SSID: "));
+  Serial.println(F("Attempting to connect to WPA SSID: "));
   Serial.println(ssid);
 
-  for(byte k=1; st=WiFi.begin(ssid, pass) != WL_CONNECTED; (k<<=1)==0?k=1:k) {
+  st = WiFi.begin(ssid, pass);
+  if(st == WL_CONNECTED) {
+    Serial.println(F("You're connected to the network"));
+  } else {
     Serial.print("ST=");
     Serial.println(wl_status_to_string(st));
-    Serial.print("RETRY=");
-    Serial.print(k);
-    Serial.println("s");
-    for(unsigned i=0; i<=k*LONG_DELAY; i+=SHORT_DELAY) {
-      toggleLED();
-      delay(SHORT_DELAY);
-    }
   }
-
-  Serial.println(F("You're connected to the network"));
 }
 
 const char* wl_status_to_string(int status) {
