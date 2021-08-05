@@ -36,7 +36,7 @@
     SenseAir S8 Low Power. UART interface.
   
 */
-#define DUMMY
+#define S8LP
 
 #define POST_INTERVAL 60
 #define POST_INTERVAL_MS (60*1000L)
@@ -379,11 +379,11 @@ void setup() {
   Serial.begin(38400);
   Serial.println(F("\n***************************"));
   Serial.println(F(" CO2 all sensors template"));
-  Serial.println(F(" * sen0219\n * mh-z14a\n * sen0220\n * t3022\n * s8lp"));
+  Serial.println(F(" * sen0219\n * mh-z14a\n * sen0220\n * t3022\n * s8lp\n * scd30"));
   Serial.println(F(" (C) 2021 hdcg@ier.unam.mx"));
   Serial.println(F("***************************\n"));
 
-  Serial.print(F("Sensor: " SENSOR_NAME));
+  Serial.println(F("Sensor: " SENSOR_NAME));
 
   Serial1.begin(9600);
 
@@ -473,7 +473,7 @@ void chkwifi(void) {
 
   for(byte k=1; st=WiFi.begin(ssid, pass) != WL_CONNECTED; (k<<=1)==0?k=1:k) {
     Serial.print("ST=");
-    Serial.print(wl_status_to_string(st));
+    Serial.println(wl_status_to_string(st));
     Serial.print("RETRY=");
     Serial.print(k);
     Serial.println("s");
