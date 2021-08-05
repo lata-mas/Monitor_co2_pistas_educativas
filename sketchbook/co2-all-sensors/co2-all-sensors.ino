@@ -10,6 +10,7 @@
       * Arduino Nano33 IoT
       * Adafruit ESP32 Feather
       * LOLIN ESP32 dev board
+      * NodeMCU ESP8266 dev board
 
   (C) 2021 Héctor Daniel Cortés González <hdcg@ier.unam.mx>
   (C) 2021 Instituto de Energías Renovables <www.ier.unam.mx>
@@ -48,9 +49,9 @@
   #include <WiFiNINA.h>
 #elif defined(ARDUINO_SAMD_MKR1000)
   #include <WiFi101.h>
-#elif defined(ARDUINO_ESP8266_ESP12)
+#elif defined(ARDUINO_ESP8266_ESP12) || defined(ARDUINO_ARCH_ESP8266)
   #include <ESP8266WiFi.h>
-#elif defined(ARDUINO_ARCH_ESP32)
+#elif defined(ARDUINO_ARCH_ESP32) ||
   #include <WiFi.h>
   #include <WiFiClient.h>
 #endif
@@ -78,8 +79,13 @@ unsigned long previousMillis = 0;
 #define DELAY 1024
 #define LONG_DELAY 8192
 
+#ifdef ARDUINO_ARCH_ESP8266
+#define CLK 14
+#define DIO 12
+#else 
 #define CLK 6
 #define DIO 7
+#endif
 
 TM1637Display display(CLK, DIO);
 
@@ -469,7 +475,7 @@ void loop() {
 
 void chkwifi(void) {
   int st;
-  WiFi.end();
+  WiFi.disconnect();
   delay(DELAY);
 
   Serial.println(F("Attempting to connect to WPA SSID: "));
