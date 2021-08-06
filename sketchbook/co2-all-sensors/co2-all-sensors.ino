@@ -4,6 +4,8 @@
 
     Requires Serial1 for UART sensors:
     
+      * Arduino Leonardo
+      * Arduino Micro
       * Arduino Uno WiFi Rev.2 
       * Arduino MKR 1000
       * Arduino MKR WiFi 1010 
@@ -11,6 +13,7 @@
       * Adafruit ESP32 Feather
       * LOLIN ESP32 dev board
       * NodeMCU ESP8266 dev board
+      * Adafruit ESP8266 Feather
 
   (C) 2021 Héctor Daniel Cortés González <hdcg@ier.unam.mx>
   (C) 2021 Instituto de Energías Renovables <www.ier.unam.mx>
@@ -54,13 +57,14 @@
   #include <WiFi101.h>
 #elif defined(ARDUINO_ESP8266_ESP12) || defined(ARDUINO_ARCH_ESP8266)
   #include <ESP8266WiFi.h>
-#elif defined(ARDUINO_ARCH_ESP32) ||
+#elif defined(ARDUINO_ARCH_ESP32)
   #include <WiFi.h>
   #include <WiFiClient.h>
+#else
+  #define NO_WIFI
 #endif
 
-#include <TM1637Display.h>
-
+#ifndef NO_WIFI
 //#include <ArduinoMQTTClient.h>
 #include <ArduinoHttpClient.h>
 
@@ -74,13 +78,12 @@ char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as k
 
 WiFiClient wifiClient;
 HttpClient httpClient = HttpClient(wifiClient, SECRET_SERVER, SECRET_PORT);
+#endif
 
 const long interval = POST_INTERVAL_MS;
 unsigned long previousMillis = 0;
 
-#define SHORT_DELAY 128
-#define DELAY 1024
-#define LONG_DELAY 8192
+#include <TM1637Display.h>
 
 #ifdef ARDUINO_ARCH_ESP8266
 #define CLK 14
@@ -91,6 +94,10 @@ unsigned long previousMillis = 0;
 #endif
 
 TM1637Display display(CLK, DIO);
+
+#define SHORT_DELAY 128
+#define DELAY 1024
+#define LONG_DELAY 8192
 
 #ifdef SCD30
 /****************************************
@@ -431,8 +438,10 @@ void setup() {
   Serial.print(interval);
   Serial.println(F("ms\n"));
 
+#ifndef NO_WIFI
   // attempt to connect to Wifi network:
   chkwifi();
+#endif
   display.clear();
 }
 
@@ -455,6 +464,7 @@ void loop() {
     Serial.println(co2ppm);
     display.showNumberDec(co2ppm);
     
+#ifndef NO_WIFI
     String payload = "{";
     payload += "'" SENSOR_NAME "':";
     payload += co2ppm;
@@ -472,10 +482,12 @@ void loop() {
     Serial.print(" ");
     Serial.println(response);
     if(statusCode!=200) chkwifi();
+#endif
     toggleLED();
   }
 }
 
+#ifndef NO_WIFI
 void chkwifi(void) {
   int st;
   WiFi.disconnect();
@@ -505,3 +517,4 @@ const char* wl_status_to_string(int status) {
     case WL_DISCONNECTED: return "WL_DISCONNECTED";
   }
 }
+#endif
