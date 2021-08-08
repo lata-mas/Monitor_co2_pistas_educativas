@@ -1,15 +1,18 @@
+#define SENSOR_NAME "scd30"
+
 #include <ESP8266WiFi.h>
+#include <WiFiClient.h>
+#include <ESP8266WebServer.h>
 #include <ArduinoHttpClient.h>
+#include <TM1637Display.h>
+#include <Adafruit_SCD30.h>
 #include "arduino_secrets.h"
 
-#define DUMMY
-#define SENSOR_NAME "dummy"
-
-#define WAIT_SERIAL
-
-#define MEASURE_INTERVAL 2
+#define MEASUREMENT_INTERVAL 2
 #define POST_INTERVAL    60
-#define DISPLAY_INTERVAL 2
+
+#define CLK 14
+#define DIO 12
 
 #define DELAY 1024
 #define SHORT_DELAY 128
@@ -21,22 +24,30 @@ char pass[] = SECRET_PASS;
 WiFiClient wifiClient;
 HttpClient httpClient = HttpClient(wifiClient, SECRET_SERVER, SECRET_PORT);
 
+Adafruit_SCD30 scd30;
+
+TM1637Display display(CLK, DIO);
+
 static boolean led = false;
 
 inline void toggleLED(void) {
   digitalWrite(LED_BUILTIN, led=!led);
 }
 
+inline void noReturn(void) {
+  for(;;delay(SHORT_DELAY))toggleLED();
+}
+
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   toggleLED();
-  // put your setup code here, to run once:
+
   Serial.begin(115200);
-#ifdef WAIT_SERIAL
-  while(!Serial) {
-    toggleLED(); delay(SHORT_DELAY);
-  }
-#endif
+
+  display.setBrightness(0x07);
+  display.showNumberDec(8888);
+  delay(LONG_DELAY);
+
   Serial.println();
   Serial.println(F("*****************************"));
   Serial.println(F("Arduino ESP8266 Test Skectch"));
@@ -44,27 +55,48 @@ void setup() {
   Serial.println(F("(C) 2021, <hdcg@ier.unam.mx>"));
   Serial.println(F("*****************************"));
   Serial.println();
+  delay(SHORT_DELAY);
+  
+  Serial.println(F("scd30.begin()"));
+  if(!scd30.begin()) noReturn();
+  delay(SHORT_DELAY);
+  
+  Serial.print(F("Interval="));
+  Serial.println(MEASUREMENT_INTERVAL);
+  if(scd30.getMeasurementInterval()!=MEASUREMENT_INTERVAL) {
+    delay(SHORT_DELAY);
+    if(!scd30.setMeasurementInterval(MEASUREMENT_INTERVAL)) noReturn();
+  }
+  delay(SHORT_DELAY);
 
+  WiFi.mode(WIFI_STA);
   chkwifi();
+
+  Serial.println(F("leaving setup()"));
 }
 
-int8_t measure_interval = 0;
 int8_t post_interval = 0;
-int8_t display_interval = 0;
 
 void loop() {
-  int16_t co2ppm;
-  
+  static int16_t co2ppm;
+
+  unsigned long entryTick=millis();
+
   toggleLED();
 
-  if(measure_interval--==0) {
-    measure_interval=MEASURE_INTERVAL;
-    co2ppm = readSensor();
-    Serial.printf(PSTR("CO2=%d\n"), co2ppm);
+  if (scd30.dataReady()) {
+    if (!scd30.read()) Serial.println("Error reading sensor data");
+    else {
+      co2ppm = scd30.CO2;
+
+      Serial.print(F("CO2ppm="));
+      Serial.println(co2ppm);
+      display.showNumberDec(co2ppm);
+    }
   }
 
   if(post_interval--==0) {
-    post_interval=POST_INTERVAL;
+    post_interval=POST_INTERVAL-1;
 
     String payload = "{";
     payload += "'" SENSOR_NAME "':";
@@ -87,12 +119,9 @@ void loop() {
     if(statusCode!=200) chkwifi();
   }
 
-  if(display_interval--==0) {
-    display_interval=DISPLAY_INTERVAL;
-
-    Serial.println("DISPLAY NOT IMPLEMENTED");
-  }
-  delay(DELAY);
+  unsigned long exitTick=millis();
+  unsigned long nextTick=exitTick-entryTick;
+  if(nextTick<DELAY) delay(DELAY-nextTick);
 }
 
 void chkwifi(void) {
@@ -106,6 +135,7 @@ void chkwifi(void) {
   st = WiFi.begin(ssid, pass);
   if(st == WL_CONNECTED) {
     Serial.println(F("You're connected to the network"));
+    Serial.println(WiFi.localIP());
   } else {
     Serial.print("ST=");
     Serial.println(wl_status_to_string(st));
@@ -123,49 +153,4 @@ const char* wl_status_to_string(int status) {
     case WL_CONNECTION_LOST: return "WL_CONNECTION_LOST";
     case WL_DISCONNECTED: return "WL_DISCONNECTED";
   }
-}
-
-void scanwifi(void) {
-  String ssid;
-  int32_t rssi;
-  uint8_t encryptionType;
-  uint8_t* bssid;
-  int32_t channel;
-  bool hidden;
-
-  int scanResult;
-  int st;
-
-  wifi_network_t* p;
-
-  WiFi.disconnect();
-  delay(DELAY);
-
-  Serial.println(F("WiFi scan..."));
-  scanResult = WiFi.scanNetworks(/*async=*/false, /*hidden=*/false);
-  
-  if (scanResult > 0) {
-    for(p=SECRET_NETWORKS; p; ++p) {
-      Serial.println(p->ssid);
-      for (int8_t i = 0; i < scanResult; i++) {
-        WiFi.getNetworkInfo(i, ssid, encryptionType, rssi, bssid, channel, hidden);
-        if(ssid == p->ssid) {
-          Serial.println(F("Connecting..."));
-          st = WiFi.begin(p->ssid, p->passwd);
-          if(st == WL_CONNECTED) {
-            Serial.println(F("You're connected to the network"));
-          } else {
-            Serial.print(F("Error status="));
-            Serial.println(wl_status_to_string(st));
-          }
-          return;
-        }
-      }
-    }
-  }
-}
-
-int16_t readSensor(void) {
-  static byte b = 0;
-  return ++b;
 }
