@@ -14,6 +14,8 @@
 
 #ifdef ESP8266HTTPClient_H_
 #define SECRET_URL "http://iot.ier.unam.mx:8080/api/v1/Br53oHwcxBgXYuGB6cVC/telemetry"
+#define SECRET_WWW_USERNAME "admin"
+#define SECRET_WWW_PASSWORD "cacahuate"
 #endif
 
 #endif

@@ -3,6 +3,8 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <ESP8266mDNS.h>
+#include <ESP8266WebServer.h>
 #include <Ticker.h>
 #include <TM1637Display.h>
 #include "arduino_secrets.h"
@@ -18,11 +20,16 @@
 #define SHORT_DELAY 128
 #define LONG_DELAY 8192
 
-char ssid[] = SECRET_SSID; 
-char pass[] = SECRET_PASS; 
+char ssid[] = SECRET_SSID;
+char pass[] = SECRET_PASS;
+
+const char *www_username = SECRET_WWW_USERNAME;
+const char *www_password = SECRET_WWW_PASSWORD;
 
 Ticker tickerSensor;
 Ticker tickerPost;
+
+ESP8266WebServer server(LISTEN_PORT);
 
 TM1637Display display(CLK, DIO);
 
@@ -78,7 +85,7 @@ typedef struct {
 } data_sen0220_t;
 
 int sen0220(void) {
-  register union {
+  union {
     struct { byte lo, hi; };
     word w;
   } retval;
@@ -281,7 +288,14 @@ void setup() {
   
   WiFi.mode(WIFI_STA);
   chkwifi(true);
+
+  MDNS.begin("huzzah8266");
+
+  server.on("/", handleRoot);
+  server.on("/commit/", HTTP_POST, handleCommit);
   
+  server.begin();
+
   tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
   tickerPost.attach(POST_INTERVAL, tckrPost);
 
@@ -301,6 +315,7 @@ void loop(void) {
     isTime2post=false;
     doPost();
   }
+  server.handleClient();
 }
 
 void tckrPost() { isTime2post = true; }
@@ -320,6 +335,8 @@ void doPost(void) {
   toggleLED();
   
   if(WiFi.status()!=WL_CONNECTED) chkwifi(false);
+
+  MDNS.update();
   
   WiFiClient wifiClient;
   HTTPClient httpClient;
@@ -385,4 +402,16 @@ const char* wl_status_to_string(int status) {
     case WL_DISCONNECTED: return "WL_DISCONNECTED";
   }
   return NULL;
+}
+
+void handleRoot(void) {
+  if (!server.authenticate(www_username, www_password))
+    return server.requestAuthentication();
+  server.send(200, "text/plain", "Login OK");
+}
+
+void handleCommit(void) {
+  if (!server.authenticate(www_username, www_password))
+    return server.requestAuthentication();
+  server.send(200, "text/plain", "Commit OK");
 }
