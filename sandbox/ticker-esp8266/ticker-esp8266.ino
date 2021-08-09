@@ -1,5 +1,5 @@
 #define DEBUG
-#define DUMMY
+#define MH_Z14A
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -7,7 +7,8 @@
 #include <TM1637Display.h>
 #include "arduino_secrets.h"
 
-#define MEASUREMENT_INTERVAL 2
+#define LISTEN_PORT 8080
+
 #define POST_INTERVAL    60
 
 #define CLK 14
@@ -32,6 +33,7 @@ TM1637Display display(CLK, DIO);
  *   Thanks Lady Ada!
  ****************************************/
 #include <Adafruit_SCD30.h>
+#define MEASUREMENT_INTERVAL 2
 
 Adafruit_SCD30 scd30;
 
@@ -62,23 +64,30 @@ int readSensor() {
  *   or similar board
  *   (CC) 2021 <hdcg@ier.unam.mx>
  ****************************************/
+#include <SoftwareSerial.h>
+#define RX_SW 13
+#define TX_SW 15
+#define MEASUREMENT_INTERVAL 2
 
-unsigned char hexdata[9] = {0xFF,0x01,0x86,0x00,0x00,0x00,0x00,0x00,0x79}; 
+SoftwareSerial SerialSW(RX_SW, TX_SW);
+
+unsigned char hexdata[] = {0xFF,0x01,0x86,0x00,0x00,0x00,0x00,0x00,0x79}; 
 
 typedef struct {
   byte ff, cmd, hi, lo, fill[4], crc;
 } data_sen0220_t;
 
 int sen0220(void) {
-  union {
+  register union {
     struct { byte lo, hi; };
     word w;
   } retval;
   data_sen0220_t data;
-  Serial1.write(hexdata,9);
+  SerialSW.write(hexdata,9);
+  SerialSW.listen();
   delay(500);
-  if (Serial1.available()>0) { 
-    Serial1.readBytes((char*)&data, 9);
+  if (SerialSW.available()>0) { 
+    SerialSW.readBytes((char*)&data, 9);
     if((data.ff != 0xff) && (data.cmd != 0x86)) return -1;
     retval.hi=data.hi;
     retval.lo=data.lo;
@@ -87,12 +96,18 @@ int sen0220(void) {
   else return -1;    
 }
 
-inline int initSensor() {
+unsigned char SET_RANGE_2K[] = {0xFF,0x01,0x99,0x00,0x00,0x00,0x07,0xD0,0x8F};
+
+int initSensor() {
+  SerialSW.begin(9600);
+  delay(SHORT_DELAY);
+  SerialSW.write(SET_RANGE_2K, sizeof(SET_RANGE_2K));
+  delay(SHORT_DELAY);
   if(sen0220()==-1) return -1;
   else return 0;
 }
 
-inline int readSensor() {
+int readSensor() {
   return sen0220();
 }
 
@@ -109,6 +124,13 @@ inline int readSensor() {
  *   UART interface
  *   (CC) 2021 <hdcg@ier.unam.mx>
  ****************************************/
+#include <SoftwareSerial.h>
+#define RX_SW 13
+#define TX_SW 15
+#define MEASUREMENT_INTERVAL 4
+
+SoftwareSerial SerialS8(RX_SW, TX_SW);
+
 static const byte S8_CMD_STATUS[]  = {0xfe, 0x04, 0x00, 0x00, 0x00, 0x01, 0x25, 0xc5};
 static const byte S8_CMD_CO2READ[] = {0xfe, 0x04, 0x00, 0x03, 0x00, 0x01, 0xd5, 0xc5};
 
@@ -135,10 +157,11 @@ int s8status(void) {
   retval_t retval;
   s8data_t data;
   
-  Serial1.write((char*)S8_CMD_STATUS, sizeof(S8_CMD_STATUS));
+  SerialS8.write((char*)S8_CMD_STATUS, sizeof(S8_CMD_STATUS));
+  SerialS8.listen();
   delay(S8_WAIT_DELAY);
-  if (Serial1.available()>0)
-    Serial1.readBytes((char*)&data,sizeof(data));
+  if (SerialS8.available()>0)
+    SerialS8.readBytes((char*)&data,sizeof(data));
   else return -1;
   
   if((data.addr != 0xfe) && (data.function_code != 0x04)) return -1;
@@ -153,10 +176,11 @@ int s8co2read(void) {
   retval_t retval;
   s8data_t data;
   
-  Serial1.write((char*)S8_CMD_CO2READ, sizeof(S8_CMD_CO2READ));
+  SerialS8.write((char*)S8_CMD_CO2READ, sizeof(S8_CMD_CO2READ));
+  SerialS8.listen();
   delay(S8_WAIT_DELAY);
-  if (Serial1.available()>0)
-    Serial1.readBytes((char*)&data,sizeof(data));
+  if (SerialS8.available()>0)
+    SerialS8.readBytes((char*)&data,sizeof(data));
   else return -1;
 
   if((data.addr != 0xfe) && (data.function_code != 0x04)) return -1;
@@ -167,11 +191,13 @@ int s8co2read(void) {
   }
 }
 
-inline int initSensor() {
+int initSensor() {
+  SerialS8.begin(9600);
+  delay(SHORT_DELAY);
   return s8status();
 }
 
-inline int readSensor() {
+int readSensor() {
   return s8co2read();
 }
 
@@ -183,6 +209,8 @@ inline int readSensor() {
  * Dummy Sensor
  *   (CC) 2021 <hdcg@ier.unam.mx>
  ****************************************/
+#define MEASUREMENT_INTERVAL 1
+
 static int myDummyData=420;
 
 int initSensor() {
@@ -239,7 +267,6 @@ void setup() {
 
   Serial.println(F("Sensor: " SENSOR_NAME));
 
-  display.showNumberHexEx(0xE001,0,true);
   Serial.println(F("Init[" SENSOR_NAME "]..."));
   while(1) {
     Serial.print(F("ST=0x"));
@@ -255,27 +282,43 @@ void setup() {
   WiFi.mode(WIFI_STA);
   chkwifi(true);
   
-  tickerSensor.attach(MEASUREMENT_INTERVAL, tckrReadSensor);
+  tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
   tickerPost.attach(POST_INTERVAL, tckrPost);
 
   Serial.println("leaving setup()");
 }
 
-void loop() {}
+volatile short co2ppm = -1;
+volatile boolean isTime2read = true;
+volatile boolean isTime2post = true;
 
-volatile short co2ppm;
+void loop(void) {
+  if(isTime2read) { 
+    isTime2read=false;
+    doReadSensor();
+  }
+  if(isTime2post) {
+    isTime2post=false;
+    doPost();
+  }
+}
 
-void tckrReadSensor(void) {
+void tckrPost() { isTime2post = true; }
+void tckrRead() { isTime2read = true; }
+
+void doReadSensor(void) {
   toggleLED();
 
   co2ppm = readSensor();  
-  
+
   Serial.print(F("CO2ppm="));
   Serial.println(co2ppm);
   display.showNumberDec(co2ppm);
 }
 
-void tckrPost(void) {
+void doPost(void) {
+  toggleLED();
+  
   if(WiFi.status()!=WL_CONNECTED) chkwifi(false);
   
   WiFiClient wifiClient;
@@ -285,7 +328,6 @@ void tckrPost(void) {
   payload += "\"" SENSOR_NAME "\":";
   payload += co2ppm;
   payload += "}";
-
   Serial.print(F("POST: "));
   Serial.println(payload);
 #ifdef DEBUG
@@ -307,6 +349,8 @@ void tckrPost(void) {
 
 void chkwifi(boolean retry) {
   int st;
+
+  display.showNumberHexEx(0xe000,0,true);
 
   Serial.print(F("WiFi SSID: "));
   Serial.println(ssid);
@@ -342,47 +386,3 @@ const char* wl_status_to_string(int status) {
   }
   return NULL;
 }
-
-
-/*
-void scanwifi(void) {
-  String ssid;
-  int32_t rssi;
-  uint8_t encryptionType;
-  uint8_t* bssid;
-  int32_t channel;
-  bool hidden;
-
-  int scanResult;
-  int st;
-
-  wifi_network_t* p;
-
-  WiFi.disconnect();
-  delay(DELAY);
-
-  Serial.println(F("WiFi scan..."));
-  scanResult = WiFi.scanNetworks(false,false);
-  //                scanNetworks(async,hidden);
-  
-  if (scanResult > 0) {
-    for(p=SECRET_NETWORKS; p; ++p) {
-      Serial.println(p->ssid);
-      for (int8_t i = 0; i < scanResult; i++) {
-        WiFi.getNetworkInfo(i, ssid, encryptionType, rssi, bssid, channel, hidden);
-        if(ssid == p->ssid) {
-          Serial.println(F("Connecting..."));
-          st = WiFi.begin(p->ssid, p->passwd);
-          if(st == WL_CONNECTED) {
-            Serial.println(F("You're connected to the network"));
-          } else {
-            Serial.print(F("Error status="));
-            Serial.println(wl_status_to_string(st));
-          }
-          return;
-        }
-      }
-    }
-  }
-}
-*/
