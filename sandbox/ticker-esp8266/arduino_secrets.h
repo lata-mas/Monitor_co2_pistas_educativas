@@ -12,10 +12,8 @@
 #define SECRET_TOPIC "v1/devices/me/telemetry"
 #endif
 
-#ifdef ArduinoHttpClient_h
-#define SECRET_SERVER "iot.ier.unam.mx"
-#define SECRET_PORT 8080
-#define SECRET_TOPIC "/api/v1/Br53oHwcxBgXYuGB6cVC/telemetry"
+#ifdef ESP8266HTTPClient_H_
+#define SECRET_URL "http://iot.ier.unam.mx:8080/api/v1/Br53oHwcxBgXYuGB6cVC/telemetry"
 #endif
 
 #endif
