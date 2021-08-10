@@ -25,7 +25,7 @@
   * SCD30
     Sensirion SCD30 sensor module. i2c (TWI) interface
 */
-#define MH_Z14A
+#define DUMMY
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -39,7 +39,7 @@
 #define DIO 12
 
 #define POST_INTERVAL 60
-#define LISTEN_PORT 80
+#define POST_MINIMAL
 
 #define LED_RED 16
 #define LED_GREEN 13
@@ -62,16 +62,29 @@ const byte colorRed[]={0,1,1};
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
 
-const char *www_username = SECRET_WWW_USERNAME;
-const char *www_password = SECRET_WWW_PASSWORD;
-
 Ticker tickerSensor;
 Ticker tickerPost;
 Ticker tickerBuzzer;
 
 TM1637Display display(CLK, DIO);
 
+#define ERROR_WIFI_NOT_CONNECTED 0xe000
+#define ERROR_SENSOR_INIT 0xe001
+#define ERROR_MEASUREMENT_INTERVAL 0xe002
+#define ERROR_ASC_FAILED 0xe003
+
+/*
+ * Esta parte está incompleta
+ */
+#define LISTEN_PORT 80
+
 ESP8266WebServer server(LISTEN_PORT);
+
+const char *www_username = SECRET_WWW_USERNAME;
+const char *www_password = SECRET_WWW_PASSWORD;
+/*
+ * Fin de la parte incompleta
+ */
 
 #ifdef SCD30
 /****************************************
@@ -86,21 +99,27 @@ Adafruit_SCD30 scd30;
 
 short initSensor() {
   if(!scd30.begin()) {
+#ifdef DEBUG
     Serial.println(F("Init scd30 failed!"));
-    noReturn(0xe0f0);
+#endif
+    noReturn(ERROR_SENSOR_INIT);
   }
   delay(SHORT_DELAY);
   
   if(scd30.getMeasurementInterval()!=MEASUREMENT_INTERVAL) {
+#ifdef DEBUG
     Serial.printf(PSTR("Interval=%d\n"), MEASUREMENT_INTERVAL);
+#endif
     delay(SHORT_DELAY);
-    if(!scd30.setMeasurementInterval(MEASUREMENT_INTERVAL)) noReturn(0xe0f1);
+    if(!scd30.setMeasurementInterval(MEASUREMENT_INTERVAL)) noReturn(ERROR_MEASUREMENT_INTERVAL);
   }
 
   if(!scd30.selfCalibrationEnabled()) {
-    Serial.println("ABC...");
     delay(SHORT_DELAY);
-    if(!scd30. selfCalibrationEnabled(true)) noReturn(0xe0f2);
+    if(!scd30. selfCalibrationEnabled(true)) noReturn(ERROR_ASC_FAILED);
+#ifdef DEBUG
+    Serial.println("ASC enabled...");
+#endif
   }
   return 0;
 }
@@ -140,7 +159,7 @@ short sen0220(void) {
     word w;
   } retval;
   data_sen0220_t data;
-  SerialSW.write(hexdata,9);
+  SerialSW.write(hexdata,sizeof(hexdata));
   SerialSW.listen();
   delay(500);
   if (SerialSW.available()>0) { 
@@ -296,22 +315,23 @@ short readSensor() {
  * Main program here!
  *********************/
 
-static boolean led = false;
-
-inline void toggleLED(void) {
-  digitalWrite(LED_BUILTIN, led=!led);
+void displayError(short errorCode) {
+  boolean led=false;      
+  for(short d=0; d<DELAY; d+=SHORT_DELAY) {
+    if(led=!led) display.showNumberHexEx(errorCode,0,true);
+    else display.clear();
+    delay(SHORT_DELAY);
+  }
 }
 
 void noReturn(short errorCode) {
-  for(;;delay(SHORT_DELAY)) {
-    toggleLED();
-    if(led) display.showNumberHexEx(errorCode, 0, true);
+  for(boolean led=false;;delay(SHORT_DELAY)) {
+    if(led=!led) display.showNumberHexEx(errorCode, 0, true);
     else display.clear();
   }
 }
 
 void setup() {
-  pinMode(LED_BUILTIN, OUTPUT);
   pinMode(BUTTON_0, INPUT);
   pinMode(CLK, OUTPUT);
   pinMode(DIO, OUTPUT);
@@ -320,15 +340,18 @@ void setup() {
   pinMode(LED_BLUE, OUTPUT);
   pinMode(BUZZER, OUTPUT);
 
+#ifdef DEBUG
   Serial.begin(115200);
   delay(SHORT_DELAY);
+#endif
 
   display.setBrightness(0x07);
   display.showNumberDec(8888);
 
+#ifdef DEBUG
   Serial.println();
   Serial.println(F("*****************************"));
-  Serial.println(F("Arduino ESP8266 Ticker test CO2"));
+  Serial.println(F(" Proyecto monitorCO2"));
   Serial.println(F(__DATE__  " " __TIME__));
   Serial.println(F("(C) 2021, <hdcg@ier.unam.mx>"));
   Serial.println(F("(C) 2021, IER-UNAM"));
@@ -337,16 +360,16 @@ void setup() {
   Serial.println();
 
   Serial.println(F("Sensor: " SENSOR_NAME));
-
+#endif
   delay(LONG_DELAY);
 
+#ifdef DEBUG
   Serial.println(F("Init..."));
+#endif
   while(1) {
-    toggleLED();
     short st=initSensor();
-    delay(SHORT_DELAY);
     if(st==0) break;
-    delay(DELAY-SHORT_DELAY);
+    displayError(ERROR_SENSOR_INIT);
   }
   
   WiFi.mode(WIFI_STA);
@@ -357,14 +380,18 @@ void setup() {
   mDNSname.replace(":","");
   mDNSname = F("monitorCO2-") + mDNSname;
 
+#ifdef DEBUG
   Serial.print("mDNS:");
   Serial.println(mDNSname);
+#endif
   MDNS.begin(mDNSname);
 
   /*
    * Esta sección está incompleta
    */
+#ifdef DEBUG
   Serial.println(F("WebServer..."));
+#endif
   server.on(F("/"), handleRoot);
   server.on(F("/commit/"), HTTP_POST, handleCommit);
   server.on(F("/frc/"), handleFRC);
@@ -375,12 +402,16 @@ void setup() {
    * Termina la sección incompleta
    */
 
+#ifdef DEBUG
   Serial.println("Ticker...");
+#endif
   tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
   tickerPost.attach(POST_INTERVAL, tckrPost);
   tickerBuzzer.attach_ms(SHORT_DELAY, tckrBuzzer);
 
+#ifdef DEBUG
   Serial.println("leaving setup()");
+#endif
 }
 
 volatile short co2ppm = -1;
@@ -415,12 +446,12 @@ void tckrRead() { isTime2read = true; }
  */
 
 void doReadSensor(void) {
-  toggleLED();
-
   co2ppm = readSensor();  
 
+#ifdef DEBUG
   Serial.print(F("CO2ppm="));
   Serial.println(co2ppm);
+#endif
   display.showNumberDec(co2ppm);
 
   const byte *color=colorBlack;
@@ -435,18 +466,17 @@ void doReadSensor(void) {
     Serial.println("YELLOW");
 #endif
     color=colorYellow;
-    startAlarm(4); // 4 STATE CHANGES, TWO BEEPS HALF SECOND
+    startAlarm(4); // 4 STATE CHANGES, TWO BEEPS, HALF SECOND
   }
   else if(co2ppm>=750) {
 #ifdef DEBUG
     Serial.println("RED");
 #endif
     color=colorRed;
-    startAlarm(8); // 8 STATE CHANGES, FOUR BEEPS ONE SECOND
+    startAlarm(8); // 8 STATE CHANGES, FOUR BEEPS, ONE SECOND
   }
-  if(color) 
-    for(byte i=0; i<3; ++i)
-      digitalWrite(ledRGB[i], color[i]);
+  for(byte i=0; i<3; ++i)
+    digitalWrite(ledRGB[i], color[i]);
 }
 
 /*
@@ -469,8 +499,10 @@ void tckrBuzzer(void) {
 
 void doBuzzer() {
   boolean state=(buzzerDuration&1)!=0; // ENABLE ON HIGH
-  Serial.printf(PSTR("Buzzer is %s\n"), 
+#ifdef DEBUG
+  Serial.printf(PSTR("Buzzer %s\n"), 
     state?PSTR("ON"):PSTR("OFF"));
+#endif
   digitalWrite(BUZZER, state);
 }
 
@@ -479,8 +511,6 @@ void doBuzzer() {
  */
 
 void doPost(void) {
-  toggleLED();
-  
   if(WiFi.status()!=WL_CONNECTED) chkwifi(false);
 
   MDNS.update();
@@ -491,17 +521,30 @@ void doPost(void) {
   String payload = "{";
   payload += "\"" SENSOR_NAME "\":";
   payload += co2ppm;
+#ifndef POST_MINIMAL
+  payload += ",\"heartbeat\":";
+  payload += millis();
+#ifdef SCD30
+  payload += ",\"temperature\":";
+  payload += String(scd30.temperature, 1);
+  payload += ",\"relative_humidity\":";
+  payload += String(scd30.relative_humidity, 0);
+#endif
+#endif
   payload += "}";
+  
+#ifdef DEBUG
   Serial.print(F("POST: "));
   Serial.println(payload);
-#ifdef DEBUG
   Serial.println(PSTR(SECRET_URL));
 #endif
+
   httpClient.begin(wifiClient, PSTR(SECRET_URL));
   httpClient.addHeader(F("Content-Type"), F("application/json"));
 
   int statusCode = httpClient.POST(payload);
   
+#ifdef DEBUG
   Serial.print(F("ST="));
   Serial.print(statusCode);
   if(statusCode<0) {
@@ -509,32 +552,34 @@ void doPost(void) {
     Serial.print(httpClient.errorToString(statusCode));
   }
   Serial.println();
+#endif
 }
 
 void chkwifi(boolean retry) {
   int st;
 
-  display.showNumberHexEx(0xe000,0,true);
-
+#ifdef DEBUG
   Serial.print(F("WiFi SSID: "));
   Serial.println(ssid);
+#endif
 
   WiFi.begin(ssid,pass);
 
   while((st = WiFi.status()) != WL_CONNECTED) {
+#ifdef DEBUG
     Serial.print("WiFi.status=");
     Serial.println(wl_status_to_string(st));
+#endif
     if(!retry) break;
     for(byte i=1; i!=0; i<<=1)
-      for(short d=0; d<DELAY; d+=SHORT_DELAY) {
-        toggleLED(); 
-        delay(SHORT_DELAY);
-      }
+      displayError(ERROR_WIFI_NOT_CONNECTED);
   }
+#ifdef DEBUG
   if(st == WL_CONNECTED) {
     Serial.print("IP address=");
     Serial.println(WiFi.localIP());
   }
+#endif
 }
 
 const char* wl_status_to_string(int status) {
@@ -587,3 +632,8 @@ void handleASC(void) {
 #endif
   server.send(200, "text/plain", "ABC started");
 }
+
+/*
+ * Termina la parte incompleta
+ */
+ 
