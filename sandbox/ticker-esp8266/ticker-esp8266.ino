@@ -1,5 +1,28 @@
 #define DEBUG
-#define MH_Z14A
+/*
+  monitorCO2.ino
+
+  Optimized for NodeMCU ESP8266 dev board
+    
+  (C) 2021 Héctor Daniel Cortés González <hdcg@ier.unam.mx>
+  (C) 2021 Instituto de Energías Renovables <www.ier.unam.mx>
+  (C) 2021 Universidad Nacional Autónoma de México <www.unam.mx>
+
+  Supported sensors:
+
+  * DUMMY
+    A dummy sensor for test purposes
+    
+  * SEN0220
+    DFRobot SEN0220.
+
+  * S8LP
+    SenseAir S8 Low Power. UART interface.
+
+  * SCD30
+    Sensirion SCD30 sensor module. i2c (TWI) interface
+*/
+#define DUMMY
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -9,19 +32,18 @@
 #include <TM1637Display.h>
 #include "arduino_secrets.h"
 
-#define LISTEN_PORT 8080
-
-#define POST_INTERVAL    60
-
 #define CLK 14
 #define DIO 12
+
+#define POST_INTERVAL 60
+#define LISTEN_PORT 80
 
 #define DELAY 1024
 #define SHORT_DELAY 128
 #define LONG_DELAY 8192
 
-char ssid[] = SECRET_SSID;
-char pass[] = SECRET_PASS;
+const char* ssid = SECRET_SSID;
+const char* pass = SECRET_PASS;
 
 const char *www_username = SECRET_WWW_USERNAME;
 const char *www_password = SECRET_WWW_PASSWORD;
@@ -29,9 +51,9 @@ const char *www_password = SECRET_WWW_PASSWORD;
 Ticker tickerSensor;
 Ticker tickerPost;
 
-ESP8266WebServer server(LISTEN_PORT);
-
 TM1637Display display(CLK, DIO);
+
+ESP8266WebServer server(LISTEN_PORT);
 
 #ifdef SCD30
 /****************************************
@@ -44,18 +66,28 @@ TM1637Display display(CLK, DIO);
 
 Adafruit_SCD30 scd30;
 
-int initSensor() {
-  Serial.println(F("scd30.begin()"));
-  if(!scd30.begin()) noReturn();
+short initSensor() {
+  if(!scd30.begin()) {
+    Serial.println(F("Init scd30 failed!"));
+    noReturn(0xe0f0);
+  }
+  delay(SHORT_DELAY);
+  
+  if(scd30.getMeasurementInterval()!=MEASUREMENT_INTERVAL) {
+    Serial.printf(PSTR("Interval=%d\n"), MEASUREMENT_INTERVAL);
+    delay(SHORT_DELAY);
+    if(!scd30.setMeasurementInterval(MEASUREMENT_INTERVAL)) noReturn(0xe0f1);
+  }
 
-  Serial.printf(PSTR("Interval=%d\n"), MEASUREMENT_INTERVAL);
-  if(scd30.getMeasurementInterval()!=MEASUREMENT_INTERVAL)
-    if(!scd30.setMeasurementInterval(MEASUREMENT_INTERVAL)) noReturn();
-
-  return 0;  
+  if(!scd30.selfCalibrationEnabled()) {
+    Serial.println("ABC...");
+    delay(SHORT_DELAY);
+    if(!scd30. selfCalibrationEnabled(true)) noReturn(0xe0f2);
+  }
+  return 0;
 }
 
-int readSensor() {
+short readSensor() {
   if (!scd30.dataReady()) return -1;
   if (!scd30.read()) return -1;
   return scd30.CO2;
@@ -84,7 +116,7 @@ typedef struct {
   byte ff, cmd, hi, lo, fill[4], crc;
 } data_sen0220_t;
 
-int sen0220(void) {
+short sen0220(void) {
   union {
     struct { byte lo, hi; };
     word w;
@@ -105,7 +137,7 @@ int sen0220(void) {
 
 unsigned char SET_RANGE_2K[] = {0xFF,0x01,0x99,0x00,0x00,0x00,0x07,0xD0,0x8F};
 
-int initSensor() {
+short initSensor() {
   SerialSW.begin(9600);
   delay(SHORT_DELAY);
   SerialSW.write(SET_RANGE_2K, sizeof(SET_RANGE_2K));
@@ -114,7 +146,7 @@ int initSensor() {
   else return 0;
 }
 
-int readSensor() {
+short readSensor() {
   return sen0220();
 }
 
@@ -160,7 +192,7 @@ typedef union {
 
 #define S8_WAIT_DELAY 100
 
-int s8status(void) {
+short s8status(void) {
   retval_t retval;
   s8data_t data;
   
@@ -179,7 +211,7 @@ int s8status(void) {
   }
 }
 
-int s8co2read(void) {
+short s8co2read(void) {
   retval_t retval;
   s8data_t data;
   
@@ -198,13 +230,13 @@ int s8co2read(void) {
   }
 }
 
-int initSensor() {
+short initSensor() {
   SerialS8.begin(9600);
   delay(SHORT_DELAY);
   return s8status();
 }
 
-int readSensor() {
+short readSensor() {
   return s8co2read();
 }
 
@@ -220,13 +252,13 @@ int readSensor() {
 
 static int myDummyData=420;
 
-int initSensor() {
+short initSensor() {
   randomSeed(0xc0cac07a);
   if (millis()&1!=0) return 0;
   else return -1;
 }
 
-int readSensor() {
+short readSensor() {
   switch(random(10)) {
     case 2: return ++myDummyData;
     case 3: return --myDummyData;
@@ -252,35 +284,42 @@ inline void toggleLED(void) {
   digitalWrite(LED_BUILTIN, led=!led);
 }
 
-void noReturn(void) {
-  for(;;delay(SHORT_DELAY))toggleLED();
+void noReturn(short errorCode) {
+  for(;;delay(SHORT_DELAY)) {
+    toggleLED();
+    if(led) display.showNumberHexEx(errorCode, 0, true);
+    else display.clear();
+  }
 }
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(0, INPUT);
+  
   Serial.begin(115200);
+  delay(SHORT_DELAY);
 
   display.setBrightness(0x07);
   display.showNumberDec(8888);
-  delay(LONG_DELAY);
 
   Serial.println();
   Serial.println(F("*****************************"));
-  Serial.println(F("Arduino ESP8266 Ticker test"));
+  Serial.println(F("Arduino ESP8266 Ticker test CO2"));
   Serial.println(F(__DATE__  " " __TIME__));
   Serial.println(F("(C) 2021, <hdcg@ier.unam.mx>"));
+  Serial.println(F("(C) 2021, IER-UNAM"));
+  Serial.println(F("(C) 2021, UNAM"));
   Serial.println(F("*****************************"));
   Serial.println();
 
   Serial.println(F("Sensor: " SENSOR_NAME));
 
-  Serial.println(F("Init[" SENSOR_NAME "]..."));
+  delay(LONG_DELAY);
+
+  Serial.println(F("Init..."));
   while(1) {
-    Serial.print(F("ST=0x"));
     toggleLED();
     short st=initSensor();
-    display.showNumberHexEx(st,0,true);
-    Serial.println(st, HEX);
     delay(SHORT_DELAY);
     if(st==0) break;
     delay(DELAY-SHORT_DELAY);
@@ -289,13 +328,30 @@ void setup() {
   WiFi.mode(WIFI_STA);
   chkwifi(true);
 
-  MDNS.begin("huzzah8266");
+  String mDNSname = WiFi.macAddress().substring(9);
+  mDNSname.toLowerCase();
+  mDNSname.replace(":","");
+  mDNSname = F("monitorCO2-") + mDNSname;
 
-  server.on("/", handleRoot);
-  server.on("/commit/", HTTP_POST, handleCommit);
+  Serial.print("mDNS:");
+  Serial.println(mDNSname);
+  MDNS.begin(mDNSname);
+
+  /*
+   * Esta sección está incompleta
+   */
+  Serial.println(F("WebServer..."));
+  server.on(F("/"), handleRoot);
+  server.on(F("/commit/"), HTTP_POST, handleCommit);
+  server.on(F("/frc/"), handleFRC);
+  server.on(F("/asc/"), handleASC);
   
   server.begin();
+  /*
+   * Termina la sección incompleta
+   */
 
+  Serial.println("Ticker...");
   tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
   tickerPost.attach(POST_INTERVAL, tckrPost);
 
@@ -308,12 +364,12 @@ volatile boolean isTime2post = true;
 
 void loop(void) {
   if(isTime2read) { 
-    isTime2read=false;
     doReadSensor();
+    isTime2read=false;
   }
   if(isTime2post) {
-    isTime2post=false;
     doPost();
+    isTime2post=false;
   }
   server.handleClient();
 }
@@ -414,4 +470,22 @@ void handleCommit(void) {
   if (!server.authenticate(www_username, www_password))
     return server.requestAuthentication();
   server.send(200, "text/plain", "Commit OK");
+}
+
+void handleFRC(void) {
+  if (!server.authenticate(www_username, www_password))
+    return server.requestAuthentication();
+#ifdef SCD30
+  scd30.forceRecalibrationWithReference(450);
+#endif
+  server.send(200, "text/plain", "FRC started");
+}
+
+void handleASC(void) {
+  if (!server.authenticate(www_username, www_password))
+    return server.requestAuthentication();
+#ifdef SCD30
+  scd30.selfCalibrationEnabled(true);
+#endif
+  server.send(200, "text/plain", "ABC started");
 }
