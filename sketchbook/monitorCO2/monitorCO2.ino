@@ -22,7 +22,7 @@
   * SCD30
     Sensirion SCD30 sensor module. i2c (TWI) interface
 */
-#define DUMMY
+#define SCD30
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -104,8 +104,8 @@ short readSensor() {
  *   (CC) 2021 <hdcg@ier.unam.mx>
  ****************************************/
 #include <SoftwareSerial.h>
-#define RX_SW 13
-#define TX_SW 15
+#define RX_SW 5
+#define TX_SW 4
 #define MEASUREMENT_INTERVAL 2
 
 SoftwareSerial SerialSW(RX_SW, TX_SW);
@@ -352,7 +352,7 @@ void setup() {
    */
 
   Serial.println("Ticker...");
-  tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
+  tickerSensor.attach_ms(MEASUREMENT_INTERVAL*DELAY, tckrRead);
   tickerPost.attach(POST_INTERVAL, tckrPost);
 
   Serial.println("leaving setup()");
