@@ -1,3 +1,6 @@
+#ifndef ARDUINO_ARCH_ESP8266
+#error Requires NodeMCU esp8266 board
+#endif 
 #define DEBUG
 /*
   monitorCO2.ino
@@ -22,7 +25,7 @@
   * SCD30
     Sensirion SCD30 sensor module. i2c (TWI) interface
 */
-#define DUMMY
+#define MH_Z14A
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -38,9 +41,23 @@
 #define POST_INTERVAL 60
 #define LISTEN_PORT 80
 
+#define LED_RED 16
+#define LED_GREEN 13
+#define LED_BLUE 15
+
+#define BUZZER 2
+
+#define BUTTON_0  0
+
 #define DELAY 1024
 #define SHORT_DELAY 128
 #define LONG_DELAY 8192
+
+const byte ledRGB[]={LED_RED, LED_GREEN, LED_BLUE};
+const byte colorBlack[]={1,1,1}; // 1=OFF 0=ON
+const byte colorGreen[]={1,0,1};
+const byte colorYellow[]={0,0,1};
+const byte colorRed[]={0,1,1};
 
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
@@ -50,6 +67,7 @@ const char *www_password = SECRET_WWW_PASSWORD;
 
 Ticker tickerSensor;
 Ticker tickerPost;
+Ticker tickerBuzzer;
 
 TM1637Display display(CLK, DIO);
 
@@ -295,6 +313,10 @@ void noReturn(short errorCode) {
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(0, INPUT);
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
   
   Serial.begin(115200);
   delay(SHORT_DELAY);
@@ -352,8 +374,9 @@ void setup() {
    */
 
   Serial.println("Ticker...");
-  tickerSensor.attach_ms(MEASUREMENT_INTERVAL*DELAY, tckrRead);
+  tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
   tickerPost.attach(POST_INTERVAL, tckrPost);
+  tickerBuzzer.attach_ms(SHORT_DELAY, tckrBuzzer);
 
   Serial.println("leaving setup()");
 }
@@ -361,13 +384,18 @@ void setup() {
 volatile short co2ppm = -1;
 volatile boolean isTime2read = true;
 volatile boolean isTime2post = true;
+volatile boolean isTime2buzz = false;
 
 void loop(void) {
+  if(isTime2buzz) { // FIRST FASTER
+    doBuzzer();
+    isTime2buzz=false;
+  }
   if(isTime2read) { 
     doReadSensor();
     isTime2read=false;
   }
-  if(isTime2post) {
+  if(isTime2post) { // LAST SLOWER
     doPost();
     isTime2post=false;
   }
@@ -377,6 +405,13 @@ void loop(void) {
 void tckrPost() { isTime2post = true; }
 void tckrRead() { isTime2read = true; }
 
+/*
+ * doReadSensor
+ * 
+ * keep rgbLED state
+ * trigger ALARM 
+ */
+
 void doReadSensor(void) {
   toggleLED();
 
@@ -385,7 +420,61 @@ void doReadSensor(void) {
   Serial.print(F("CO2ppm="));
   Serial.println(co2ppm);
   display.showNumberDec(co2ppm);
+
+  const byte *color=colorBlack;
+  if(co2ppm>=400 && co2ppm<600) {
+#ifdef DEBUG
+    Serial.println("GREEN");
+#endif
+    color=colorGreen;
+  }
+  else if(co2ppm>=600 && co2ppm<750) {
+#ifdef DEBUG
+    Serial.println("YELLOW");
+#endif
+    color=colorYellow;
+    startAlarm(4); // 4 STATE CHANGES, TWO BEEPS HALF SECOND
+  }
+  else if(co2ppm>=750) {
+#ifdef DEBUG
+    Serial.println("RED");
+#endif
+    color=colorRed;
+    startAlarm(8); // 8 STATE CHANGES, FOUR BEEPS ONE SECOND
+  }
+  if(color) 
+    for(byte i=0; i<3; ++i)
+      digitalWrite(ledRGB[i], color[i]);
 }
+
+/*
+ * BUZZER over TICKER
+ */
+
+volatile byte buzzerDuration = 0;
+
+void startAlarm(byte duration) {
+  if(duration==0) return;
+  buzzerDuration=duration;
+}
+
+void tckrBuzzer(void) {
+  if(buzzerDuration>0) {
+    buzzerDuration--;
+    isTime2buzz=true;
+  }
+}
+
+void doBuzzer() {
+  boolean state=(buzzerDuration&1)!=0; // ENABLE ON HIGH
+  Serial.printf(PSTR("Buzzer is %s\n"), 
+    state?PSTR("ON"):PSTR("OFF"));
+  digitalWrite(BUZZER, state);
+}
+
+/*
+ * POST/KEEP WiFi
+ */
 
 void doPost(void) {
   toggleLED();
@@ -460,6 +549,13 @@ const char* wl_status_to_string(int status) {
   return NULL;
 }
 
+/*
+ * WEBSERVER
+ * 
+ * Esta parte está incompleta
+ * 
+ */
+ 
 void handleRoot(void) {
   if (!server.authenticate(www_username, www_password))
     return server.requestAuthentication();
