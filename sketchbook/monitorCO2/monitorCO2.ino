@@ -312,12 +312,14 @@ void noReturn(short errorCode) {
 
 void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(0, INPUT);
+  pinMode(BUTTON_0, INPUT);
+  pinMode(CLK, OUTPUT);
+  pinMode(DIO, OUTPUT);
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_BLUE, OUTPUT);
   pinMode(BUZZER, OUTPUT);
-  
+
   Serial.begin(115200);
   delay(SHORT_DELAY);
 
