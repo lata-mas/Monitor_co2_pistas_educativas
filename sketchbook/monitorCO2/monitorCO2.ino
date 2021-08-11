@@ -68,7 +68,7 @@ Ticker tickerBuzzer;
 
 TM1637Display display(CLK, DIO);
 
-#define ERROR_WIFI_NOT_CONNECTED 0xe000
+#define ERROR_WIFI_NOT_CONNECTED 0xf000
 #define ERROR_SENSOR_INIT 0xe001
 #define ERROR_MEASUREMENT_INTERVAL 0xe002
 #define ERROR_ASC_FAILED 0xe003
@@ -287,10 +287,14 @@ short readSensor() {
  ****************************************/
 #define MEASUREMENT_INTERVAL 1
 
-static int myDummyData=420;
+static int myDummyData=450;
 
 short initSensor() {
-  randomSeed(0xc0cac07a);
+  static boolean st = true;
+  if(st) {
+    randomSeed(0xc0cac07a);
+    st = false;
+  } else random();
   if (millis()&1!=0) return 0;
   else return -1;
 }
@@ -570,7 +574,7 @@ void chkwifi(boolean retry) {
     Serial.print("WiFi.status=");
     Serial.println(wl_status_to_string(st));
 #endif
-    displayError(ERROR_WIFI_NOT_CONNECTED);
+    displayError(ERROR_WIFI_NOT_CONNECTED+st);
     if(!retry) break;
   }
 #ifdef DEBUG
