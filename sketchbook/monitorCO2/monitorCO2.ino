@@ -34,6 +34,7 @@
 #include <Ticker.h>
 #include <TM1637Display.h>
 #include "arduino_secrets.h"
+#include "cma.h"
 
 #define CLK 14
 #define DIO 12
@@ -335,6 +336,10 @@ void noReturn(short errorCode) {
   }
 }
 
+#define SAMPLES (POST_INTERVAL/MEASUREMENT_INTERVAL)
+
+CMA cmaCO2(SAMPLES);
+
 void setup() {
   pinMode(BUTTON_0, INPUT);
   pinMode(CLK, OUTPUT);
@@ -450,7 +455,8 @@ void tckrRead() { isTime2read = true; }
  */
 
 void doReadSensor(void) {
-  co2ppm = readSensor();  
+  co2ppm = readSensor();
+  if(co2ppm>0) cmaCO2.addData(co2ppm);
 
 #ifdef DEBUG
   Serial.print(F("CO2ppm="));
@@ -524,7 +530,7 @@ void doPost(void) {
 
   String payload = "{";
   payload += "\"" SENSOR_NAME "\":";
-  payload += co2ppm;
+  payload += String(cmaCO2.avg(), 0);
 #ifndef POST_MINIMAL
   payload += ",\"heartbeat\":";
   payload += millis();
