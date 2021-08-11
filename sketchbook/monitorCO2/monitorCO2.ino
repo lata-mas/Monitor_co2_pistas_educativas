@@ -17,7 +17,7 @@
     A dummy sensor for test purposes
     
   * SEN0220
-    DFRobot SEN0220.
+    DFRobot SEN0220. UART interface.
 
   * S8LP
     SenseAir S8 Low Power. UART interface.
@@ -570,9 +570,8 @@ void chkwifi(boolean retry) {
     Serial.print("WiFi.status=");
     Serial.println(wl_status_to_string(st));
 #endif
+    displayError(ERROR_WIFI_NOT_CONNECTED);
     if(!retry) break;
-    for(byte i=1; i!=0; i<<=1)
-      displayError(ERROR_WIFI_NOT_CONNECTED);
   }
 #ifdef DEBUG
   if(st == WL_CONNECTED) {
