@@ -70,6 +70,7 @@ Ticker tickerBuzzer;
 TM1637Display display(CLK, DIO);
 
 #define ERROR_WIFI_NOT_CONNECTED 0xf000
+#define ERROR_SENSOR_READ 0xe000
 #define ERROR_SENSOR_INIT 0xe001
 #define ERROR_MEASUREMENT_INTERVAL 0xe002
 #define ERROR_ASC_FAILED 0xe003
@@ -302,10 +303,11 @@ short initSensor() {
 
 short readSensor() {
   switch(random(10)) {
+    case 1: return -1; // read error
     case 2: return ++myDummyData;
     case 3: return --myDummyData;
     case 5: return myDummyData+=10;
-    case 7: return myDummyData-=10;
+    case 8: return myDummyData-=10;
     default: return myDummyData;
   }
 }
@@ -455,8 +457,16 @@ void tckrRead() { isTime2read = true; }
  */
 
 void doReadSensor(void) {
-  co2ppm = readSensor();
-  if(co2ppm>0) cmaCO2.addData(co2ppm);
+  short x = readSensor();
+  if(x<=0) { // OMIT READ ERRORS
+#ifdef DEBUG
+    Serial.println("readSensor Error");
+#endif
+    displayError(ERROR_SENSOR_READ);
+    return; 
+  }
+  cmaCO2.addData(x);
+  co2ppm = cmaCO2.avg();
 
 #ifdef DEBUG
   Serial.print(F("CO2ppm="));
@@ -476,14 +486,14 @@ void doReadSensor(void) {
     Serial.println("YELLOW");
 #endif
     color=colorYellow;
-    startAlarm(4); // 4 STATE CHANGES, TWO BEEPS, HALF SECOND
+    startAlarm(4); // 4 STATE CHANGES, 2 BEEPS, 1/2 SECOND
   }
   else if(co2ppm>=750) {
 #ifdef DEBUG
     Serial.println("RED");
 #endif
     color=colorRed;
-    startAlarm(8); // 8 STATE CHANGES, FOUR BEEPS, ONE SECOND
+    startAlarm(6); // 6 STATE CHANGES, 3 BEEPS, 3/4 SECOND
   }
   for(byte i=0; i<3; ++i)
     digitalWrite(ledRGB[i], color[i]);
