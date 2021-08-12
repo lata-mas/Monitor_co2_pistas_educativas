@@ -322,7 +322,7 @@ short readSensor() {
  * Main program here!
  *********************/
 
-void displayError(short errorCode) {
+void displayError(unsigned short errorCode) {
   boolean led=false;      
   for(short d=0; d<DELAY; d+=SHORT_DELAY) {
     if(led=!led) display.showNumberHexEx(errorCode,0,true);
@@ -331,7 +331,7 @@ void displayError(short errorCode) {
   }
 }
 
-void noReturn(short errorCode) {
+void noReturn(unsigned short errorCode) {
   for(boolean led=false;;delay(SHORT_DELAY)) {
     if(led=!led) display.showNumberHexEx(errorCode, 0, true);
     else display.clear();
@@ -356,9 +356,6 @@ void setup() {
   delay(SHORT_DELAY);
 #endif
 
-  display.setBrightness(0x07);
-  display.showNumberDec(8888);
-
 #ifdef DEBUG
   Serial.println();
   Serial.println(F("*****************************"));
@@ -371,8 +368,11 @@ void setup() {
   Serial.println();
 
   Serial.println(F("Sensor: " SENSOR_NAME));
+
+  Serial.println(F("POST..."));
 #endif
-  delay(LONG_DELAY);
+
+  powerOnSelfTest();
 
 #ifdef DEBUG
   Serial.println(F("Init..."));
@@ -592,6 +592,8 @@ void chkwifi(boolean retry) {
 #endif
     displayError(ERROR_WIFI_NOT_CONNECTED+st);
     if(!retry) break;
+    static byte i=1;
+    if((i<<=1)==0) break;
   }
 #ifdef DEBUG
   if(st == WL_CONNECTED) {
@@ -615,6 +617,34 @@ const char* wl_status_to_string(int status) {
   return NULL;
 }
 
+void powerOnSelfTest(void) {
+  while(1) {
+#ifdef DEBUG
+    Serial.println("DISPLAY=8888");
+#endif
+    display.setBrightness(0x07);
+    display.showNumberDec(8888);
+
+    for(byte led=0; led<3; led++) {
+#ifdef DEBUG
+      switch(led) {
+        case 0: Serial.println("LED RED"); break;
+        case 1: Serial.println("LED GREEN"); break;
+        case 2: Serial.println("LED BLUE"); break;
+      }
+#endif
+      digitalWrite(BUZZER, HIGH);
+      digitalWrite(ledRGB[led], LOW);
+      delay(SHORT_DELAY);
+      digitalWrite(BUZZER, LOW);
+      delay(SHORT_DELAY);
+      digitalWrite(ledRGB[led], HIGH);
+    }
+    display.clear();
+    delay(SHORT_DELAY);
+    if(digitalRead(BUTTON_0)==HIGH) break;
+  }
+}
 /*
  * WEBSERVER
  * 
