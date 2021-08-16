@@ -34,7 +34,7 @@ barato, usando so software y hardware libre  siguiendo la filosofía del softwar
 ## Introducción
 
 
-Se diseñó  un dispositivo  medidor de CO2 buscando minimizar el precio total
+Se diseñó y construyó un dispositivo  medidor de CO2 buscando minimizar el precio total
 utilizando software y hardware libre. El dispositivo está basado en el
 esp8266 lolin y cuenta con una   una batería recargable usb
 que alimenta al esp8266 y al sensor.
@@ -52,15 +52,15 @@ este caso se usa el sensor s8lp.
 Se diseñó un experimento para medir el tiempo de respuesta (TR)
 y el error respecto a un dispositivo de referencia (Fluke 975). El experimento
 consiste en colocar el sensor a caracterizar y el dispositivo de referencia    
-en una caja (casi)hermética. El experimento inicia cuando se produce CO2 mezclando
-vinagre y bicarbonato de sodio (Figura 1) y se mide la concentración de CO2  en ppm
-a lo largo de una hora.
+en una caja (casi) hermética. El experimento inicia cuando se produce CO2 mezclando
+vinagre y bicarbonato de sodio (Figura 1) y se mide la concentración de CO2    
+a lo largo del tiempo.
 
 
 ![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/6793b8df06d98f5591a92e80fcb6b1445978810d/sensores_vco2/img/800ppm.png "800ppm")
 
 El TR se define como el tiempo transcurrido  en que el cambio
-de la derivada de la concentración de CO2
+de  la concentración de CO2
 respecto al tiempo es menor a 2 ppm. En  la  Figura 2 se muestra
 la tasa de cambio para el sensor s8lp y se puede apreciar que el TR es alrededor de 5 minutos.
 
@@ -148,7 +148,7 @@ El dispositivo está basado en el ESP8266 Lolin, y se seleccionó el sensor s8lp
 
 
 
-## Encárgalo
+## Encárgalo  
 
 Si no quieres construirlo, mándanos un correo, nosotros podemos hacerlo y te lo enviamos
 con su hoja de caracterización, te lo enviamos armado. También podemos agregarle un plan de da
@@ -181,6 +181,7 @@ Costos del dispositivo incluyendo IVA.
 * [ ] Configurable en 2 o 3 redes
 * [ ] Incluir referencias bibliogr'aficas
 * [ ] Que el scd30 despligue valores de oC, HR y ppm
+* [ ] TR al 90% comenzando en 420 ppm
 
 
 ## Autores
