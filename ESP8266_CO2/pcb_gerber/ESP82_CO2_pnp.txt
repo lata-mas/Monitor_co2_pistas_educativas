@@ -1,0 +1,36 @@
+*Pick And Place List
+*Company=
+*Author=
+*eMail=
+*
+*Project=ESP82_CO2
+*Date=11:11:02
+*CreatedBy=Fritzing 0.9.3b.04.19.5c895d327c44a3114e5fcc9d8260daf0cbb52806
+*
+*
+*Coordinates in mm, always center of component
+*Origin 0/0=Lower left corner of PCB
+*Rotation in degree (0-360, math. pos.)
+*
+*No;Value;Package;X;Y;Rotation;Side;Name
+1;;;9.82911;-73.5806;0;Bottom;Hole1
+2;;;26.3777;-24.7454;0;Bottom;ESP8266
+3;220;THT;45.3892;-20.2406;180;Bottom;R4
+4;;molex-1x6-ra;3.91736;-59.6106;-90;Bottom;s8lp1
+5;10k;THT;47.9292;-27.8606;-90;Bottom;R1
+6;;molex-1x6-ra;6.45736;-11.3504;-90;Bottom;USB
+7;220;THT;45.3892;-17.7006;180;Bottom;R2
+8;;;60.6292;-73.5806;0;Bottom;Hole11
+9;;;60.6292;-2.46052;0;Bottom;Hole10
+10;;;2.20922;-2.46052;0;Bottom;Hole9
+11;;Breakout board;25.0745;-17.0566;180;Bottom;Buzzer
+12;;;2.20922;-73.5806;0;Bottom;Hole8
+13;220;THT;45.3892;-43.1006;180;Bottom;R3
+14;;5 mm [THT];55.5492;-66.883;-90;Bottom;LED
+15;;;47.3648;-64.4206;-90;Bottom;Pantalla
+16;;;25.0182;-49.8254;90;Bottom;Scd30/0220
+17;;THT;49.1992;-10.0806;180;Bottom;Boton
+18;;;47.929;-53.2606;0;Bottom;Hole4
+19;;;9.82911;-53.2606;0;Bottom;Hole2
+20;;;47.9291;-73.5806;0;Bottom;Hole3
+21;;molex-1x6-ra;34.3972;-59.6106;-90;Bottom;s8lp
