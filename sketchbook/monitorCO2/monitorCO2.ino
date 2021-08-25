@@ -60,6 +60,8 @@ const byte colorGreen[]={1,0,1};
 const byte colorYellow[]={0,0,1};
 const byte colorRed[]={0,1,1};
 
+short wifiMode = WIFI_STA;
+
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
 
@@ -361,6 +363,7 @@ void setup() {
   Serial.println(F("*****************************"));
   Serial.println(F(" Proyecto monitorCO2"));
   Serial.println(F(__DATE__  " " __TIME__));
+  Serial.println(F(ARDUINO_BOARD));
   Serial.println(F("(C) 2021, <hdcg@ier.unam.mx>"));
   Serial.println(F("(C) 2021, IER-UNAM"));
   Serial.println(F("(C) 2021, UNAM"));
@@ -384,6 +387,7 @@ void setup() {
   }
   
   WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, pass);
   chkwifi(true);
 
   String mDNSname = WiFi.macAddress().substring(9);
@@ -531,7 +535,10 @@ void doBuzzer() {
  */
 
 void doPost(void) {
-  if(WiFi.status()!=WL_CONNECTED) chkwifi(false);
+  if(!WiFi.isConnected()) {
+    WiFi.reconnect();
+    chkwifi(false);
+  }
 
   MDNS.update();
   
@@ -578,15 +585,15 @@ void doPost(void) {
 void chkwifi(boolean retry) {
   int st;
 
+  delay(SHORT_DELAY);
 #ifdef DEBUG
   Serial.print(F("WiFi SSID: "));
   Serial.println(ssid);
 #endif
 
-  WiFi.begin(ssid,pass);
-
-  while((st = WiFi.status()) != WL_CONNECTED) {
+  while(!WiFi.isConnected()) {
 #ifdef DEBUG
+    st = WiFi.status();
     Serial.print("WiFi.status=");
     Serial.println(wl_status_to_string(st));
 #endif
@@ -596,7 +603,7 @@ void chkwifi(boolean retry) {
     if((i<<=1)==0) break;
   }
 #ifdef DEBUG
-  if(st == WL_CONNECTED) {
+  if(WiFi.isConnected()) {
     Serial.print("IP address=");
     Serial.println(WiFi.localIP());
   }
