@@ -57,6 +57,7 @@ void setup() {
     Serial.println("NO EEPROM DATA, WIFI-ACCESS-POINT...");
     WiFi.softAP(mDNSname);
     Serial.println(mDNSname);
+    WiFi.mode(WIFI_AP);
     myIP=WiFi.softAPIP();
   }
   Serial.print("IPaddres=");
@@ -79,6 +80,7 @@ void setup() {
 
 void loop() {
   server.handleClient();
+  MDNS.update();
 }
 
 void handleRoot() {
