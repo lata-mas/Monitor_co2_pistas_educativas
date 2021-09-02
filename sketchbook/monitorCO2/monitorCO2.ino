@@ -33,6 +33,7 @@
 #include <ESP8266WebServer.h>
 #include <Ticker.h>
 #include <TM1637Display.h>
+#include "myEEPROM.h"
 #include "arduino_secrets.h"
 #include "cma.h"
 
@@ -60,10 +61,15 @@ const byte colorGreen[]={1,0,1};
 const byte colorYellow[]={0,0,1};
 const byte colorRed[]={0,1,1};
 
-short wifiMode = WIFI_STA;
-
+/*
 const char* ssid = SECRET_SSID;
 const char* pass = SECRET_PASS;
+*/
+
+WiFiMode_t wifiMode;
+
+myEEPROM myEEPROM;
+eeprom_data_t *eeprom_data;
 
 Ticker tickerSensor;
 Ticker tickerPost;
@@ -84,8 +90,6 @@ TM1637Display display(CLK, DIO);
 
 ESP8266WebServer server(LISTEN_PORT);
 
-const char *www_username = SECRET_WWW_USERNAME;
-const char *www_password = SECRET_WWW_PASSWORD;
 /*
  * Fin de la parte incompleta
  */
@@ -122,7 +126,7 @@ short initSensor() {
     delay(SHORT_DELAY);
     if(!scd30. selfCalibrationEnabled(true)) noReturn(ERROR_ASC_FAILED);
 #ifdef DEBUG
-    Serial.println("ASC enabled...");
+    Serial.println(F("ASC enabled..."));
 #endif
   }
   return 0;
@@ -165,7 +169,7 @@ short sen0220(void) {
   data_sen0220_t data;
   SerialSW.write(hexdata,sizeof(hexdata));
   SerialSW.listen();
-  delay(500);
+  delay(500); // TO BIG!
   if (SerialSW.available()>0) { 
     SerialSW.readBytes((char*)&data, 9);
     if((data.ff != 0xff) && (data.cmd != 0x86)) return -1;
@@ -289,7 +293,7 @@ short readSensor() {
  * Dummy Sensor
  *   (CC) 2021 <hdcg@ier.unam.mx>
  ****************************************/
-#define MEASUREMENT_INTERVAL 1
+#define MEASUREMENT_INTERVAL 5
 
 static int myDummyData=450;
 
@@ -371,8 +375,6 @@ void setup() {
   Serial.println();
 
   Serial.println(F("Sensor: " SENSOR_NAME));
-
-  Serial.println(F("POST..."));
 #endif
 
   powerOnSelfTest();
@@ -385,21 +387,44 @@ void setup() {
     if(st==0) break;
     displayError(ERROR_SENSOR_INIT);
   }
-  
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, pass);
-  chkwifi(true);
 
   String mDNSname = WiFi.macAddress().substring(9);
   mDNSname.toLowerCase();
   mDNSname.replace(":","");
   mDNSname = F("monitorCO2-") + mDNSname;
+/*
+ * Check EEPROM data
+ */
+  eeprom_data = new eeprom_data_t;
+
+  if(myEEPROM.readData(eeprom_data)) {
+#ifdef DEBUG
+    Serial.println(F("OK EEPROM DATA, WIFI-STATION..."));
+#endif
+    WiFi.mode(wifiMode=WIFI_STA);
+    WiFi.begin(eeprom_data->wifi_ssid, eeprom_data->wifi_pass);
+    chkwifi(true);
+  } else {
+#ifdef DEBUG
+    Serial.println(F("NO EEPROM DATA, WIFI-ACCESS-POINT..."));
+#endif
+    WiFi.softAP(mDNSname);
+    Serial.println(mDNSname);
+    WiFi.mode(wifiMode=WIFI_AP);
+  }
 
 #ifdef DEBUG
-  Serial.print("mDNS:");
+  Serial.print(F("mDNS:"));
   Serial.println(mDNSname);
 #endif
   MDNS.begin(mDNSname);
+
+#ifdef DEBUG
+  Serial.println(F("Ticker..."));
+#endif
+  tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
+  tickerPost.attach(POST_INTERVAL, tckrPost);
+  tickerBuzzer.attach_ms(SHORT_DELAY, tckrBuzzer);
 
   /*
    * Esta sección está incompleta
@@ -407,23 +432,23 @@ void setup() {
 #ifdef DEBUG
   Serial.println(F("WebServer..."));
 #endif
+/*
+ * WEB SERVER SETUP
+ */
   server.on(F("/"), handleRoot);
-  server.on(F("/commit/"), HTTP_POST, handleCommit);
-  server.on(F("/frc/"), handleFRC);
-  server.on(F("/asc/"), handleASC);
-  
+  server.on(F("/commit"), HTTP_POST, handleCommit);
+  server.on(F("/reset"), handleReset);
+#ifdef SCD30
+  server.on(F("/FRC"), handleFRC);
+  server.on(F("/ASC"), handleASC);
+#endif
   server.begin();
+#ifdef DEBUG
+  Serial.println("HTTP server started...");
+#endif
   /*
    * Termina la sección incompleta
    */
-
-#ifdef DEBUG
-  Serial.println("Ticker...");
-#endif
-  tickerSensor.attach(MEASUREMENT_INTERVAL, tckrRead);
-  tickerPost.attach(POST_INTERVAL, tckrPost);
-  tickerBuzzer.attach_ms(SHORT_DELAY, tckrBuzzer);
-
 #ifdef DEBUG
   Serial.println("leaving setup()");
 #endif
@@ -535,6 +560,7 @@ void doBuzzer() {
  */
 
 void doPost(void) {
+  if(wifiMode==WIFI_AP) return;
   if(!WiFi.isConnected()) {
     WiFi.reconnect();
     chkwifi(false);
@@ -545,28 +571,31 @@ void doPost(void) {
   WiFiClient wifiClient;
   HTTPClient httpClient;
 
-  String payload = "{";
-  payload += "\"" SENSOR_NAME "\":";
+  String payload = F("{");
+  payload += F("\"" SENSOR_NAME "\":");
   payload += String(cmaCO2.avg(), 0);
 #ifndef POST_MINIMAL
-  payload += ",\"heartbeat\":";
+  payload += F(",\"heartbeat\":");
   payload += millis();
 #ifdef SCD30
-  payload += ",\"temperature\":";
+  payload += F(",\"temperature\":");
   payload += String(scd30.temperature, 1);
-  payload += ",\"relative_humidity\":";
+  payload += F(",\"relative_humidity\":");
   payload += String(scd30.relative_humidity, 0);
 #endif
 #endif
-  payload += "}";
+  payload += F("}");
+
+  String URL=F(SECRET_URL_PREFIX) + eeprom_data->access_token + F(SECRET_URL_POSTFIX);
   
 #ifdef DEBUG
+  Serial.println(WiFi.localIP());
   Serial.print(F("POST: "));
   Serial.println(payload);
-  Serial.println(PSTR(SECRET_URL));
+  Serial.println(URL);
 #endif
 
-  httpClient.begin(wifiClient, PSTR(SECRET_URL));
+  httpClient.begin(wifiClient, URL);
   httpClient.addHeader(F("Content-Type"), F("application/json"));
 
   int statusCode = httpClient.POST(payload);
@@ -588,7 +617,7 @@ void chkwifi(boolean retry) {
   delay(SHORT_DELAY);
 #ifdef DEBUG
   Serial.print(F("WiFi SSID: "));
-  Serial.println(ssid);
+  Serial.println(WiFi.SSID());
 #endif
 
   while(!WiFi.isConnected()) {
@@ -625,6 +654,10 @@ const char* wl_status_to_string(int status) {
 }
 
 void powerOnSelfTest(void) {
+  short holdButton=0;
+#ifdef DEBUG
+  Serial.println("Power On Self Test...");
+#endif  
   while(1) {
 #ifdef DEBUG
     Serial.println("DISPLAY=8888");
@@ -650,6 +683,16 @@ void powerOnSelfTest(void) {
     display.clear();
     delay(SHORT_DELAY);
     if(digitalRead(BUTTON_0)==HIGH) break;
+    holdButton++;
+#ifdef DEBUG
+    Serial.println(holdButton);
+#endif
+  }
+  if(holdButton>3) {
+#ifdef DEBUG
+    Serial.println(F("Erasing EEPROM...")); 
+#endif
+    myEEPROM.clear();
   }
 }
 /*
@@ -659,35 +702,76 @@ void powerOnSelfTest(void) {
  * 
  */
  
-void handleRoot(void) {
-  if (!server.authenticate(www_username, www_password))
-    return server.requestAuthentication();
-  server.send(200, "text/plain", "Login OK");
+void handleRoot() {
+#ifdef DEBUG
+  Serial.println(F("handleRoot()"));
+#endif
+  server.send(200, F("text/html"), F("<!DOCTYPE html>"
+"<html><body>"
+"<h1>MonitorCO2</h1>"
+"<p>Proporciona los siguientes datos:</p>"
+"<form action=\"/commit\" method=\"post\">"
+"<label for=\"ssid\">WiFi SSID:</label><br>"
+"<input type=\"text\" id=\"ssid\" name=\"ssid\"><br>"
+"<label for=\"pass\">WiFi password:</label><br>"
+"<input type=\"text\" id=\"pass\" name=\"pass\"><br>"
+"<label for=\"token\">Access Token:</label><br>"
+"<input type=\"text\" id=\"token\" name=\"token\"><br>"
+"<input type=\"submit\" value=\"Submit\">"
+"</form>"
+"</body></html>")
+  );
 }
 
-void handleCommit(void) {
-  if (!server.authenticate(www_username, www_password))
-    return server.requestAuthentication();
-  server.send(200, "text/plain", "Commit OK");
+void handleCommit() {
+#ifdef DEBUG
+  Serial.println(F("handleCommit()"));
+#endif
+  for (uint8_t i = 0; i < server.args(); i++) {
+    if(server.argName(i)=="token") 
+      eeprom_data->access_token=server.arg(i);
+    if(server.argName(i)=="ssid") 
+      eeprom_data->wifi_ssid=server.arg(i);
+    if(server.argName(i)=="pass") 
+      eeprom_data->wifi_pass=server.arg(i);
+  }
+  myEEPROM.writeData(eeprom_data);
+  server.send(200, "text/html", "<!DOCTYPE html>"
+"<html><body>"
+"<h1>MonitorCO2</h1>"
+"<p>Datos grabados, por favor, reinicia el monitorCO2</p>"
+"</body></html>"
+  );
 }
 
+const char* www_username = SECRET_WWW_USERNAME;
+const char* www_password = SECRET_WWW_PASSWORD;
+
+void handleReset() {
+#ifdef DEBUG
+  Serial.println(F("handleReset()"));
+#endif
+  if (!server.authenticate(www_username, www_password))
+    return server.requestAuthentication();
+  myEEPROM.clear();
+  server.send(200, "text/plain", "Reset OK");
+}
+
+#ifdef SCD30
 void handleFRC(void) {
   if (!server.authenticate(www_username, www_password))
     return server.requestAuthentication();
-#ifdef SCD30
-  scd30.forceRecalibrationWithReference(450);
-#endif
+  scd30.forceRecalibrationWithReference(450);  // perhaps this is a parameter?
   server.send(200, "text/plain", "FRC started");
 }
 
 void handleASC(void) {
   if (!server.authenticate(www_username, www_password))
     return server.requestAuthentication();
-#ifdef SCD30
   scd30.selfCalibrationEnabled(true);
-#endif
-  server.send(200, "text/plain", "ABC started");
+  server.send(200, "text/plain", "ASC started");
 }
+#endif
 
 /*
  * Termina la parte incompleta
