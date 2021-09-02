@@ -30,6 +30,9 @@ eeprom_data_t *eeprom_data;
 
 ESP8266WebServer server(80);
 
+const char* www_username = SECRET_WWW_USERNAME;
+const char* www_password = SECRET_WWW_PASSWORD;
+
 void setup() {
   Serial.begin(115200);
 
@@ -85,27 +88,34 @@ void loop() {
 
 void handleRoot() {
   Serial.println("handleRoot()");
-  server.send(200, "text/html", "<!DOCTYPE html>"
+  server.send(200, "text/html", F("<!DOCTYPE html>"
 "<html><body>"
 "<h1>MonitorCO2</h1>"
 "<p>Proporciona los siguientes datos:</p>"
 "<form action=\"/commit\" method=\"post\">"
+"<label for=\"ssid\">WiFi SSID:</label><br>"
+"<input type=\"text\" id=\"ssid\" name=\"ssid\"><br>"
+"<label for=\"pass\">WiFi password:</label><br>"
+"<input type=\"text\" id=\"pass\" name=\"pass\"><br>"
 "<label for=\"token\">Access Token:</label><br>"
 "<input type=\"text\" id=\"token\" name=\"token\"><br>"
 "<input type=\"submit\" value=\"Submit\">"
 "</form>"
-"</body></html>"
+"</body></html>")
   );
 }
 
 void handleCommit() {
   Serial.println("handleCommit()");
+  Serial.println(server.arg("plain"));
   for (uint8_t i = 0; i < server.args(); i++) {
     if(server.argName(i)=="token") 
       eeprom_data->access_token=server.arg(i);
+    if(server.argName(i)=="ssid") 
+      eeprom_data->wifi_ssid=server.arg(i);
+    if(server.argName(i)=="pass") 
+      eeprom_data->wifi_pass=server.arg(i);
   }
-  eeprom_data->wifi_ssid=SECRET_SSID;
-  eeprom_data->wifi_pass=SECRET_PASS;
   myEEPROM.writeData(eeprom_data);
   server.send(200, "text/html", "<!DOCTYPE html>"
 "<html><body>"
@@ -117,6 +127,8 @@ void handleCommit() {
 
 void handleReset() {
   Serial.println("handleReset()");
+  if (!server.authenticate(www_username, www_password))
+    return server.requestAuthentication();
   myEEPROM.clear();
   server.send(200, "text/plain", "Reset OK");
 }
