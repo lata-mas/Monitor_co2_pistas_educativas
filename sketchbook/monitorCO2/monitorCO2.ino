@@ -412,9 +412,8 @@ void setup() {
 #ifdef DEBUG
     Serial.println(F("NO EEPROM DATA, WIFI-ACCESS-POINT..."));
 #endif
-    WiFi.softAP(mDNSname);
-    Serial.println(mDNSname);
     WiFi.mode(wifiMode=WIFI_AP);
+    WiFi.softAP(mDNSname);
   }
 
 #ifdef DEBUG
