@@ -35,7 +35,9 @@
 #include <TM1637Display.h>
 #include "myEEPROM.h"
 #include "arduino_secrets.h"
-#include "cma.h"
+//#include "cma.h"
+
+#define MAX_READ_ERRORS 8
 
 #define CLK 14
 #define DIO 12
@@ -344,9 +346,11 @@ void noReturn(unsigned short errorCode) {
   }
 }
 
+#ifdef _CMA_H_
 #define SAMPLES (POST_INTERVAL/MEASUREMENT_INTERVAL)
 
 CMA cmaCO2(SAMPLES);
+#endif
 
 void setup() {
   pinMode(BUTTON_0, INPUT);
@@ -487,15 +491,25 @@ void tckrRead() { isTime2read = true; }
 
 void doReadSensor(void) {
   short x = readSensor();
-  if(x<=0) { // OMIT READ ERRORS
+#ifndef _CMA_H_
+  co2ppm = x;
+#endif
+  static byte readErrors=0;
+  if(x<=0) { // CHECK READ ERRORS
+    readErrors++;
 #ifdef DEBUG
-    Serial.println("readSensor Error");
+    Serial.print("readSensor Error: ");
+    Serial.println(readErrors);
 #endif
     displayError(ERROR_SENSOR_READ);
+    if(readErrors>MAX_READ_ERRORS) ESP.reset();
     return; 
-  }
+  } else if(readErrors>0) readErrors--;
+    
+#ifdef _CMA_H_
   cmaCO2.addData(x);
   co2ppm = cmaCO2.avg();
+#endif
 
 #ifdef DEBUG
   Serial.print(F("CO2ppm="));
@@ -573,7 +587,7 @@ void doPost(void) {
 
   String payload = F("{");
   payload += F("\"" SENSOR_NAME "\":");
-  payload += String(cmaCO2.avg(), 0);
+  payload += String(co2ppm);
 #ifndef POST_MINIMAL
   payload += F(",\"heartbeat\":");
   payload += millis();
