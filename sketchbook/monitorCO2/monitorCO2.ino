@@ -25,7 +25,7 @@
   * SCD30
     Sensirion SCD30 sensor module. i2c (TWI) interface
 */
-#define DUMMY
+#define S8LP
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -35,9 +35,10 @@
 #include <TM1637Display.h>
 #include "myEEPROM.h"
 #include "arduino_secrets.h"
-//#include "cma.h"
+#include "cma.h"
 
 #define MAX_READ_ERRORS 8
+#define MAX_WIFI_ERRORS 8
 
 #define CLK 14
 #define DIO 12
@@ -48,6 +49,10 @@
 #define LED_RED 16
 #define LED_GREEN 13
 #define LED_BLUE 15
+
+#define CO2_MIN 400
+#define CO2_MID 600
+#define CO2_MAX 800
 
 #define BUZZER 2
 
@@ -455,7 +460,8 @@ void setup() {
 #ifdef DEBUG
   Serial.println("leaving setup()");
 #endif
-}
+}  static byte readErrors=0;
+
 
 volatile short co2ppm = -1;
 volatile boolean isTime2read = true;
@@ -517,20 +523,20 @@ void doReadSensor(void) {
   display.showNumberDec(co2ppm);
 
   const byte *color=colorBlack;
-  if(co2ppm>=400 && co2ppm<600) {
+  if(co2ppm>=CO2_MIN && co2ppm<CO2_MID) {
 #ifdef DEBUG
     Serial.println("GREEN");
 #endif
     color=colorGreen;
   }
-  else if(co2ppm>=600 && co2ppm<750) {
+  else if(co2ppm>=CO2_MID && co2ppm<CO2_MAX) {
 #ifdef DEBUG
     Serial.println("YELLOW");
 #endif
     color=colorYellow;
     startAlarm(4); // 4 STATE CHANGES, 2 BEEPS, 1/2 SECOND
   }
-  else if(co2ppm>=750) {
+  else if(co2ppm>=CO2_MAX) {
 #ifdef DEBUG
     Serial.println("RED");
 #endif
@@ -574,10 +580,12 @@ void doBuzzer() {
 
 void doPost(void) {
   if(wifiMode==WIFI_AP) return;
+  static byte wifiErrors=0;
   if(!WiFi.isConnected()) {
+    if(++wifiErrors>MAX_WIFI_ERRORS) ESP.reset();
     WiFi.reconnect();
     chkwifi(false);
-  }
+  } else if(wifiErrors>0) wifiErrors--;
 
   MDNS.update();
   
