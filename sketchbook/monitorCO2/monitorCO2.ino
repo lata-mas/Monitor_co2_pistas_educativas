@@ -460,8 +460,7 @@ void setup() {
 #ifdef DEBUG
   Serial.println("leaving setup()");
 #endif
-}  static byte readErrors=0;
-
+}
 
 volatile short co2ppm = -1;
 volatile boolean isTime2read = true;
