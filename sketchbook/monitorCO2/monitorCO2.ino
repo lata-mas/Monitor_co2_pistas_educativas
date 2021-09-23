@@ -47,8 +47,8 @@
 #define POST_MINIMAL
 
 #define LED_RED 16
-#define LED_GREEN 13
-#define LED_BLUE 15
+#define LED_GREEN 15
+#define LED_BLUE 13
 
 #define CO2_MIN 400
 #define CO2_MID 600
