@@ -14,7 +14,7 @@ def fecha_geo(file,renglon=3):
     return fecha
 
 def importa_geo(file,fecha,renglon=128):
-    geo = pd.read_csv(file,delimiter="\t",skiprows=renglon)
+    geo = pd.read_csv(file,delimiter="\t",skiprows=renglon,encoding="iso-8859-1")
     geo.sec = pd.to_timedelta(geo.sec,unit='S')
 #     geo['fecha'] = fecha - geo.sec
     geo['fecha'] = fecha + geo.sec - np.max(geo.sec)
@@ -23,7 +23,7 @@ def importa_geo(file,fecha,renglon=128):
     return geo
 
 def importa_fluke(archivo):
-    tmp = pd.read_csv(archivo,usecols=[7,11],names=["fluke","tiempo"],skiprows=1)
+    tmp = pd.read_csv(archivo,usecols=[7,11],names=["fluke","tiempo"],skiprows=1,encoding='iso-8859-1')
     tmp.tiempo = pd.to_datetime(tmp.tiempo,dayfirst=True)
     tmp.set_index("tiempo",inplace=True)
     tmp.fluke = tmp.fluke.str.replace(" ppm","")
