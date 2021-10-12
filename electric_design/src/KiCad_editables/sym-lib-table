@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name buzzer3)(type Legacy)(uri ${KIPRJMOD}/buzzer3.lib)(options "")(descr ""))
+  (lib (name co2_project-rescue)(type Legacy)(uri ${KIPRJMOD}/co2_project-rescue.lib)(options "")(descr ""))
+)
