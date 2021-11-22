@@ -1,11 +1,12 @@
 # Dispositivo medidor de CO2 para monitorear la calidad del aire construido con hardware y software libre
 
-Click [here](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/main/README_EN.md)for english version
+Click [here](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/main/README_EN.md) for english version
 ___
 ## Contenido
 
 1. [**Objetivo**](#Objetivo)
-2. [**Introducción**](#Introducción)
+2. [**Funcionamiento**](#Dispositivo)
+2. [****](#Dispositivo)
 3. [**Metodologia**](#Metodología)
 4. [**Sensores**](#Sensores)
 5. [**Conclusiones**](#Conclusiones)
@@ -19,46 +20,44 @@ ___
 
 ## Objetivo
 
-El objetivo general es diseñar un dispositivo medidor de CO2 para medir
-la calidad del aire que sea confiable (con un error menor a 50 ppm) y lo más
-barato, usando software y hardware libre.
+El objetivo general es diseñar y construir un dispositivo medidor de CO2 para medir
+la calidad del aire, con un error menor a 50 ppm, barato y que el diseño acepte
+diferentes sensores de CO2.
 
 
 
-## Introducción
+## Funcionamiento
 
 
 
+## Dispositivo medidor de CO2
 
-Se diseñó y construyó un dispositivo  medidor de CO2 buscando minimizar el precio total
-utilizando software y hardware libre. El dispositivo está basado en el
-esp8266 lolin y cuenta con una   una batería recargable usb
-que alimenta al esp8266 y al sensor.
+El dispositivo está basado en el ESP8266 V3.0 y puede utilizar
+cualquiera de los siguientes tres sensores NDIR de CO2:
+1. s8lp
+1. scd30
+1. sen0220
+El dispositivo mide el CO2 y reporta el promedio del último minuto
+de mediciones en su pantalla y publica en una plataforma IoT.
 
-Se diseñó un PCB y un programa en Arduino
-que funciona con cualquiera de los sensores presentados en [**Conclusiones**](#Conclusiones)
-siguiendo el esquemático de conexión correspondiente de cada sensor.
-El dispositivo tiene la opción de publicar en la plataforma ThingsBoard y
-tener un tablero en línea y  descargar los datos para su posterior análisis o visualización.
-
-En la sección [**Constrúyelo**](#Constrúyelo) se presenta el esquemático de conexión y el programa, para
-este caso se usa el sensor s8lp.
-
-## Metodología
-Se diseñó un experimento para medir el tiempo de respuesta (TR)
-y el error respecto a un dispositivo de referencia (Fluke 975). El experimento
-consiste en colocar el sensor a caracterizar y el dispositivo de referencia    
-en una caja (casi) hermética. El experimento inicia cuando se produce CO2 mezclando
-vinagre y bicarbonato de sodio (Figura 1) y se mide la concentración de CO2    
-a lo largo del tiempo.
+Además, se le han incorporado las siguientes características:
+1. Led indicador de niveles de CO2
+1. Pantalla de 7 segmentos
+1. Alarma sonora
+1. Botón para desactivar la alarma sonora
+1. Conectividad WiFi para publicar datos
+1. Batería USB
+1. Revisión de funcionamiento de ensamblado
 
 
-![800ppm](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/6793b8df06d98f5591a92e80fcb6b1445978810d/sensores_vco2/img/800ppm.png "800ppm")
 
-El TR se define como el tiempo transcurrido  en que el cambio
-de  la concentración de CO2
-respecto al tiempo es menor a 2 ppm. En  la  Figura 2 se muestra
-la tasa de cambio para el sensor s8lp y se puede apreciar que el TR es alrededor de 5 minutos.
+Fotos del dispositivo
+
+
+
+## Uso del dispositivo
+
+Se recomienda ver el
 
 La prueba dura una hora, y se asegura que se alcance un estado permanente. Una vez
 que se ha alcanzado el estado permanente  se obtiene el promedio temporal
