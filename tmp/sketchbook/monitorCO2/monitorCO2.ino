@@ -466,6 +466,7 @@ volatile short co2ppm = -1;
 volatile boolean isTime2read = true;
 volatile boolean isTime2post = true;
 volatile boolean isTime2buzz = false;
+volatile boolean isMuted = false;
 
 void loop(void) {
   if(isTime2buzz) { // FIRST FASTER
@@ -527,6 +528,7 @@ void doReadSensor(void) {
     Serial.println("GREEN");
 #endif
     color=colorGreen;
+    if(isMuted) isMuted=false;
   }
   else if(co2ppm>=CO2_MID && co2ppm<CO2_MAX) {
 #ifdef DEBUG
@@ -565,12 +567,19 @@ void tckrBuzzer(void) {
 }
 
 void doBuzzer() {
+  if(isMuted) {
+#ifdef DEBUG
+    Serial.println("Buzzer is MUTED");
+#endif
+    return;
+  }
   boolean state=(buzzerDuration&1)!=0; // ENABLE ON HIGH
 #ifdef DEBUG
   Serial.printf(PSTR("Buzzer %s\n"), 
     state?PSTR("ON"):PSTR("OFF"));
 #endif
   digitalWrite(BUZZER, state);
+  if(!state && digitalRead(BUTTON_0)==LOW) isMuted=true;
 }
 
 /*

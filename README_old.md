@@ -1,6 +1,6 @@
 # Dispositivo medidor de CO2 para monitorear la calidad del aire construido con hardware y software libre
 
-Click [here](https://github.com/Dispositivos-Edificio-Bioclimatico/co2/blob/main/README_EN.md)for english version
+(Click here for english version)[]
 ___
 ## Contenido
 
