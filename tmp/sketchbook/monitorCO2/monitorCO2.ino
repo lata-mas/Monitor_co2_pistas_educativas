@@ -45,6 +45,7 @@
 
 #define POST_INTERVAL 60
 #define POST_MINIMAL
+#define ALARM_INTERVAL 20
 
 #define LED_RED 16
 #define LED_GREEN 15
@@ -52,7 +53,7 @@
 
 #define CO2_MIN 400
 #define CO2_MID 600
-#define CO2_MAX 800
+#define CO2_MAX 700
 
 #define BUZZER 2
 
@@ -376,8 +377,8 @@ void setup() {
   Serial.println(F("*****************************"));
   Serial.println(F(" Proyecto monitorCO2"));
   Serial.println(F(__DATE__  " " __TIME__));
-  Serial.println(F(ARDUINO_BOARD));
   Serial.println(F("(C) 2021, <hdcg@ier.unam.mx>"));
+  Serial.println(F("(C) 2021, LaTA+"));
   Serial.println(F("(C) 2021, IER-UNAM"));
   Serial.println(F("(C) 2021, UNAM"));
   Serial.println(F("*****************************"));
@@ -494,6 +495,8 @@ void tckrRead() { isTime2read = true; }
  * trigger ALARM 
  */
 
+volatile char alarmCounter=0;
+
 void doReadSensor(void) {
   short x = readSensor();
 #ifndef _CMA_H_
@@ -529,20 +532,23 @@ void doReadSensor(void) {
 #endif
     color=colorGreen;
     if(isMuted) isMuted=false;
+    if(alarmCounter>0) alarmCounter=0;
   }
   else if(co2ppm>=CO2_MID && co2ppm<CO2_MAX) {
 #ifdef DEBUG
     Serial.println("YELLOW");
 #endif
     color=colorYellow;
-    startAlarm(4); // 4 STATE CHANGES, 2 BEEPS, 1/2 SECOND
+    if(alarmCounter>0) alarmCounter--;
+    else startAlarm(4); // 4 STATE CHANGES, 2 BEEPS, 1/2 SECOND
   }
   else if(co2ppm>=CO2_MAX) {
 #ifdef DEBUG
     Serial.println("RED");
 #endif
     color=colorRed;
-    startAlarm(6); // 6 STATE CHANGES, 3 BEEPS, 3/4 SECOND
+    if(alarmCounter>0) alarmCounter--;
+    else startAlarm(6); // 6 STATE CHANGES, 3 BEEPS, 3/4 SECOND
   }
   for(byte i=0; i<3; ++i)
     digitalWrite(ledRGB[i], color[i]);
@@ -557,6 +563,7 @@ volatile byte buzzerDuration = 0;
 void startAlarm(byte duration) {
   if(duration==0) return;
   buzzerDuration=duration;
+  alarmCounter=(ALARM_INTERVAL/MEASUREMENT_INTERVAL);
 }
 
 void tckrBuzzer(void) {
