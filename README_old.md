@@ -186,7 +186,7 @@ En este trabajo fue iniciado por (orden alfabético):
 
 * Giovanni Velázquez
 * Guillermo Barrios
-* Guillermo Ramirez
+* Guillermo Ramírez
 * Héctor Daniel Cortés
 
 Y a la fecha han contribuido:
