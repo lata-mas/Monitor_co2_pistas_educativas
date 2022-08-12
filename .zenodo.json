@@ -6,15 +6,10 @@
     "upload_type": "software", 
     "publication_date": "2022-08-11", 
     "creators": [
-        {
-            "affiliation": "UNAM", 
-            "name": "Guillermo Barrios del Valle"
-        }
 	{
 		"affiliation":"UTEZ",
 		"name":"Guillermo Rámirez-Zúñiga"
 	}
-
     ], 
     "access_right": "open", 
     "related_identifiers": [
