@@ -2,6 +2,6 @@ config.ini
 # General
 .DS_Store
 ./*/DS_Store
-
+./notebooks/.ipynb_checkpoints/*
 
 
