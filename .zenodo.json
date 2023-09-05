@@ -1,0 +1,28 @@
+{
+    "description": "<p>First public release of the CO2 monitor developed at IER-UNAM</p>", 
+    "license": "other-open", 
+    "title": "AltamarMx/co2: v0.1.0", 
+    "version": "v1.2.2", 
+    "upload_type": "software", 
+    "publication_date": "2022-03-24", 
+    "creators": [
+        {
+            "affiliation": "UNAM", 
+            "name": "Guillermo Barrios del Valle"
+        }, 
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/AltamarMx/co2/tree/v1.2.2", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.6383337", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
