@@ -55,11 +55,17 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
 9. Enchufar el zumbador en el conector hembra de tres pines doblado.
 10. Enchufar el ESP8266 con conexión microUSB alineada con el borde de la PCB.
 
-![Cara frontal de la PCB del monitor de CO2 sin componentes](img/front_pcb.jpg "a) Cara frontal de la PCB sin componentes")
-![Cara trasera de la PCB del monitor de CO2 sin componentes](img/back_pcb.jpg "b) Cara trasera de la PCB sin componentes")
 
-![Cara frontal de la PCB del monitor de CO2 con componentes soldados](img/front_soldered.jpg "c) Cara frontal de la PCB con componentes soldados")
-![Cara trasera de la PCB del monitor de CO2 con componentes soldados](img/back_soldered.jpg "d) Cara trasera de la PCB con componentes soldados")
+<img src="img/front_pcb.jpg" alt="Cara frontal de la PCB del monitor de CO2 sin componentes" title="a) Cara frontal de la PCB sin componentes" width="33%"/>
+
+<img src="img/back_pcb.jpg" alt="Cara trasera de la PCB del monitor de CO2 sin componentes" title="b) Cara trasera de la PCB sin componentes" width="33%"/>
+
+<img src="img/front_soldered.jpg" alt="Cara frontal de la PCB del monitor de CO2 con componentes soldados" title="c) Cara frontal de la PCB con componentes soldados" width="33%"/>
+
+<img src="img/back_soldered.jpg" alt="Cara trasera de la PCB del monitor de CO2 con componentes soldados" title="d) Cara trasera de la PCB con componentes soldados" width="33%"/>
+
+**Figura 1**: a) Cara frontal y b) cara trasera de la PCB para el monitor de CO2 sin componentes. Tras soldar los componentes c) cara frontal y d) cara trasera de la PCB. La cara frontal tiene etiquetas para los componentes.
+
 
 **Figura 1**: a) Cara frontal y b) cara trasera de la PCB para el monitor de CO2 sin componentes. Tras soldar los componentes c) cara frontal y d) cara trasera de la PCB. La cara frontal tiene etiquetas para los componentes.
 
