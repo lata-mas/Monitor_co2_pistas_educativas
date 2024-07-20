@@ -110,7 +110,7 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
   </tr>
 </table>
 
-<figcaption>Figura 2: a) S8LP, b) SCD30, y c) SEN0220 sensores conectados en la cara trasera.</figcaption>
+<figcaption>**Figura 2**: a) S8LP, b) SCD30, y c) SEN0220 sensores conectados en la cara trasera.</figcaption>
 
 
 ### Configuración y carga del firmware en el ESP8266
@@ -150,19 +150,19 @@ Si decides no completar esta configuración, el monitor de CO2 seguirá siendo c
 
 ### Carcasa para el monitor de CO2 y batería
 
-La carcasa del Monitor de CO2 consiste en dos láminas rígidas con recortes para la pantalla, el led y para el botón. Se ensambla con cuatro tornillos, tuercas y dos popotes cortados en ocho piezas (2.5 cm cada pieza) que se utilizan como separadores. Antes de ensamblar la carcasa, el monitor de CO2 debe parecerse a lo mostrado en la Figura 2 a) la cara frontal y b) la trasera usando el S8LP. En la Figura 3 a) se muestran las láminas rígidas para la carcasa con los recortes para el sonido, ranuras, pantalla, botón, led y tornillos para el ensamblaje. La pantalla se asegura a una de las láminas rígidas usando 2 tornillos que generalmente se incluyen con la pantalla. En la misma lámina, hay un orificio donde encaja el LED, en caso de usar tableros opacos. También tiene 4 orificios por los cuales pasarán los tornillos. Esta lámina corresponde a la cara frontal de la PCB. La otra lámina de la carcasa tiene un recorte para asegurar el botón y ranuras para asegurar una ventilación adecuada para el sensor de CO2.
+La carcasa del Monitor de CO2 consiste en dos láminas rígidas con recortes para la pantalla, el led y para el botón. Se ensambla con cuatro tornillos, tuercas y dos popotes cortados en ocho piezas (2.5 cm cada pieza) que se utilizan como separadores. Antes de ensamblar la carcasa, el monitor de CO2 debe parecerse a lo mostrado en la Figura 3 a) la cara frontal y b) la trasera usando el S8LP. En la Figura 4 a) se muestran las láminas rígidas para la carcasa con los recortes para el sonido, ranuras, pantalla, botón, led y tornillos para el ensamblaje. La pantalla se asegura a una de las láminas rígidas usando 2 tornillos que generalmente se incluyen con la pantalla. En la misma lámina, hay un orificio donde encaja el LED, en caso de usar tableros opacos. También tiene 4 orificios por los cuales pasarán los tornillos. Esta lámina corresponde a la cara frontal de la PCB. La otra lámina de la carcasa tiene un recorte para asegurar el botón y ranuras para asegurar una ventilación adecuada para el sensor de CO2.
 
-Finalmente, el monitor de CO2 ensamblado con láminas transparentes como carcasa y con una batería USB adjunta se muestra en la Figura 3 b).
+Finalmente, el monitor de CO2 ensamblado con láminas transparentes como carcasa y con una batería USB adjunta se muestra en la Figura 4 b).
 
 <img src="img/button.jpg" alt="Cara frontal de la PCB con todos los elementos soldados y enchufados" width="50%">
 <img src="img/buzzer.jpg" alt="Cara trasera de la PCB con todos los elementos soldados y enchufados" width="50%">
 
-**Figura 2**: a) Cara frontal y b) cara trasera de la PCB con todos los elementos soldados y enchufados.
+**Figura 3**: a) Cara frontal y b) cara trasera de la PCB con todos los elementos soldados y enchufados.
 
 <img src="img/straw.jpg" alt="Láminas rígidas con recortes para la carcasa, tornillos y popotes rígidos" width="50%">
 <img src="img/CO2_monitor.jpg" alt="Monitor de CO2 completamente ensamblado y funcionando, alimentado con una batería USB" width="50%">
 
-**Figura 3**: a) Láminas rígidas con recortes para la carcasa, tornillos y popotes rígidos y b) Monitor de CO2 completamente ensamblado y funcionando, alimentado con una batería USB.
+**Figura 4**: a) Láminas rígidas con recortes para la carcasa, tornillos y popotes rígidos y b) Monitor de CO2 completamente ensamblado y funcionando, alimentado con una batería USB.
 
 
 ### Instrucciones de operación
