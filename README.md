@@ -54,22 +54,33 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
 8. Enchufar la pantalla de 4 dígitos con un cable universal de cuatro pines con hebilla.
 9. Enchufar el zumbador en el conector hembra de tres pines doblado.
 10. Enchufar el ESP8266 con conexión microUSB alineada con el borde de la PCB.
-
 <table>
   <tr>
     <td>
-      <img src="img/front_pcb.jpg" alt="Cara frontal de la PCB del monitor de CO2 sin componentes" title="a) Cara frontal de la PCB sin componentes" width="50%"/>
+      <figure>
+        <img src="img/front_pcb.jpg" alt="Cara frontal de la PCB del monitor de CO2 sin componentes" title="a) Cara frontal de la PCB sin componentes" width="50%"/>
+        <figcaption>a) Cara frontal de la PCB sin componentes</figcaption>
+      </figure>
     </td>
     <td>
-      <img src="img/back_pcb.jpg" alt="Cara trasera de la PCB del monitor de CO2 sin componentes" title="b) Cara trasera de la PCB sin componentes" width="50%"/>
+      <figure>
+        <img src="img/back_pcb.jpg" alt="Cara trasera de la PCB del monitor de CO2 sin componentes" title="b) Cara trasera de la PCB sin componentes" width="50%"/>
+        <figcaption>b) Cara trasera de la PCB sin componentes</figcaption>
+      </figure>
     </td>
   </tr>
   <tr>
     <td>
-      <img src="img/front_soldered.jpg" alt="Cara frontal de la PCB del monitor de CO2 con componentes soldados" title="c) Cara frontal de la PCB con componentes soldados" width="50%"/>
+      <figure>
+        <img src="img/front_soldered.jpg" alt="Cara frontal de la PCB del monitor de CO2 con componentes soldados" title="c) Cara frontal de la PCB con componentes soldados" width="50%"/>
+        <figcaption>c) Cara frontal de la PCB con componentes soldados</figcaption>
+      </figure>
     </td>
     <td>
-      <img src="img/back_soldered.jpg" alt="Cara trasera de la PCB del monitor de CO2 con componentes soldados" title="d) Cara trasera de la PCB con componentes soldados" width="50%"/>
+      <figure>
+        <img src="img/back_soldered.jpg" alt="Cara trasera de la PCB del monitor de CO2 con componentes soldados" title="d) Cara trasera de la PCB con componentes soldados" width="50%"/>
+        <figcaption>d) Cara trasera de la PCB con componentes soldados</figcaption>
+      </figure>
     </td>
   </tr>
 </table>
