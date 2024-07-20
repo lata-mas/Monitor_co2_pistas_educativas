@@ -91,19 +91,19 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
   <tr>
     <td style="text-align: center;">
       <figure>
-        <img src="img/s8lp.jpg" alt="Sensor S8LP" title="a) S8LP" style="width: 33%;"/>
+        <img src="img/s8lp.jpg" alt="Sensor S8LP" title="a) S8LP" style="width: 40%;"/>
         <figcaption>a) S8LP</figcaption>
       </figure>
     </td>
     <td style="text-align: center;">
       <figure>
-        <img src="img/scd30.jpg" alt="Sensor SCD30" title="b) SCD30" style="width: 33%;"/>
+        <img src="img/scd30.jpg" alt="Sensor SCD30" title="b) SCD30" style="width: 40%;"/>
         <figcaption>b) SCD30</figcaption>
       </figure>
     </td>
     <td style="text-align: center;">
       <figure>
-        <img src="img/sen0220.jpg" alt="Sensor SEN0220" title="c) SEN0220" style="width: 33%;"/>
+        <img src="img/sen0220.jpg" alt="Sensor SEN0220" title="c) SEN0220" style="width: 40%;"/>
         <figcaption>c) SEN0220</figcaption>
       </figure>
     </td>
@@ -113,6 +113,74 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
 <figcaption>Figura 2: a) S8LP, b) SCD30, y c) SEN0220 sensores conectados en la cara trasera.</figcaption>
 
 
+### Configuración y carga del firmware en el ESP8266
+
+Antes de cargar el firmware en el ESP8266, en el archivo .ino, localiza la línea `#define S8LP` y reemplaza `S8LP` con el sensor de CO2 que hayas elegido. Las opciones disponibles son `DUMMY, SEN0220` y `SCD30`. Vale la pena mencionar que la opción `DUMMY` se utiliza cuando el sensor seleccionado no está disponible. Esta opción genera datos simulados, permitiendo evaluaciones preliminares del hardware.
+
+Adicionalmente, en las líneas donde se define:
+
+```
+#define CO2_MIN 400
+#define CO2_MID 600
+#define CO2_MAX 700
+```
+
+tienes la opción de configurar los colores verde, amarillo y rojo, respectivamente, que también corresponden a la alarma audible.
+
+En el archivo `arduino_secrets.h`, los usuarios deben especificar la URL de la plataforma IoT ThingsBoard. Además, el ESP8266 establece un servicio web específico para configurar la red WiFi a la que se unirá y el token del dispositivo donde el monitor de CO2 publicará sus datos. El nombre de usuario y contraseña del administrador pueden ajustarse en este archivo o mantenerse como están.
+
+Una vez que todos los cambios necesarios estén hechos, el archivo .ino puede cargarse en el ESP8266 usando el Arduino IDE. Cuando se configura un gran conjunto de monitores de CO2, se recomienda exportar el archivo como un archivo binario. Para hacer esto, una vez abierto el archivo .ino y compilado para verificar errores, el usuario debe ir a Sketch, Export compiled binary y el archivo binario puede cargarse en diferentes monitores de CO2. En la carpeta /software/build del repositorio se puede encontrar el archivo binario que usamos para configurar los monitores de CO2 y un script bash, `foo.sh`, como referencia para cargar el binario usando esptool.
+
+### Prueba de ensamblaje
+
+Al encender el Monitor de CO2, este verificará si el zumbador y el LED RGB están funcionando correctamente. Si ambos funcionan bien, el zumbador emitirá un sonido y el LED RGB mostrará los colores rojo, verde y azul antes de comenzar a funcionar.
+
+### Configuración para la plataforma IoT
+
+Una vez cargado el firmware en el ESP8266 y encendido por primera vez, el monitor de CO2 establece automáticamente un punto de acceso denominado `monitorCO2-XXXXXXXXX` donde las `X` se reemplazan con los últimos nueve dígitos de la dirección MAC de cada ESP8266. Para configurar el token necesario y la información de WiFi, haz lo siguiente:
+
+1. Conéctate a la red WiFi del monitor de CO2 llamada `monitorCO2-XXXXXXXXX` desde un computador cercano.
+2. Abre un navegador y navega a `http://192.168.4.1`, donde te llevará a una interfaz de configuración.
+3. Inicia sesión utilizando las credenciales predeterminadas: nombre de usuario `admin` y contraseña `password`. Estos corresponden a las constantes `SECRET_WWW_USERNAME` y `SECRET_WWW_PASSWORD` en el archivo .ino del firmware. A menos que el código haya sido modificado, estas serán las credenciales predeterminadas.
+4. Luego se te solicitará que ingreses los detalles de la red WiFi que el ESP8266 utilizará para conectarse a Internet junto con su contraseña, también se te pedirá el token del dispositivo.
+5. Después de proporcionar esta información, el monitor de CO2 almacenará los datos y desactivará su función de punto de acceso.
+6. Reinicia el ESP8266.
+
+Si decides no completar esta configuración, el monitor de CO2 seguirá siendo completamente operativo para mediciones pero no enviará datos a la plataforma IoT y el punto de acceso estará disponible hasta que se realice la configuración.
+
+### Carcasa para el monitor de CO2 y batería
+
+La carcasa del Monitor de CO2 consiste en dos láminas rígidas con recortes para la pantalla, el led y para el botón. Se ensambla con cuatro tornillos, tuercas y dos popotes cortados en ocho piezas (2.5 cm cada pieza) que se utilizan como separadores. Antes de ensamblar la carcasa, el monitor de CO2 debe parecerse a lo mostrado en la Figura 2 a) la cara frontal y b) la trasera usando el S8LP. En la Figura 3 a) se muestran las láminas rígidas para la carcasa con los recortes para el sonido, ranuras, pantalla, botón, led y tornillos para el ensamblaje. La pantalla se asegura a una de las láminas rígidas usando 2 tornillos que generalmente se incluyen con la pantalla. En la misma lámina, hay un orificio donde encaja el LED, en caso de usar tableros opacos. También tiene 4 orificios por los cuales pasarán los tornillos. Esta lámina corresponde a la cara frontal de la PCB. La otra lámina de la carcasa tiene un recorte para asegurar el botón y ranuras para asegurar una ventilación adecuada para el sensor de CO2.
+
+Finalmente, el monitor de CO2 ensamblado con láminas transparentes como carcasa y con una batería USB adjunta se muestra en la Figura 3 b).
+
+<img src="img/button.jpg" alt="Cara frontal de la PCB con todos los elementos soldados y enchufados" width="50%">
+<img src="img/buzzer.jpg" alt="Cara trasera de la PCB con todos los elementos soldados y enchufados" width="50%">
+
+**Figura 2**: a) Cara frontal y b) cara trasera de la PCB con todos los elementos soldados y enchufados.
+
+<img src="img/straw.jpg" alt="Láminas rígidas con recortes para la carcasa, tornillos y popotes rígidos" width="50%">
+<img src="img/CO2_monitor.jpg" alt="Monitor de CO2 completamente ensamblado y funcionando, alimentado con una batería USB" width="50%">
+
+**Figura 3**: a) Láminas rígidas con recortes para la carcasa, tornillos y popotes rígidos y b) Monitor de CO2 completamente ensamblado y funcionando, alimentado con una batería USB.
+
+
+### Instrucciones de operación
+
+Una vez que el monitor de CO2 está ensamblado y configurado, puede ser encendido utilizando el cable microUSB. Al activarse, el monitor comienza a medir las concentraciones de CO2, mostrando el promedio móvil de un minuto en su pantalla de 7 segmentos. Las alarmas visuales y sonoras preconfiguradas alertarán a los usuarios cuando sea necesario ventilar (indicado por una luz amarilla o dos pitidos) o si se recomienda evacuar el espacio (señalado por una luz roja y tres pitidos).
+
+La alarma audible del Monitor de CO2 está diseñada para activarse cuando las concentraciones de CO2 alcanzan o superan las 600 ppm. Específicamente, para niveles entre 600 y 699 ppm, la alarma produce dos pulsos cada 20 segundos. Para concentraciones de 700 ppm o más, emite tres pulsos en el mismo intervalo. Esta característica auditiva es especialmente beneficiosa para usuarios con discapacidad visual que podrían tener dificultades con el sistema de colores o la lectura de la pantalla. Para desactivar temporalmente la alarma audible, presiona y mantén presionado el botón durante 20 segundos después del pitido. La alarma se reactivate una vez que las concentraciones de CO2 vuelvan al rango seguro de 400-599 ppm, asegurando alertas renovadas si los niveles exceden las 600 ppm. Si se prefiere, el zumbador puede ser excluido o desmontado del diseño sin afectar las funciones del monitor.
+
+Los tres sensores seleccionados cuentan con un mecanismo de autocalibración que asume una exposición periódica al aire fresco (aproximadamente 400 ppm de CO2) durante la operación. Para una precisión de calibración óptima, los sensores deben experimentar exposición al aire fresco. Sin embargo, en entornos con concentraciones de CO2 consistentemente elevadas, la calibración manual puede ser más apropiada, ya que la falta prolongada de exposición a niveles ambientales puede resultar en desviaciones de calibración.
+
+Si el Monitor de CO2 encuentra algún problema, mostrará uno de los siguientes códigos de error en su pantalla:
+- F000: Imposible conectar al WiFi.
+- E000: Falla en la medición del sensor de CO2.
+- E001: Falla en la inicialización del sensor de CO2.
+- E002: Falla en la modificación del intervalo de medición.
+- E003: Falla en el comando de autocalibración.
+
+Los mensajes de error E002 y E003 son exclusivos del sensor SCD30 y podrían aparecer durante su modo de autocalibración. Este modo puede ser activado dentro del código de Arduino a través de la función `InitSensor()`.
 
 
 ## Autores
