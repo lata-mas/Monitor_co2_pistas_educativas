@@ -1,4 +1,4 @@
-# Dispositivo medidor de CO2 con sensores NDIR intercambiables para evaluar la ventilación natural
+# Monitor de CO2 con sensores NDIR intercambiables para evaluar la ventilación natural
 
 
 En este repositorio se encuentran los archivos necesarios para replicar el monitor de CO2 desarrollado en el Instituto de Energías Renovables de la UNAM, ubicado en Temixco, Morelos, México.
@@ -44,12 +44,12 @@ El proceso de construcción se divide en cinco etapas. La primera etapa describe
 
 Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo para construir el monitor de CO2, considerando que se puede probar y configurar aunque no haya un sensor de CO2 en el momento de la construcción, definiendo un sensor ficticio.
 
-1. La PCB es de doble cara y puede producirse mediante serigrafía o mecanizado. Una de las caras tiene impresa la posición de las resistencias, sensores, led, etc., que se llamará cara frontal y el lado sin etiquetar cara trasera. Ambos lados de la PCB se muestran en la Figura~\ref{fig:front_back} a) cara frontal y b) cara trasera.
+1. La PCB es de doble cara y puede producirse mediante serigrafía o mecanizado. Una de las caras tiene impresa la posición de las resistencias, sensores, led, etc., que se llamará cara frontal y el lado sin etiquetar cara trasera. Ambos lados de la PCB se muestran en la Figura 1a) cara frontal y 1b) cara trasera.
 2. Soldar dos cables puente (6 cm de largo) al botón pulsador.
-3. Soldar los siguientes componentes en la cara frontal. Cuatro resistencias, que están marcadas en la PCB como R1 para la resistencia de 10 $kOhm$ y R2, R3 y R4 son resistencias de 220 $Ohm$. Soldar dos líneas de quince pines hembra para el ESP8266. Soldar un conector hembra de cuatro pines para el LED. Para el botón, introducir los cables del botón en esta cara, por lo que la soldadura debería estar en la cara trasera. Insertar el conector vertical grove y soldar. En este punto, la PCB debería parecerse a la Figura~\ref{fig:front_back} c).
+3. Soldar los siguientes componentes en la cara frontal. Cuatro resistencias, que están marcadas en la PCB como R1 para la resistencia de 10 $kOhm$ y R2, R3 y R4 son resistencias de 220 $Ohm$. Soldar dos líneas de quince pines hembra para el ESP8266. Soldar un conector hembra de cuatro pines para el LED. Para el botón, introducir los cables del botón en esta cara, por lo que la soldadura debería estar en la cara trasera. Insertar el conector vertical grove y soldar. En este punto, la PCB debería parecerse a la Figura 1c).
 4. En la cara trasera, soldar lo siguiente: Soldar el adaptador MicroUSB y el conector hembra de tres pines para el zumbador, el conector hembra para este último debe estar doblado.
-5. Si se usa S8LP, soldar dos líneas de conector hembra de seis pines en la cara trasera. En este punto, la cara trasera de la PCB debería parecerse a la Figura~\ref{fig:front_back} d). Luego soldar dos líneas de seis pines al sensor CO2 S8LP y enchufarlo en la PCB como se muestra en la Figura~\ref{fig:co2_sensors} a).
-6. Si se usa SCD30 o SEN0220, soldar una línea de conector hembra de cuatro pines en la cara trasera y, dependiendo del sensor, conectar como se muestra en la Figura~\ref{fig:co2_sensors} b) para SCD30 y como se muestra en la Figura~\ref{fig:co2_sensors} c) para SEN0220.
+5. Si se usa S8LP, soldar dos líneas de conector hembra de seis pines en la cara trasera. En este punto, la cara trasera de la PCB debería parecerse a la Figura 1d). Luego soldar dos líneas de seis pines al sensor CO2 S8LP y enchufarlo en la PCB como se muestra en la Figura 2a).
+6. Si se usa SCD30 o SEN0220, soldar una línea de conector hembra de cuatro pines en la cara trasera y, dependiendo del sensor, conectar como se muestra en la Figura 2b) para SCD30 y como se muestra en la Figura 2c) para SEN0220.
 7. Enchufar el cable rojo del LED RGB apuntando al borde de la PCB en la cara frontal.
 8. Enchufar la pantalla de 4 dígitos con un cable universal de cuatro pines con hebilla.
 9. Enchufar el zumbador en el conector hembra de tres pines doblado.
@@ -182,13 +182,3 @@ Si el Monitor de CO2 encuentra algún problema, mostrará uno de los siguientes 
 
 Los mensajes de error E002 y E003 son exclusivos del sensor SCD30 y podrían aparecer durante su modo de autocalibración. Este modo puede ser activado dentro del código de Arduino a través de la función `InitSensor()`.
 
-
-## Autores
-
-En este trabajo es colaboración de (orden alfabético):
-
-* Giovanni Velázquez
-* Guadalupe Huelsz
-* Guillermo Barrios
-* Guillermo Ramirez
-* Héctor Daniel Cortés
