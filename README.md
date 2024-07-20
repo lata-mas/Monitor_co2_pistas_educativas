@@ -87,8 +87,30 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
 
 **Figura 1**: a) Cara frontal y b) cara trasera de la PCB para el monitor de CO2 sin componentes. Tras soldar los componentes c) cara frontal y d) cara trasera de la PCB. La cara frontal tiene etiquetas para los componentes.
 
+<table>
+  <tr>
+    <td style="text-align: center;">
+      <figure>
+        <img src="img/s8lp.jpg" alt="Sensor S8LP" title="a) S8LP" style="width: 33%;"/>
+        <figcaption>a) S8LP</figcaption>
+      </figure>
+    </td>
+    <td style="text-align: center;">
+      <figure>
+        <img src="img/scd30.jpg" alt="Sensor SCD30" title="b) SCD30" style="width: 33%;"/>
+        <figcaption>b) SCD30</figcaption>
+      </figure>
+    </td>
+    <td style="text-align: center;">
+      <figure>
+        <img src="img/sen0220.jpg" alt="Sensor SEN0220" title="c) SEN0220" style="width: 33%;"/>
+        <figcaption>c) SEN0220</figcaption>
+      </figure>
+    </td>
+  </tr>
+</table>
 
-**Figura 1**: a) Cara frontal y b) cara trasera de la PCB para el monitor de CO2 sin componentes. Tras soldar los componentes c) cara frontal y d) cara trasera de la PCB. La cara frontal tiene etiquetas para los componentes.
+<figcaption>Figura 2: a) S8LP, b) SCD30, y c) SEN0220 sensores conectados en la cara trasera.</figcaption>
 
 
 
