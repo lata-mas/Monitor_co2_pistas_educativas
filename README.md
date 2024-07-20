@@ -59,13 +59,13 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
     <td>
       <figure>
         <img src="img/front_pcb.jpg" alt="Cara frontal de la PCB del monitor de CO2 sin componentes" title="a) Cara frontal de la PCB sin componentes" width="50%"/>
-        <figcaption>a) Cara frontal de la PCB sin componentes</figcaption>
+        <figcaption>a)</figcaption>
       </figure>
     </td>
     <td>
       <figure>
         <img src="img/back_pcb.jpg" alt="Cara trasera de la PCB del monitor de CO2 sin componentes" title="b) Cara trasera de la PCB sin componentes" width="50%"/>
-        <figcaption>b) Cara trasera de la PCB sin componentes</figcaption>
+        <figcaption>b) </figcaption>
       </figure>
     </td>
   </tr>
@@ -73,13 +73,13 @@ Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo pa
     <td>
       <figure>
         <img src="img/front_soldered.jpg" alt="Cara frontal de la PCB del monitor de CO2 con componentes soldados" title="c) Cara frontal de la PCB con componentes soldados" width="50%"/>
-        <figcaption>c) Cara frontal de la PCB con componentes soldados</figcaption>
+        <figcaption>c) </figcaption>
       </figure>
     </td>
     <td>
       <figure>
         <img src="img/back_soldered.jpg" alt="Cara trasera de la PCB del monitor de CO2 con componentes soldados" title="d) Cara trasera de la PCB con componentes soldados" width="50%"/>
-        <figcaption>d) Cara trasera de la PCB con componentes soldados</figcaption>
+        <figcaption>d) </figcaption>
       </figure>
     </td>
   </tr>
