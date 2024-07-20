@@ -9,7 +9,7 @@ En este repositorio se encuentran los archivos necesarios para replicar el monit
 
 Los archivos para el PCB se encuentran en el folder **electric_design**. Los archivos KiCAD del esquema del PCB y el diagrama eléctrico se encuentran en el folder **pcb_src**. Los archivos para maquinar o cortar por láser el PCB se encuentran en el folder **pcb_gerber**. El diagrama eléctrico en formato PDF se encuentra en el folder **pcb_pdf**. Las plantillas para producir el PCB por impresión de pantalla en formato JPG se encuentran en el folder **pcb_jpg**. Adicionalmente, renders tridimensionales del PCB con las partes del monitor se encuentran en el folder **pcb_view3D**. Los archivos para producir la carcasa del monitor de CO2 se encuentran en el folder **hardcase_pdf**. Los archivos FreeCAD se encuentran en el folder **cad**, junto con archivos en PDF para calcar en el folder **hardcase_pdf**, y también archivos en formato STL y DXF en el folder **hardcase_printable**.
 
-El programa, código fuente y binario, se encuentran en el folder **software**. En el folder notebook se encuentran libretas de Jupyter con los datos de la calibración hecha.
+El programa, código fuente y binario, se encuentran en el folder **software**. En el folder **notebook** se encuentran libretas de Jupyter con los datos de la calibración hecha y la campaña experimental, los datos se encuentran en el folder **dat**.
 
 
 # Lista de componentes
@@ -34,6 +34,35 @@ El programa, código fuente y binario, se encuentran en el folder **software**. 
 | Tuercas     | Tuercas hexagonales M3-0.5 mm   | 4        | 1.0         | [Amazon](https://www.amazon.com.mx/gp/product/B07ZFFFRJ5/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&th=1) |
 | Popote      | Popote rígido de plástico       | 2        | 3.4         | [Amazon](https://www.amazon.com.mx/Pajitas-Repuesto-Pl%C3%A1stico-Reutilizables-Pinceles/dp/B0925H4F6R/ref=sr_1_18?__mk_es_MX=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=IM4WCLYX9S0K&keywords=popote+rigido&qid=1693848668&sprefix=popote+rigido%2Caps%2C150&sr=8-18&ufe=app_do%3Aamzn1.fos.4e545b5e-1d45-498b-8193-a253464ffa471) |
 | Cable       | Cable jumper o 22-26 AWG 6 cm   | 2        | 1.8         | [Adafruit](https://www.adafruit.com/product/794) |
+
+
+# Instrucciones de armado
+
+El proceso de construcción se divide en cinco etapas. La primera etapa describe el ensamblaje del hardware para el monitor de CO2. La segunda etapa detalla la configuración y el procedimiento de carga del firmware para el ESP8266. En la tercera etapa se realiza una prueba de ensamblaje y en la cuarta etapa se lleva a cabo la configuración para la plataforma IoT. La quinta y última etapa implica el ensamblaje de la carcasa y la conexión de la batería USB si es necesario. Es importante destacar que el monitor de CO2 puede construirse y probarse en ausencia de los sensores de CO2, lo que permite adaptarse a posibles demoras en la entrega de componentes en regiones como México.
+
+### Ensamblaje del monitor de CO2
+
+Los siguientes pasos deben llevarse a cabo una vez que el usuario esté listo para construir el monitor de CO2, considerando que se puede probar y configurar aunque no haya un sensor de CO2 en el momento de la construcción, definiendo un sensor ficticio.
+
+1. La PCB es de doble cara y puede producirse mediante serigrafía o mecanizado. Una de las caras tiene impresa la posición de las resistencias, sensores, led, etc., que se llamará cara frontal y el lado sin etiquetar cara trasera. Ambos lados de la PCB se muestran en la Figura~\ref{fig:front_back} a) cara frontal y b) cara trasera.
+2. Soldar dos cables puente (6 cm de largo) al botón pulsador.
+3. Soldar los siguientes componentes en la cara frontal. Cuatro resistencias, que están marcadas en la PCB como R1 para la resistencia de 10 $kOhm$ y R2, R3 y R4 son resistencias de 220 $Ohm$. Soldar dos líneas de quince pines hembra para el ESP8266. Soldar un conector hembra de cuatro pines para el LED. Para el botón, introducir los cables del botón en esta cara, por lo que la soldadura debería estar en la cara trasera. Insertar el conector vertical grove y soldar. En este punto, la PCB debería parecerse a la Figura~\ref{fig:front_back} c).
+4. En la cara trasera, soldar lo siguiente: Soldar el adaptador MicroUSB y el conector hembra de tres pines para el zumbador, el conector hembra para este último debe estar doblado.
+5. Si se usa S8LP, soldar dos líneas de conector hembra de seis pines en la cara trasera. En este punto, la cara trasera de la PCB debería parecerse a la Figura~\ref{fig:front_back} d). Luego soldar dos líneas de seis pines al sensor CO2 S8LP y enchufarlo en la PCB como se muestra en la Figura~\ref{fig:co2_sensors} a).
+6. Si se usa SCD30 o SEN0220, soldar una línea de conector hembra de cuatro pines en la cara trasera y, dependiendo del sensor, conectar como se muestra en la Figura~\ref{fig:co2_sensors} b) para SCD30 y como se muestra en la Figura~\ref{fig:co2_sensors} c) para SEN0220.
+7. Enchufar el cable rojo del LED RGB apuntando al borde de la PCB en la cara frontal.
+8. Enchufar la pantalla de 4 dígitos con un cable universal de cuatro pines con hebilla.
+9. Enchufar el zumbador en el conector hembra de tres pines doblado.
+10. Enchufar el ESP8266 con conexión microUSB alineada con el borde de la PCB.
+
+![Cara frontal de la PCB del monitor de CO2 sin componentes](img/front_pcb.jpg "a) Cara frontal de la PCB sin componentes")
+![Cara trasera de la PCB del monitor de CO2 sin componentes](img/back_pcb.jpg "b) Cara trasera de la PCB sin componentes")
+
+![Cara frontal de la PCB del monitor de CO2 con componentes soldados](img/front_soldered.jpg "c) Cara frontal de la PCB con componentes soldados")
+![Cara trasera de la PCB del monitor de CO2 con componentes soldados](img/back_soldered.jpg "d) Cara trasera de la PCB con componentes soldados")
+
+**Figura 1**: a) Cara frontal y b) cara trasera de la PCB para el monitor de CO2 sin componentes. Tras soldar los componentes c) cara frontal y d) cara trasera de la PCB. La cara frontal tiene etiquetas para los componentes.
+
 
 
 
